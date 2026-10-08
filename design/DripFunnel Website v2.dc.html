@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="icon" type="image/png" href="assets/favicon/round-light-64.png" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="assets/favicon/round-dark-64.png" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+[data-site]{--paper:#FDFAF7;--surface:#FFFFFF;--sunk:#F3EDE8;--border:#E8E2DC;--field:#D7D3CD;--text:#14181F;--head:#0A2A4A;--muted:#5A6472;--link:#B8541F;--link-h:#8F4017;--focus:#00519F;--btn-h:#D96C33;--outline:#B8541F;--outline-h:#FDF0E8;--tint:#FDF0E8;--tint-fg:#8F4017;--okbg:#EEF7F2;--okfg:#1D6B47;--band:#0A2A4A;--logo-l:block;--logo-d:none;--fl-a:0.7;--dr-a:0.56;}
+[data-site][data-theme="dark"]{--paper:#061726;--surface:#0A2A4A;--sunk:#071F35;--border:#1C3F60;--field:#2A4C6E;--text:#FFFFFF;--head:#FFFFFF;--muted:#B8C7D6;--link:#EC844F;--link-h:#F09A6D;--focus:#2E7BD1;--btn-h:#F09A6D;--outline:#EC844F;--outline-h:#2A1710;--tint:#2A1710;--tint-fg:#EC844F;--okbg:#0F2A1E;--okfg:#7FD1A5;--band:#0E3355;--logo-l:none;--logo-d:block;--fl-a:0.63;--dr-a:0.504;}
+*{box-sizing:border-box;}
+body{margin:0;background:#FDFAF7;}
+a{color:var(--link,#B8541F);text-underline-offset:3px;}
+a:hover{color:var(--link-h,#8F4017);}
+:focus-visible{outline:2px solid var(--focus,#00519F);outline-offset:2px;}
+[data-band] :focus-visible{outline-color:#2E7BD1;}
+@keyframes dfDrip{0%{stroke-dashoffset:14;opacity:0;}10%{opacity:1;}88%{opacity:1;}100%{stroke-dashoffset:-100;opacity:0;}}
+@keyframes dfDrift{from{background-position:0 0;}to{background-position:22px 44px;}}
+@keyframes dfFloatA{0%{transform:translate(-8%,-6%) scale(1);}100%{transform:translate(10%,8%) scale(1.15);}}
+@keyframes dfFloatB{0%{transform:translate(6%,4%) scale(1.1);}100%{transform:translate(-10%,-8%) scale(0.95);}}
+@media (prefers-reduced-motion: reduce){[data-hero-bg] *{animation:none !important;}}
+</style>
+</helmet>
+<div data-site="" data-theme="{{ theme }}" style="min-height:100vh;display:flex;flex-direction:column;background:{{ deskBg }};">
+<div style="background:#14181F;color:#FFFFFF;font-family:Inter,sans-serif;font-size:13px;">
+  <div style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4cqw,24px);min-height:44px;display:flex;align-items:center;gap:10px 20px;flex-wrap:wrap;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#EC844F;">Prototype controls</span>
+    <span role="group" aria-label="Device" style="display:flex;border:1px solid #3A424E;border-radius:6px;overflow:hidden;"><sc-for list="{{ devices }}" as="d" hint-placeholder-count="2"><button onClick="{{ d.onClick }}" aria-pressed="{{ d.pressed }}" style="height:28px;padding:0 12px;border:0;background:{{ d.bg }};color:{{ d.fg }};font-family:Inter,sans-serif;font-size:12px;cursor:pointer;">{{ d.label }}</button></sc-for></span>
+    <label style="display:flex;align-items:center;gap:6px;color:#B8C7D6;">Currency<select value="{{ cur }}" onChange="{{ onCur }}" style="height:28px;border:1px solid #3A424E;border-radius:6px;background:#232A33;color:#FFFFFF;padding:0 8px;font-family:Inter,sans-serif;font-size:12px;"><option value="USD">USD</option><option value="EUR">EUR</option><option value="INR">INR</option></select></label>
+    <label style="display:flex;align-items:center;gap:6px;color:#B8C7D6;">Theme<select value="{{ theme }}" onChange="{{ onTheme }}" style="height:28px;border:1px solid #3A424E;border-radius:6px;background:#232A33;color:#FFFFFF;padding:0 8px;font-family:Inter,sans-serif;font-size:12px;"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+  </div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:{{ frameAlign }};padding:{{ framePad }};">
+<div data-frame="" style="{{ frameStyle }}">
+<div style="background:var(--paper,#FDFAF7);color:var(--text,#14181F);font-family:Inter,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.55;min-height:100%;text-wrap:pretty;display:flex;flex-direction:column;position:relative;container-type:inline-size;">
+  <a href="#main" style="position:absolute;left:-9999px;top:8px;">Skip to content</a>
+  <header style="position:sticky;top:0;z-index:30;background:var(--paper,#FDFAF7);border-bottom:1px solid var(--border,#E8E2DC);">
+    <div style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4cqw,24px);height:{{ headH }};display:flex;align-items:center;gap:24px;">
+      <a href="#/" aria-label="DripFunnel home" style="display:flex;align-items:center;min-height:44px;flex:none;"><img src="assets/dripfunnel-logo.svg" alt="" style="height:28px;width:auto;display:var(--logo-l,block);"><img src="assets/dripfunnel-logo-inverse.svg" alt="" style="height:28px;width:auto;display:var(--logo-d,none);"></a>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <nav aria-label="Main" style="display:flex;align-items:center;justify-content:center;gap:2px;flex:1;">
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4"><a href="{{ n.href }}" aria-current="{{ n.cur }}" style="height:44px;padding:0 12px;display:flex;align-items:center;text-decoration:none;font-weight:500;font-size:15px;color:var(--text,#14181F);box-shadow:inset 0 -2px 0 {{ n.line }};" style-hover="color:var(--link,#B8541F);">{{ n.label }}</a></sc-for>
+          <div style="position:relative;">
+            <button onClick="{{ toggleRes }}" aria-haspopup="true" aria-expanded="{{ resOpen }}" style="height:44px;padding:0 12px;display:flex;align-items:center;gap:6px;border:0;background:transparent;font-family:Inter,sans-serif;font-weight:500;font-size:15px;color:var(--text,#14181F);cursor:pointer;box-shadow:inset 0 -2px 0 {{ resLine }};">Resources<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+            <sc-if value="{{ resOpen }}" hint-placeholder-val="{{ false }}">
+              <div role="menu" style="position:absolute;top:52px;left:0;min-width:260px;background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;box-shadow:0 16px 40px rgba(10,42,74,0.16);padding:6px;display:flex;flex-direction:column;">
+                <sc-for list="{{ resNav }}" as="r" hint-placeholder-count="3"><a role="menuitem" href="{{ r.href }}" style="min-height:44px;padding:8px 12px;border-radius:8px;display:flex;flex-direction:column;justify-content:center;text-decoration:none;color:var(--text,#14181F);" style-hover="background:var(--sunk,#F3EDE8);color:var(--text,#14181F);"><span style="font-weight:600;font-size:15px;">{{ r.label }}</span><span style="font-size:13px;color:var(--muted,#5A6472);line-height:1.4;">{{ r.sub }}</span></a></sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </nav>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onClick="{{ toggleTheme }}" aria-label="{{ themeLabel }}" style="width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:var(--text,#14181F);cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--sunk,#F3EDE8);"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"></path></svg></sc-if></button>
+          <a href="DF Store Prototype.dc.html" style="height:44px;padding:0 12px;display:flex;align-items:center;text-decoration:none;font-weight:500;font-size:15px;color:var(--text,#14181F);" style-hover="color:var(--link,#B8541F);">Sign in</a>
+          <a href="DF Store Prototype.dc.html" style="height:44px;padding:0 18px;border:1px solid var(--outline,#B8541F);border-radius:8px;display:flex;align-items:center;text-decoration:none;font-family:Manrope,sans-serif;font-weight:700;font-size:15px;color:var(--outline,#B8541F);" style-hover="background:var(--outline-h,#FDF0E8);color:var(--outline,#B8541F);">Start free</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <span style="flex:1;"></span>
+        <button onClick="{{ toggleTheme }}" aria-label="{{ themeLabel }}" style="width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:var(--text,#14181F);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"></path></svg></button>
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="width:44px;height:44px;border:1px solid var(--border,#E8E2DC);border-radius:8px;background:var(--surface,#FFFFFF);color:var(--text,#14181F);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+      </sc-if>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <nav aria-label="Main" style="border-top:1px solid var(--border,#E8E2DC);background:var(--paper,#FDFAF7);padding:8px clamp(16px,4cqw,24px) 20px;display:flex;flex-direction:column;box-shadow:0 16px 32px rgba(10,42,74,0.12);">
+        <sc-for list="{{ mnav }}" as="n" hint-placeholder-count="7"><a href="{{ n.href }}" aria-current="{{ n.cur }}" style="min-height:48px;display:flex;align-items:center;border-bottom:1px solid var(--border,#E8E2DC);text-decoration:none;color:var(--text,#14181F);font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">{{ n.label }}</a></sc-for>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:16px;">
+          <a href="DF Store Prototype.dc.html" style="height:48px;border:1px solid var(--outline,#B8541F);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-family:Manrope,sans-serif;font-weight:700;color:var(--outline,#B8541F);">Sign in</a>
+          <a href="DF Store Prototype.dc.html" style="height:48px;border-radius:8px;background:#EC844F;display:flex;align-items:center;justify-content:center;text-decoration:none;font-family:Manrope,sans-serif;font-weight:700;color:#FFFFFF;">Start free</a>
+        </div>
+      </nav>
+    </sc-if>
+  </header>
+  <main id="main" style="flex:1;overflow-x:clip;">
+<sc-if value="{{ pg.home }}" hint-placeholder-val="{{ true }}">
+  <section data-screen-label="Home" style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(28px,4cqw,48px);padding-bottom:clamp(40px,7cqw,96px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;position:relative;isolation:isolate;">
+    {{ heroBg }}
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);"><span>700+ merchants</span><span aria-hidden="true" style="color:#EC844F;">●</span><span>No templates</span><span aria-hidden="true" style="color:#EC844F;">●</span><span>0% fee on orders</span></div>
+    <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(34px,6.6cqw,84px);line-height:1.02;letter-spacing:-0.04em;margin:0;color:var(--head,#0A2A4A);max-width:15ch;">Tell Us What You Sell. We’ll Build <span style="background:linear-gradient(transparent 62%, rgba(236,132,79,0.45) 62%, rgba(236,132,79,0.45) 92%, transparent 92%);padding:0 0.04em;">Your Store.</span></h1>
+    <p style="margin:0;font-size:clamp(16px,1.7cqw,20px);line-height:1.55;color:var(--muted,#5A6472);max-width:56ch;">No themes, no design skills, no code. Say what you sell and how it should feel. You get a homepage, pages, menus and product pages to check, and nothing goes live until you approve it.</p>
+    <div style="width:100%;max-width:780px;background:var(--surface,#FFFFFF);border:1.5px solid var(--text,#14181F);border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;text-align:left;">
+        <span aria-hidden="true" style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--link,#B8541F);padding-left:12px;">›</span>
+        <input type="text" aria-label="Describe your shop" value="{{ heroPrompt }}" onChange="{{ onHeroPrompt }}" placeholder="Describe your shop…" style="flex:1;min-width:200px;height:52px;border:0;border-radius:8px;background:transparent;padding:0 8px;font-family:Inter,sans-serif;font-size:17px;color:var(--text,#14181F);">
+        <a href="DF Store Prototype.dc.html" onClick="{{ savePrompt }}" style="height:52px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;gap:8px;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;flex:none;" style-hover="background:var(--btn-h,#D96C33);color:#FFFFFF;">Start free<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center;"><span style="font-size:14px;color:var(--muted,#5A6472);">Try</span><sc-for list="{{ examples }}" as="x" hint-placeholder-count="3"><button onClick="{{ x.use }}" style="min-height:44px;padding:0 14px;border:1px dashed var(--field,#D7D3CD);border-radius:8px;background:transparent;color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:14px;cursor:pointer;" style-hover="border-style:solid;border-color:var(--outline,#B8541F);">{{ x.short }}</button></sc-for></div>
+    <span style="font-size:14px;color:var(--muted,#5A6472);">Starter is free forever. Paid plans start with 10 days of Business, no credit card.</span>
+  </section>
+
+  <section aria-label="Merchants" style="border-top:1px solid var(--border,#E8E2DC);border-bottom:1px solid var(--border,#E8E2DC);background:var(--surface,#FFFFFF);">
+    <div style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:22px;padding-bottom:22px;display:flex;align-items:center;gap:16px 32px;flex-wrap:wrap;justify-content:center;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;color:var(--head,#0A2A4A);">700+ merchants sell on DripFunnel</span>
+      <sc-if value="{{ showPh }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;"><sc-for list="{{ logoSlots }}" as="l" hint-placeholder-count="6"><span style="width:112px;height:40px;border:1px dashed var(--field,#D7D3CD);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Merchant logo</span></sc-for></div></sc-if>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(48px,9cqw,120px);padding-bottom:clamp(40px,7cqw,88px);display:flex;flex-direction:column;gap:40px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">01 — How it works</span>
+      <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:20ch;">Describe, preview, publish. Undo whenever you like.</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);max-width:60ch;">This is {{ R.store }}, a sample shop in {{ R.country }}. Click through the four steps.</p></div>
+    </div>
+    <div role="group" aria-label="Steps" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));border-top:1px solid var(--border,#E8E2DC);">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4"><button onClick="{{ st.onClick }}" aria-pressed="{{ st.pressed }}" style="text-align:left;padding:20px 20px 22px 0;border:0;border-top:3px solid {{ st.mk }};margin-top:-2px;background:transparent;color:var(--text,#14181F);cursor:pointer;display:flex;flex-direction:column;gap:6px;font-family:Inter,sans-serif;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(36px,5cqw,64px);line-height:1;letter-spacing:-0.04em;color:{{ st.numC }};">{{ st.n }}</span><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:19px;">{{ st.t }}</span><span style="font-size:14px;color:var(--muted,#5A6472);line-height:1.5;max-width:30ch;">{{ st.d }}</span></button></sc-for>
+    </div>
+    <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:clamp(16px,3cqw,32px);display:flex;flex-direction:column;gap:18px;">
+      <sc-if value="{{ d0 }}" hint-placeholder-val="{{ true }}">
+          <span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">Describe your shop</span>
+          <div style="border:1px solid var(--field,#D7D3CD);border-radius:8px;padding:14px 16px;font-size:15px;line-height:1.6;background:var(--paper,#FDFAF7);">{{ R.prompt }}</div>
+          <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">What the AI designs</span><div style="display:flex;flex-wrap:wrap;gap:8px;"><span style="padding:6px 12px;border-radius:16px;background:var(--sunk,#F3EDE8);font-size:14px;">Homepage</span><span style="padding:6px 12px;border-radius:16px;background:var(--sunk,#F3EDE8);font-size:14px;">Pages</span><span style="padding:6px 12px;border-radius:16px;background:var(--sunk,#F3EDE8);font-size:14px;">Menus</span><span style="padding:6px 12px;border-radius:16px;background:var(--sunk,#F3EDE8);font-size:14px;">Product pages</span><span style="padding:6px 12px;border-radius:16px;background:var(--sunk,#F3EDE8);font-size:14px;">Colours and type</span></div></div>
+          <span style="font-size:14px;color:var(--muted,#5A6472);">The AI changes how your shop looks. It never changes your prices, stock or checkout.</span>
+        </sc-if>
+        <sc-if value="{{ d1 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">Draft · not on your live site</span><span role="group" aria-label="Preview size" style="display:flex;border:1px solid var(--field,#D7D3CD);border-radius:8px;overflow:hidden;"><sc-for list="{{ devs }}" as="w" hint-placeholder-count="3"><button onClick="{{ w.onClick }}" aria-pressed="{{ w.pressed }}" style="height:44px;padding:0 14px;border:0;background:{{ w.bg }};color:{{ w.fg }};font-family:Inter,sans-serif;font-size:14px;cursor:pointer;">{{ w.label }}</button></sc-for></span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;">
+            <sc-for list="{{ frames }}" as="f" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:center;min-width:0;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">{{ f.label }}</span>
+                <div aria-hidden="true" style="width:100%;max-width:{{ dv.maxw }};border:6px solid #14181F;border-radius:{{ dv.r }};overflow:hidden;background:#FFFFFF;color:#14181F;">
+                  <div style="padding:8px 10px;display:flex;justify-content:space-between;gap:8px;font-size:10px;border-bottom:1px solid #EDEAE5;background:{{ f.bar }};"><strong style="font-family:{{ f.hfont }},sans-serif;">{{ R.store }}</strong><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ f.nav }}</span></div>
+                  <div style="padding:{{ dv.pad }};background:{{ f.bg }};display:flex;flex-direction:column;gap:8px;"><span style="font-family:{{ f.hfont }},sans-serif;font-weight:800;font-size:{{ dv.hfs }};line-height:1.12;letter-spacing:-0.02em;color:{{ f.fg }};">{{ f.headline }}</span><span style="font-size:12px;color:{{ f.fg }};">{{ f.sub }}</span><span style="align-self:flex-start;padding:6px 12px;border-radius:6px;background:{{ f.accent }};color:#FFFFFF;font-size:12px;font-weight:700;">{{ f.cta }}</span></div>
+                  <div style="padding:10px;display:grid;grid-template-columns:{{ dv.cols }};gap:8px;"><sc-for list="{{ f.tiles }}" as="t" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:3px;min-width:0;"><span style="aspect-ratio:4/5;border-radius:4px;background:{{ t.bg }};"></span><span style="font-size:10px;line-height:1.3;">{{ t.name }}</span><span style="font-size:10px;font-weight:700;">{{ t.price }}</span></div></sc-for></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;"><span style="color:var(--okfg,#1D6B47);"><strong>Changed:</strong> colours, type, homepage, menu, new page</span><span style="color:var(--muted,#5A6472);"><strong>Not touched:</strong> products, prices, checkout</span></div>
+        </sc-if>
+        <sc-if value="{{ d2 }}" hint-placeholder-val="{{ false }}">
+          <span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">Approve and publish</span>
+          <div style="display:flex;flex-direction:column;gap:8px;"><div style="height:8px;border-radius:4px;background:var(--sunk,#F3EDE8);overflow:hidden;"><div style="width:100%;height:100%;background:#1D6B47;"></div></div><span style="font-size:14px;color:var(--okfg,#1D6B47);font-weight:600;">Version 13 is live. We checked your site and it changed.</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;">
+            <div style="border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Before you publish</span><span style="font-size:15px;">Nothing reaches shoppers until you press approve.</span></div>
+            <div style="border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">While it publishes</span><span style="font-size:15px;">Your shop stays open. Shoppers see the old version until the new one is ready.</span></div>
+            <div style="border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">If something breaks</span><span style="font-size:15px;">The draft stays a draft. Your live site doesn’t change.</span></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ d3 }}" hint-placeholder-val="{{ false }}">
+          <span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">History</span>
+          <div style="border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:hidden;">
+            <sc-for list="{{ history }}" as="h" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border,#E8E2DC);font-size:14px;flex-wrap:wrap;"><span style="flex:1;min-width:180px;display:flex;flex-direction:column;"><strong>v{{ h.v }} · {{ h.label }}</strong><span style="color:var(--muted,#5A6472);font-size:13px;">{{ h.date }} · {{ R.owner }}</span></span><sc-if value="{{ h.isLive }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--okbg,#EEF7F2);color:var(--okfg,#1D6B47);">Live</span></sc-if><sc-if value="{{ h.canBack }}" hint-placeholder-val="{{ true }}"><button onClick="{{ h.back }}" style="height:44px;padding:0 14px;border:1px solid var(--outline,#B8541F);border-radius:8px;background:transparent;color:var(--outline,#B8541F);font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:var(--outline-h,#FDF0E8);">Go back to this</button></sc-if></div></sc-for>
+          </div>
+          <span role="status" style="font-size:14px;color:var(--muted,#5A6472);">{{ liveMsg }}</span>
+        </sc-if>
+        <button onClick="{{ nextStep }}" style="align-self:flex-start;height:44px;padding:0;border:0;background:transparent;color:var(--link,#B8541F);font-family:Inter,sans-serif;font-weight:500;font-size:15px;cursor:pointer;">{{ nextLabel }} →</button>
+    </div>
+  </section>
+
+  <section style="background:var(--sunk,#F3EDE8);">
+    <div style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(48px,9cqw,120px);padding-bottom:clamp(48px,9cqw,120px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(32px,6cqw,88px);align-items:center;">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">02 — Fees</span>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(30px,5cqw,64px);line-height:1;letter-spacing:-0.04em;margin:0;color:var(--head,#0A2A4A);">Read the last line of the receipt.</h2>
+        <p style="margin:0;font-size:18px;color:var(--muted,#5A6472);max-width:46ch;">DripFunnel takes nothing from your orders, on every plan, including Starter. You pay your payment provider’s own fee and that’s it.</p>
+        <dl style="margin:8px 0 0;display:flex;flex-direction:column;border-top:1px solid var(--text,#14181F);">
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border,#E8E2DC);flex-wrap:wrap;"><dt style="font-family:Manrope,sans-serif;font-weight:700;">Starter</dt><dd style="margin:0;color:var(--muted,#5A6472);">Free forever · 10 products</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border,#E8E2DC);flex-wrap:wrap;"><dt style="font-family:Manrope,sans-serif;font-weight:700;">Paid plans</dt><dd style="margin:0;color:var(--muted,#5A6472);">10 days of Business first, no card</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border,#E8E2DC);flex-wrap:wrap;"><dt style="font-family:Manrope,sans-serif;font-weight:700;">Changing plan</dt><dd style="margin:0;color:var(--muted,#5A6472);">Upgrades now · downgrades at period end</dd></div>
+        </dl>
+        <a href="#/pricing" style="min-height:44px;display:flex;align-items:center;font-weight:500;">See plans and prices in {{ cur }} →</a>
+      </div>
+      <div style="display:flex;justify-content:center;">
+        <div aria-label="Sample order receipt" role="img" style="width:100%;max-width:380px;background:#FFFFFF;color:#14181F;padding:36px 28px 40px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;transform:rotate(-1.5deg);filter:drop-shadow(0 18px 28px rgba(10,42,74,0.16));-webkit-mask:conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/14px 51% repeat-x,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/14px 51% repeat-x;mask:conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/14px 51% repeat-x,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/14px 51% repeat-x;display:flex;flex-direction:column;gap:6px;">
+          <span style="text-align:center;font-family:Manrope,sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.01em;">{{ R.store }}</span>
+          <span style="text-align:center;color:#5A6472;font-size:11px;">Order #1042 · {{ R.city }}</span>
+          <span style="border-top:1px dashed #B8BEC6;margin:10px 0 6px;"></span>
+          <sc-for list="{{ receipt.items }}" as="r" hint-placeholder-count="2"><span style="display:flex;justify-content:space-between;gap:12px;"><span>{{ r.l }}</span><span>{{ r.v }}</span></span></sc-for>
+          <span style="border-top:1px dashed #B8BEC6;margin:6px 0;"></span>
+          <sc-for list="{{ receipt.lines }}" as="r" hint-placeholder-count="4"><span style="display:flex;justify-content:space-between;gap:12px;color:#434A55;"><span>{{ r.l }}</span><span style="text-align:right;">{{ r.v }}</span></span></sc-for>
+          <span style="border-top:1px dashed #B8BEC6;margin:6px 0;"></span>
+          <span style="display:flex;justify-content:space-between;gap:12px;font-weight:500;font-size:14px;"><span>Shopper paid</span><span>{{ receipt.net }}</span></span>
+          <span style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:2px solid #EC844F;border-radius:6px;font-weight:500;font-size:14px;"><span>DripFunnel fee</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:#B8541F;">{{ receipt.zero }}</span></span>
+          <span style="text-align:center;color:#5A6472;font-size:11px;margin-top:12px;">Sample order · thank you for shopping small</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(48px,9cqw,120px);padding-bottom:clamp(40px,7cqw,88px);display:flex;flex-direction:column;gap:28px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">03 — What you get</span>
+      <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:20ch;">Everything a shop needs, in one portal.</h2></div>
+    </div>
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ homeFeatures }}" as="f" hint-placeholder-count="8"><a href="{{ f.href }}" style="display:grid;grid-template-columns:{{ idxCols }};gap:6px 32px;padding:24px 0;border-bottom:1px solid var(--border,#E8E2DC);text-decoration:none;color:var(--text,#14181F);align-items:baseline;" style-hover="color:var(--link,#B8541F);"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted,#5A6472);">{{ f.n }}</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(19px,2.6cqw,32px);line-height:1.15;letter-spacing:-0.025em;">{{ f.t }}</span><span style="font-size:16px;color:var(--muted,#5A6472);line-height:1.55;">{{ f.d }}</span><span aria-hidden="true" style="font-size:22px;color:var(--link,#B8541F);text-align:right;">→</span></a></sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(32px,6cqw,72px);padding-bottom:clamp(48px,9cqw,120px);display:flex;flex-direction:column;gap:32px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">04 — Your portal</span>
+      <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:20ch;">Open it and see what needs you.</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);max-width:60ch;">Home starts with what’s waiting: orders to ship, carts to win back, supplier products to approve. Then today’s numbers.</p></div>
+    </div>
+    <div aria-hidden="true" style="border:1.5px solid var(--text,#14181F);border-radius:12px;overflow:hidden;background:var(--paper,#FDFAF7);display:flex;min-height:420px;">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div style="width:210px;flex:none;background:#0A2A4A;color:#FFFFFF;display:flex;flex-direction:column;padding:16px 0;gap:1px;"><img src="assets/dripfunnel-logo-inverse.svg" alt="" style="height:20px;width:auto;align-self:flex-start;margin:0 16px 14px;"><sc-for list="{{ pnav }}" as="p" hint-placeholder-count="10"><span style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 16px 8px 13px;font-size:13px;background:{{ p.bg }};border-left:3px solid {{ p.mk }};font-weight:{{ p.w }};">{{ p.label }}<sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="min-width:20px;padding:1px 6px;border-radius:10px;background:#EC844F;color:#FFFFFF;font-size:11px;font-weight:700;text-align:center;">{{ p.badge }}</span></sc-if></span></sc-for></div></sc-if>
+      <div style="flex:1;min-width:0;padding:24px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;">Good morning, {{ R.owner }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">{{ R.store }} · sample data</span></div>
+        <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:hidden;">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border,#E8E2DC);font-family:Manrope,sans-serif;font-weight:700;font-size:15px;">Waiting for you</div>
+          <sc-for list="{{ wait }}" as="x" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border,#E8E2DC);"><span style="flex:1;display:flex;flex-direction:column;min-width:0;"><span style="font-size:14px;font-weight:600;">{{ x.t }}</span><span style="font-size:12px;color:var(--muted,#5A6472);">{{ x.d }}</span></span><span style="height:32px;padding:0 12px;border:1px solid var(--field,#D7D3CD);border-radius:8px;display:flex;align-items:center;font-size:13px;">{{ x.a }}</span></div></sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;"><sc-for list="{{ nums }}" as="n" hint-placeholder-count="3"><div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--muted,#5A6472);">{{ n.l }}</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.03em;">{{ n.v }}</span></div></sc-for></div>
+      </div>
+    </div>
+    <a href="DF Store Prototype.dc.html" style="min-height:44px;display:flex;align-items:center;font-weight:500;align-self:flex-start;">Open the portal →</a>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-bottom:clamp(48px,9cqw,120px);display:flex;flex-direction:column;gap:32px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">05 — Sell worldwide</span>
+      <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:20ch;">Local rules, local payments, local couriers.</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);max-width:60ch;">Your shop follows the rules of the country it sells in. Here is what changes in three of them.</p></div>
+    </div>
+    <div role="region" aria-label="Country comparison" tabindex="0" style="overflow:auto;">
+      <table style="width:100%;min-width:720px;border-collapse:collapse;font-size:15px;">
+        <thead><tr><th scope="col" style="text-align:left;padding:14px 16px 14px 0;width:18%;"></th><sc-for list="{{ regions }}" as="r" hint-placeholder-count="3"><th scope="col" style="text-align:left;padding:14px 16px;border-bottom:1.5px solid var(--text,#14181F);background:{{ r.hbg }};vertical-align:bottom;"><span style="display:flex;flex-direction:column;gap:2px;"><sc-if value="{{ r.on }}" hint-placeholder-val="{{ false }}"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tint-fg,#8F4017);">Your region</span></sc-if><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;">{{ r.country }}</span><span style="font-size:13px;font-weight:400;color:var(--muted,#5A6472);">Sample shop: {{ r.store }}</span></span></th></sc-for></tr></thead>
+        <tbody><sc-for list="{{ regTable }}" as="row" hint-placeholder-count="6"><tr><th scope="row" style="text-align:left;padding:14px 16px 14px 0;border-bottom:1px solid var(--border,#E8E2DC);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);font-weight:400;">{{ row.l }}</th><sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="3"><td style="padding:14px 16px;border-bottom:1px solid var(--border,#E8E2DC);background:{{ c.bg }};vertical-align:top;">{{ c.v }}</td></sc-for></tr></sc-for></tbody>
+      </table>
+    </div>
+  </section>
+
+  <sc-if value="{{ showPh }}" hint-placeholder-val="{{ true }}">
+    <section aria-label="What merchants say" style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-bottom:clamp(48px,9cqw,120px);">
+      <figure style="margin:0 auto;max-width:900px;border:1px dashed var(--field,#D7D3CD);border-radius:12px;padding:clamp(28px,5cqw,56px);display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Testimonial placeholder</span>
+        <blockquote style="margin:0;font-family:Manrope,sans-serif;font-weight:700;font-size:clamp(20px,3cqw,34px);line-height:1.25;letter-spacing:-0.02em;color:var(--muted,#5A6472);">“A merchant’s own words go here, one or two sentences about what changed for their shop.”</blockquote>
+        <figcaption style="font-size:15px;color:var(--muted,#5A6472);">Name · Shop · Country</figcaption>
+      </figure>
+    </section>
+  </sc-if>
+
+  <section data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(48px,9cqw,120px);padding-bottom:clamp(48px,9cqw,120px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,6cqw,76px);letter-spacing:-0.04em;line-height:1;max-width:14ch;">Your shop can be live today.</span>
+      <span style="font-size:18px;color:#B8C7D6;max-width:52ch;">Describe it, preview it, publish it. Starter is free forever.</span>
+      <div style="width:100%;max-width:780px;background:#FFFFFF;border:0;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;text-align:left;">
+        <span aria-hidden="true" style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:#B8541F;padding-left:12px;">›</span>
+        <input type="text" aria-label="Describe your shop" value="{{ heroPrompt }}" onChange="{{ onHeroPrompt }}" placeholder="Describe your shop…" style="flex:1;min-width:200px;height:52px;border:0;border-radius:8px;background:transparent;padding:0 8px;font-family:Inter,sans-serif;font-size:17px;color:#14181F;">
+        <a href="DF Store Prototype.dc.html" onClick="{{ savePrompt }}" style="height:52px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;gap:8px;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;flex:none;" style-hover="background:#F09A6D;color:#FFFFFF;">Start free<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+      <a href="#/contact/demo" style="min-height:44px;display:flex;align-items:center;color:#F09A6D;font-weight:500;" style-hover="color:#FFFFFF;">Or book a demo</a>
+    </div>
+  </section>
+</sc-if>
+<sc-if value="{{ pg.ai }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="AI Builder" style="max-width:1240px;margin:0 auto;padding:clamp(40px,7cqw,96px) clamp(16px,4cqw,24px) clamp(36px,5cqw,64px);display:flex;flex-direction:column;gap:22px;">
+    <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:2px;background:#EC844F;display:block;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">AI Store Builder</span></div>
+    <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,6cqw,68px);line-height:1.03;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:16ch;">Your whole store, designed from a description.</h1>
+    <p style="margin:0;font-size:clamp(16px,1.6cqw,19px);color:var(--muted,#5A6472);max-width:60ch;">There are no themes to pick and no templates to fight. You tell the AI about your business. It designs the homepage, pages, menus, product pages and the look of all of them. You check it, publish it, and can undo it.</p>
+    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;"><a href="DF Store Prototype.dc.html" style="height:44px;padding:0 22px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;font-size:15px;" style-hover="background:var(--btn-h,#D96C33);color:#FFFFFF;">Start free</a><a href="#/pricing" style="min-height:44px;display:flex;align-items:center;font-weight:500;">Which plans include AI</a></div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);">
+    <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px;">
+      <sc-for list="{{ aiSteps }}" as="x" hint-placeholder-count="5"><li style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:var(--link,#B8541F);">{{ x.n }}</span><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:18px;">{{ x.t }}</span><span style="font-size:15px;color:var(--muted,#5A6472);line-height:1.55;">{{ x.d }}</span></li></sc-for>
+    </ol>
+  </section>
+
+  <section style="background:var(--sunk,#F3EDE8);">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,96px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:720px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(26px,4cqw,44px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">What merchants type</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">Plain sentences. Ask for one change at a time, or describe the whole shop at once.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px;">
+        <sc-for list="{{ aiPrompts }}" as="x" hint-placeholder-count="6"><div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;"><span style="font-size:16px;line-height:1.55;">“{{ x.p }}”</span><span style="display:flex;gap:8px;align-items:baseline;font-size:14px;border-top:1px solid var(--border,#E8E2DC);padding-top:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);flex:none;">Changes</span><span style="color:var(--okfg,#1D6B47);">{{ x.c }}</span></span></div></sc-for>
+      </div>
+      <span style="font-size:15px;color:var(--muted,#5A6472);">The AI changes how your shop looks and reads. It never touches your prices, stock, orders or checkout.</span>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,96px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:640px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(26px,4cqw,44px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">Before and after, on every screen</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">Every change arrives as a draft. Check it on desktop, tablet and phone before anyone else sees it.</p></div>
+      <span role="group" aria-label="Preview size" style="display:flex;border:1px solid var(--field,#D7D3CD);border-radius:8px;overflow:hidden;"><sc-for list="{{ devs }}" as="w" hint-placeholder-count="3"><button onClick="{{ w.onClick }}" aria-pressed="{{ w.pressed }}" style="height:44px;padding:0 16px;border:0;background:{{ w.bg }};color:{{ w.fg }};font-family:Inter,sans-serif;font-size:14px;cursor:pointer;">{{ w.label }}</button></sc-for></span>
+    </div>
+    <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:clamp(16px,3cqw,28px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;">
+      <sc-for list="{{ frames }}" as="f" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:center;min-width:0;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">{{ f.label }}</span>
+          <div aria-hidden="true" style="width:100%;max-width:{{ dv.maxw }};border:6px solid #14181F;border-radius:{{ dv.r }};overflow:hidden;background:#FFFFFF;color:#14181F;">
+            <div style="padding:8px 10px;display:flex;justify-content:space-between;gap:8px;font-size:10px;border-bottom:1px solid #EDEAE5;background:{{ f.bar }};"><strong style="font-family:{{ f.hfont }},sans-serif;">{{ R.store }}</strong><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ f.nav }}</span></div>
+            <div style="padding:{{ dv.pad }};background:{{ f.bg }};display:flex;flex-direction:column;gap:8px;"><span style="font-family:{{ f.hfont }},sans-serif;font-weight:800;font-size:{{ dv.hfs }};line-height:1.12;letter-spacing:-0.02em;color:{{ f.fg }};">{{ f.headline }}</span><span style="font-size:12px;color:{{ f.fg }};">{{ f.sub }}</span><span style="align-self:flex-start;padding:6px 12px;border-radius:6px;background:{{ f.accent }};color:#FFFFFF;font-size:12px;font-weight:700;">{{ f.cta }}</span></div>
+            <div style="padding:10px;display:grid;grid-template-columns:{{ dv.cols }};gap:8px;"><sc-for list="{{ f.tiles }}" as="t" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:3px;min-width:0;"><span style="aspect-ratio:4/5;border-radius:4px;background:{{ t.bg }};"></span><span style="font-size:10px;line-height:1.3;">{{ t.name }}</span><span style="font-size:10px;font-weight:700;">{{ t.price }}</span></div></sc-for></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px;"><sc-for list="{{ aiDesigns }}" as="x" hint-placeholder-count="5"><div style="border-top:2px solid #EC844F;padding-top:12px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:16px;">{{ x.t }}</span><span style="font-size:14px;color:var(--muted,#5A6472);">{{ x.d }}</span></div></sc-for></div>
+  </section>
+
+  <section style="background:var(--sunk,#F3EDE8);">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,96px) clamp(16px,4cqw,24px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(28px,5cqw,56px);align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(26px,4cqw,44px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">Every version kept. Undo in one click.</h2>
+        <p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">Each publish becomes a numbered version with what changed and who did it. Going back to an older one is instant and never uses your AI allowance.</p>
+        <dl style="margin:0;display:flex;flex-direction:column;"><sc-for list="{{ histPlans }}" as="x" hint-placeholder-count="5"><div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--border,#E8E2DC);font-size:15px;"><dt>{{ x.p }}</dt><dd style="margin:0;font-weight:600;">{{ x.v }}</dd></div></sc-for></dl>
+      </div>
+      <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:hidden;">
+        <div style="padding:14px 18px;border-bottom:1px solid var(--border,#E8E2DC);font-family:Manrope,sans-serif;font-weight:700;font-size:16px;">History · {{ R.store }}</div>
+        <sc-for list="{{ history }}" as="h" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border,#E8E2DC);font-size:14px;flex-wrap:wrap;"><span style="flex:1;min-width:180px;display:flex;flex-direction:column;"><strong>v{{ h.v }} · {{ h.label }}</strong><span style="color:var(--muted,#5A6472);font-size:13px;">{{ h.date }} · {{ R.owner }}</span></span><sc-if value="{{ h.isLive }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--okbg,#EEF7F2);color:var(--okfg,#1D6B47);">Live</span></sc-if><sc-if value="{{ h.canBack }}" hint-placeholder-val="{{ true }}"><button onClick="{{ h.back }}" style="height:44px;padding:0 14px;border:1px solid var(--outline,#B8541F);border-radius:8px;background:transparent;color:var(--outline,#B8541F);font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:var(--outline-h,#FDF0E8);">Go back to this</button></sc-if></div></sc-for>
+        <div role="status" style="padding:12px 18px;font-size:14px;color:var(--muted,#5A6472);">{{ liveMsg }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,96px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:28px;">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:720px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(26px,4cqw,44px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">AI on every plan</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">The same AI designs your store and writes your product descriptions and translations. How you pay for it depends on your plan.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px;">
+      <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Starter (Free) and Growth</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;">On your own AI key</span><span style="font-size:15px;color:var(--muted,#5A6472);">Connect your own OpenAI or Anthropic account and pay them directly for what you use. Paste the key once in Settings.</span></div>
+      <div style="background:var(--surface,#FFFFFF);border:2px solid #EC844F;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tint-fg,#8F4017);">From Growth Pro</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;">Included, no key needed</span><span style="font-size:15px;color:var(--muted,#5A6472);">A monthly allowance comes with the plan, larger on Business. If you run out, your shop keeps working and nothing you published changes.</span></div>
+    </div>
+  </section>
+
+  <section data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,7cqw,88px) clamp(16px,4cqw,24px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:36px;align-items:center;">
+      <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#B8C7D6;">Optional setup help</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(24px,4cqw,40px);letter-spacing:-0.03em;line-height:1.1;">Need help building your storefront? We’ll do it for you.</span><span style="font-size:17px;color:#B8C7D6;">Our team builds your homepage, pages, menus and first products so you launch looking finished. It’s a one-time payment on paid plans: {{ setupLine }}.</span></div>
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;"><a href="#/contact/sales" style="height:48px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;" style-hover="background:#F09A6D;color:#FFFFFF;">Ask us to build it</a><a href="DF Store Prototype.dc.html" style="min-height:44px;display:flex;align-items:center;color:#F09A6D;font-weight:500;" style-hover="color:#FFFFFF;">Or build it yourself, free</a></div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ pg.features }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Features" style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(32px,6cqw,80px);padding-bottom:clamp(32px,5cqw,56px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Features</span>
+    <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(34px,6.6cqw,84px);line-height:1.02;letter-spacing:-0.04em;margin:0;color:var(--head,#0A2A4A);max-width:15ch;">Everything a shop needs. Nothing to bolt on.</h1>
+    <p style="margin:0;font-size:clamp(16px,1.7cqw,20px);color:var(--muted,#5A6472);max-width:58ch;">{{ featCount }} features across ten parts of running a shop, all in one portal. Each one says which plan it starts on, and every plan has zero fees on your orders.</p>
+    <div style="display:flex;gap:6px 18px;flex-wrap:wrap;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);"><span>{{ featCount }} features</span><span aria-hidden="true" style="color:#EC844F;">●</span><span>{{ featFree }} on Starter (Free)</span><span aria-hidden="true" style="color:#EC844F;">●</span><span>5 plans</span></div>
+  </section>
+
+  <nav aria-label="Contents" style="position:sticky;top:{{ stickyTop }};z-index:20;background:var(--paper,#FDFAF7);border-top:1px solid var(--border,#E8E2DC);border-bottom:1px solid var(--border,#E8E2DC);">
+    <div style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;"><sc-for list="{{ fnav }}" as="n" hint-placeholder-count="10"><button onClick="{{ n.onClick }}" style="height:48px;padding:0 12px;border:0;background:transparent;color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:14px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;" style-hover="color:var(--link,#B8541F);"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted,#5A6472);">{{ n.n }}</span>{{ n.label }}</button></sc-for></div>
+  </nav>
+
+  <sc-for list="{{ fsecs }}" as="f" hint-placeholder-count="10">
+    <section id="{{ f.id }}" style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(44px,8cqw,104px);padding-bottom:clamp(32px,6cqw,72px);display:flex;flex-direction:column;gap:36px;scroll-margin-top:140px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+        <div style="display:flex;flex-direction:column;gap:10px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">{{ f.n }} — {{ f.label }}</span><span style="font-size:14px;color:var(--muted,#5A6472);">{{ f.plan }}</span></div>
+        <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);max-width:20ch;">{{ f.title }}</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);max-width:60ch;">{{ f.lead }}</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(28px,4cqw,56px);align-items:start;">
+        <dl style="grid-column:span 2;min-width:min(100%,340px);margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:0 32px;">
+          <sc-for list="{{ f.items }}" as="x" hint-placeholder-count="8"><div style="padding:16px 0;border-bottom:1px solid var(--border,#E8E2DC);display:flex;flex-direction:column;gap:4px;"><dt style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;line-height:1.3;">{{ x.t }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:{{ x.pc }};white-space:nowrap;flex:none;">{{ x.p }}</span></dt><dd style="margin:0;font-size:14px;color:var(--muted,#5A6472);line-height:1.5;">{{ x.d }}</dd></div></sc-for>
+        </dl>
+        <div aria-hidden="true" style="position:sticky;top:{{ mockTop }};background:var(--surface,#FFFFFF);border:1.5px solid var(--text,#14181F);border-radius:12px;overflow:hidden;font-size:14px;">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border,#E8E2DC);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:15px;">{{ f.mockTitle }}</span><span style="font-size:13px;color:var(--muted,#5A6472);">{{ f.mockSub }}</span></div>
+          <sc-if value="{{ f.isBars }}" hint-placeholder-val="{{ false }}"><div style="padding:20px 18px 12px;display:flex;align-items:flex-end;gap:10px;height:200px;"><sc-for list="{{ f.bars }}" as="b" hint-placeholder-count="7"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;"><span style="width:100%;height:{{ b.h }};background:{{ b.c }};border-radius:4px 4px 0 0;"></span><span style="font-size:11px;color:var(--muted,#5A6472);">{{ b.l }}</span></div></sc-for></div></sc-if>
+          <sc-for list="{{ f.rows }}" as="r" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border,#E8E2DC);flex-wrap:wrap;"><span style="flex:1;min-width:150px;display:flex;flex-direction:column;"><span style="font-weight:600;">{{ r.a }}</span><span style="font-size:13px;color:var(--muted,#5A6472);">{{ r.b }}</span></span><span style="font-size:13px;color:var(--text,#14181F);">{{ r.c }}</span><sc-if value="{{ r.pill }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;background:{{ r.pbg }};color:{{ r.pfg }};">{{ r.pill }}</span></sc-if></div></sc-for>
+          <sc-if value="{{ f.foot }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 18px;font-size:13px;color:var(--muted,#5A6472);background:var(--paper,#FDFAF7);">{{ f.foot }}</div></sc-if>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+
+  <section style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(32px,6cqw,72px);padding-bottom:clamp(48px,9cqw,120px);display:flex;flex-direction:column;gap:28px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px 40px;border-top:1px solid var(--text,#14181F);padding-top:20px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Index</span>
+      <div style="grid-column:span 3;min-width:min(100%,300px);display:flex;flex-direction:column;gap:12px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(28px,4.4cqw,56px);line-height:1.02;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);">Every feature, by plan.</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);max-width:60ch;">The whole list on one page. Pick a plan to see what it includes; prices are on the <a href="#/pricing">pricing page</a>.</p></div>
+    </div>
+    <div role="group" aria-label="Show features from" style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ planFilter }}" as="p" hint-placeholder-count="6"><button onClick="{{ p.onClick }}" aria-pressed="{{ p.pressed }}" style="min-height:44px;padding:0 16px;border:1px solid {{ p.bd }};border-radius:8px;background:{{ p.bg }};color:{{ p.fg }};font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;">{{ p.label }}</button></sc-for></div>
+    <div style="columns:{{ idxColumns }};column-gap:40px;">
+      <sc-for list="{{ fIndex }}" as="g" hint-placeholder-count="10"><div style="break-inside:avoid;padding-bottom:22px;display:flex;flex-direction:column;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);padding-bottom:8px;border-bottom:1px solid var(--text,#14181F);">{{ g.n }} — {{ g.label }}</span><sc-for list="{{ g.items }}" as="x" hint-placeholder-count="6"><span style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--border,#E8E2DC);font-size:15px;color:{{ x.fg }};"><span>{{ x.t }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:{{ x.pc }};white-space:nowrap;">{{ x.p }}</span></span></sc-for></div></sc-for>
+    </div>
+    <span role="status" style="font-size:14px;color:var(--muted,#5A6472);">{{ idxLine }}</span>
+  </section>
+
+  <section data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding-left:clamp(16px,4cqw,24px);padding-right:clamp(16px,4cqw,24px);padding-top:clamp(48px,9cqw,120px);padding-bottom:clamp(48px,9cqw,120px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,6cqw,76px);letter-spacing:-0.04em;line-height:1;max-width:14ch;">Try every feature for 10 days.</span>
+      <span style="font-size:18px;color:#B8C7D6;max-width:52ch;">New shops get everything in Business, no credit card. Then pick a plan or stay on Starter for free.</span>
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;"><a href="DF Store Prototype.dc.html" style="height:52px;padding:0 26px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;" style-hover="background:#F09A6D;color:#FFFFFF;">Start free</a><a href="#/pricing" style="min-height:44px;display:flex;align-items:center;color:#F09A6D;font-weight:500;" style-hover="color:#FFFFFF;">Compare plans</a></div>
+    </div>
+  </section>
+</sc-if>
+<sc-if value="{{ pg.pricing }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Pricing" style="max-width:1240px;margin:0 auto;padding:clamp(40px,7cqw,88px) clamp(16px,4cqw,24px) 36px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;">
+    <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:2px;background:#EC844F;display:block;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Pricing</span></div>
+    <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,5.5cqw,60px);line-height:1.04;letter-spacing:-0.035em;margin:0;max-width:18ch;color:var(--head,#0A2A4A);">Start free. Pay when your shop grows.</h1>
+    <span style="display:inline-flex;padding:6px 14px;border-radius:20px;background:var(--okbg,#EEF7F2);color:var(--okfg,#1D6B47);font-family:Manrope,sans-serif;font-weight:700;font-size:14px;">Try everything in Business free for 10 days · no credit card required</span>
+    <p style="margin:0;max-width:60ch;font-size:17px;color:var(--muted,#5A6472);">Every plan has a real shop, unlimited orders, zero fees on your orders and the legal details your markets need. Paid plans add more products, a team, suppliers and selling abroad.</p>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
+      <div role="group" aria-label="Billing period" style="display:flex;gap:4px;padding:4px;border:1px solid var(--border,#E8E2DC);border-radius:10px;background:var(--surface,#FFFFFF);"><sc-for list="{{ periods }}" as="p" hint-placeholder-count="2"><button onClick="{{ p.onClick }}" aria-pressed="{{ p.pressed }}" style="height:44px;padding:0 16px;border:0;border-radius:8px;background:{{ p.bg }};color:{{ p.fg }};font-family:Manrope,sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;">{{ p.label }}<sc-if value="{{ p.tag }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:var(--okbg,#EEF7F2);color:var(--okfg,#1D6B47);">{{ p.tag }}</span></sc-if></button></sc-for></div>
+      <select value="{{ cur }}" onChange="{{ onCur }}" aria-label="Currency" style="height:52px;border:1px solid var(--border,#E8E2DC);border-radius:10px;background:var(--surface,#FFFFFF);padding:0 12px;font-family:Inter,sans-serif;font-size:15px;color:var(--text,#14181F);"><option value="USD">$ USD</option><option value="EUR">€ EUR</option><option value="INR">₹ INR</option></select>
+    </div>
+  </section>
+  <section aria-label="Plans" style="max-width:1240px;margin:0 auto;padding:12px clamp(16px,4cqw,24px) 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;align-items:stretch;">
+    <sc-for list="{{ plans }}" as="p" hint-placeholder-count="5">
+      <div style="background:{{ p.bg }};color:{{ p.fg }};border:{{ p.bd }};border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;gap:12px;position:relative;">
+        <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-12px;left:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:12px;background:#0A2A4A;color:#FFFFFF;">{{ p.badge }}</span></sc-if>
+        <h2 style="margin:0;font-family:Manrope,sans-serif;font-weight:800;font-size:20px;">{{ p.name }}</h2>
+        <span style="font-size:14px;color:{{ p.sub }};min-height:44px;">{{ p.for }}</span>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="display:flex;align-items:baseline;gap:4px;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.03em;">{{ p.price }}</span><span style="font-size:14px;color:{{ p.sub }};">{{ p.per }}</span></span><span style="font-size:13px;color:{{ p.sub }};min-height:40px;">{{ p.note }}</span></div>
+        <a href="{{ p.href }}" style="height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-family:Manrope,sans-serif;font-weight:700;font-size:14px;background:{{ p.btnBg }};color:{{ p.btnFg }};border:{{ p.btnBd }};" style-hover="{{ p.btnH }}">{{ p.cta }}</a>
+        <div style="height:1px;background:{{ p.rule }};"></div>
+        <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;"><sc-for list="{{ p.points }}" as="pt" hint-placeholder-count="6"><li style="display:flex;gap:8px;font-size:14px;line-height:1.45;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ p.tick }}" stroke-width="2.2" stroke-linecap="round" style="flex:none;margin-top:2px;"><path d="M5 12l5 5L20 7"></path></svg>{{ pt }}</li></sc-for></ul>
+      </div>
+    </sc-for>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4cqw,24px) 64px;display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;align-items:baseline;gap:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--link,#B8541F);">01</span><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(22px,3.4cqw,34px);letter-spacing:-0.025em;margin:0;color:var(--head,#0A2A4A);">Compare every feature</h2></div>
+    <div role="region" aria-label="Feature comparison" tabindex="0" style="border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:auto;background:var(--surface,#FFFFFF);">
+      <div role="table" style="min-width:880px;">
+        <div role="row" style="display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(5,minmax(110px,1fr));border-bottom:1px solid var(--border,#E8E2DC);">
+          <span role="columnheader" style="padding:14px 18px;font-size:13px;color:var(--muted,#5A6472);">Feature</span>
+          <sc-for list="{{ heads }}" as="h" hint-placeholder-count="5"><span role="columnheader" style="padding:14px 12px;font-family:Manrope,sans-serif;font-weight:800;font-size:15px;text-align:center;background:{{ h.bg }};">{{ h.name }}</span></sc-for>
+        </div>
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="8">
+          <div role="row" style="padding:12px 18px;background:var(--paper,#FDFAF7);border-bottom:1px solid var(--border,#E8E2DC);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tint-fg,#8F4017);"><span role="rowheader">{{ g.name }}</span></div>
+          <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="5">
+            <div role="row" style="display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(5,minmax(110px,1fr));border-bottom:1px solid var(--border,#E8E2DC);font-size:14px;">
+              <span role="rowheader" style="padding:12px 18px;display:flex;flex-direction:column;"><span>{{ r.name }}</span><sc-if value="{{ r.note }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--muted,#5A6472);">{{ r.note }}</span></sc-if></span>
+              <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5"><span role="cell" aria-label="{{ c.label }}" style="padding:12px;text-align:center;color:{{ c.fg }};background:{{ c.bg }};font-weight:{{ c.w }};">{{ c.v }}</span></sc-for>
+            </div>
+          </sc-for>
+        </sc-for>
+      </div>
+    </div>
+    <span style="font-size:13px;color:var(--muted,#5A6472);">{{ priceFoot }}</span>
+  </section>
+  <section style="max-width:880px;margin:0 auto;padding:0 clamp(16px,4cqw,24px) 80px;display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;align-items:baseline;gap:14px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--link,#B8541F);">02</span><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(22px,3.4cqw,34px);letter-spacing:-0.025em;margin:0;color:var(--head,#0A2A4A);">Questions</h2></div>
+    <div style="border-top:1px solid var(--border,#E8E2DC);">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="8">
+        <div style="border-bottom:1px solid var(--border,#E8E2DC);">
+          <button onClick="{{ f.onClick }}" aria-expanded="{{ f.exp }}" style="width:100%;min-height:60px;padding:14px 0;border:0;background:transparent;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;cursor:pointer;color:var(--text,#14181F);font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">{{ f.q }}<span aria-hidden="true" style="font-size:22px;color:var(--link,#B8541F);flex:none;">{{ f.sign }}</span></button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:0 0 18px;font-size:15px;color:var(--muted,#5A6472);line-height:1.65;max-width:68ch;">{{ f.a }}</p></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <section data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,7cqw,80px) clamp(16px,4cqw,24px);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(22px,3.6cqw,36px);letter-spacing:-0.025em;">Your shop can be live today.</span><span style="font-size:16px;color:#B8C7D6;">Try everything in Business free for 10 days. No credit card required.</span></div>
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;"><a href="DF Store Prototype.dc.html" style="height:48px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;" style-hover="background:#F09A6D;color:#FFFFFF;">Start free</a><a href="#/contact/sales" style="min-height:44px;display:flex;align-items:center;color:#F09A6D;font-weight:500;" style-hover="color:#FFFFFF;">Talk to us</a></div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ pg.partners }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Partners" data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,112px) clamp(16px,4cqw,24px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(32px,5cqw,64px);align-items:center;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:2px;background:#EC844F;display:block;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#B8C7D6;">Partners · white-label</span></div>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,6cqw,64px);line-height:1.03;letter-spacing:-0.035em;margin:0;">Run DripFunnel under your own brand.</h1>
+        <p style="margin:0;font-size:18px;color:#B8C7D6;max-width:52ch;">For agencies and groups that run shops for others. Your name on the portal, the shops and every email. Your plans and your prices. Many stores under one account.</p>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;"><a href="#/contact/partners" style="height:48px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;" style-hover="background:#F09A6D;color:#FFFFFF;">Talk to us</a><a href="mailto:sales@dripfunnel.com" style="min-height:44px;display:flex;align-items:center;color:#F09A6D;font-weight:500;" style-hover="color:#FFFFFF;">sales@dripfunnel.com</a></div>
+      </div>
+      <div aria-hidden="true" style="background:#FFFFFF;color:#14181F;border-radius:12px;overflow:hidden;border:1px solid #1C3F60;">
+        <div style="height:48px;padding:0 16px;display:flex;align-items:center;gap:10px;background:#1F4B3A;color:#FFFFFF;"><span style="width:24px;height:24px;border-radius:6px;background:#F4C95D;"></span><strong style="font-family:Manrope,sans-serif;font-size:14px;">Northstar Shops</strong><span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:0.85;">store.northstar.com</span></div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#5A6472;">Example partner · your brand here</span>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;"><sc-for list="{{ pStats }}" as="x" hint-placeholder-count="3"><div style="border:1px solid #E8E2DC;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;"><span style="font-size:11px;color:#5A6472;">{{ x.l }}</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;">{{ x.v }}</span></div></sc-for></div>
+          <sc-for list="{{ pDomains }}" as="d" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-top:1px solid #E8E2DC;font-size:13px;flex-wrap:wrap;"><span style="color:#5A6472;">{{ d.l }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;">{{ d.v }}</span></div></sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,104px) clamp(16px,4cqw,24px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;">
+    <sc-for list="{{ pBlocks }}" as="b" hint-placeholder-count="4">
+      <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;color:var(--link,#B8541F);">{{ b.n }}</span>
+        <h2 style="margin:0;font-family:Manrope,sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;color:var(--head,#0A2A4A);">{{ b.t }}</h2>
+        <span style="font-size:15px;color:var(--muted,#5A6472);">{{ b.d }}</span>
+        <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;"><sc-for list="{{ b.pts }}" as="p" hint-placeholder-count="3"><li style="padding:9px 0;border-top:1px solid var(--border,#E8E2DC);font-size:14px;">{{ p }}</li></sc-for></ul>
+      </div>
+    </sc-for>
+  </section>
+  <section style="background:var(--sunk,#F3EDE8);">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,96px) clamp(16px,4cqw,24px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(28px,5cqw,56px);align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(24px,4cqw,42px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">How the money works</h2>
+        <p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">Your merchants pay you, at the prices you set. DripFunnel keeps a wholesale fee for each store and pays you the rest every month, with a statement that shows every line.</p>
+        <span style="font-size:14px;color:var(--muted,#5A6472);">Wholesale rates depend on volume. Talk to us for yours.</span>
+      </div>
+      <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:hidden;">
+        <div style="padding:14px 18px;border-bottom:1px solid var(--border,#E8E2DC);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;"><span style="font-family:Manrope,sans-serif;font-weight:700;">Monthly payout statement</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Example figures</span></div>
+        <sc-for list="{{ pStatement }}" as="x" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border,#E8E2DC);font-size:15px;font-weight:{{ x.w }};"><span>{{ x.l }}</span><span style="font-variant-numeric:tabular-nums;">{{ x.v }}</span></div></sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(44px,8cqw,104px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:28px;">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:720px;"><h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(24px,4cqw,42px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">From first call to live</h2><p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">Every partner is checked before going live, so shops under your brand start on solid ground.</p></div>
+    <ol style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px;"><sc-for list="{{ pSteps }}" as="x" hint-placeholder-count="6"><li style="border-top:2px solid #EC844F;padding-top:14px;display:flex;flex-direction:column;gap:6px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--link,#B8541F);">{{ x.n }}</span><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:17px;">{{ x.t }}</span><span style="font-size:14px;color:var(--muted,#5A6472);">{{ x.d }}</span></li></sc-for></ol>
+  </section>
+  <section data-band="" style="background:var(--band,#0A2A4A);color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,7cqw,80px) clamp(16px,4cqw,24px);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:620px;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(22px,3.6cqw,36px);letter-spacing:-0.025em;">Tell us about the shops you run.</span><span style="font-size:16px;color:#B8C7D6;">How many stores, which countries, and what you’d like to charge. We’ll come back with a wholesale rate and a plan to go live.</span></div>
+      <a href="#/contact/partners" style="height:48px;padding:0 24px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;" style-hover="background:#F09A6D;color:#FFFFFF;">Talk to us</a>
+    </div>
+  </section>
+</sc-if>
+<sc-if value="{{ pg.blog }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ blogIndex }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Blog" style="max-width:1240px;margin:0 auto;padding:clamp(40px,7cqw,88px) clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);display:flex;flex-direction:column;gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:2px;background:#EC844F;display:block;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Blog</span></div>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(32px,5.5cqw,56px);line-height:1.05;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);">Running a shop, one guide at a time.</h1>
+      </div>
+      <div role="group" aria-label="Topics" style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ blogCats }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" aria-pressed="{{ c.pressed }}" style="min-height:44px;padding:0 16px;border:1px solid {{ c.bd }};border-radius:22px;background:{{ c.bg }};color:{{ c.fg }};font-family:Inter,sans-serif;font-size:14px;cursor:pointer;">{{ c.label }}</button></sc-for></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:18px;">
+        <sc-for list="{{ posts }}" as="p" hint-placeholder-count="6">
+          <a href="{{ p.href }}" style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:var(--text,#14181F);" style-hover="border-color:var(--outline,#B8541F);color:var(--text,#14181F);">
+            <span style="aspect-ratio:16/9;background:var(--sunk,#F3EDE8);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Cover image</span>
+            <span style="padding:20px;display:flex;flex-direction:column;gap:8px;flex:1;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tint-fg,#8F4017);">{{ p.cat }}</span><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:19px;line-height:1.3;">{{ p.title }}</span><span style="font-size:15px;color:var(--muted,#5A6472);flex:1;">{{ p.ex }}</span><span style="font-size:13px;color:var(--muted,#5A6472);">{{ p.meta }}</span></span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+  <sc-if value="{{ post }}" hint-placeholder-val="{{ false }}">
+    <article data-screen-label="Blog article" style="max-width:760px;margin:0 auto;padding:clamp(32px,6cqw,72px) clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);display:flex;flex-direction:column;gap:22px;">
+      <nav aria-label="Breadcrumb" style="font-size:14px;display:flex;gap:8px;flex-wrap:wrap;color:var(--muted,#5A6472);"><a href="#/blog">Blog</a><span aria-hidden="true">/</span><span>{{ post.cat }}</span></nav>
+      <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(30px,5cqw,50px);line-height:1.08;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">{{ post.title }}</h1>
+      <span style="font-size:14px;color:var(--muted,#5A6472);">{{ post.meta }} · Author name placeholder</span>
+      <span style="aspect-ratio:16/8;border-radius:12px;background:var(--sunk,#F3EDE8);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Cover image</span>
+      <p style="margin:0;font-size:19px;line-height:1.65;">{{ post.ex }}</p>
+      <sc-for list="{{ post.body }}" as="b" hint-placeholder-count="3"><h2 style="margin:12px 0 0;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em;color:var(--head,#0A2A4A);">{{ b.h }}</h2><p style="margin:0;font-size:17px;line-height:1.75;">{{ b.p }}</p></sc-for>
+      <sc-if value="{{ post.stub }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed var(--field,#D7D3CD);border-radius:12px;padding:20px;font-size:15px;color:var(--muted,#5A6472);">Placeholder: the full article goes here.</div></sc-if>
+      <div style="margin-top:20px;background:var(--sunk,#F3EDE8);border-radius:12px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;"><span style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;">Try it on your own shop</span><span style="font-size:15px;color:var(--muted,#5A6472);">Starter is free forever. No card needed.</span></span><a href="DF Store Prototype.dc.html" style="height:44px;padding:0 22px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;" style-hover="background:var(--btn-h,#D96C33);color:#FFFFFF;">Start free</a></div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-top:16px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);">Keep reading</span><sc-for list="{{ related }}" as="r" hint-placeholder-count="2"><a href="{{ r.href }}" style="min-height:44px;display:flex;align-items:center;font-size:16px;font-weight:500;">{{ r.title }}</a></sc-for></div>
+    </article>
+  </sc-if>
+</sc-if>
+
+<sc-if value="{{ pg.help }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ helpIndex }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Help centre" style="background:var(--sunk,#F3EDE8);">
+      <div style="max-width:880px;margin:0 auto;padding:clamp(40px,7cqw,88px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;">
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(30px,5cqw,52px);line-height:1.05;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);">How can we help?</h1>
+        <label style="width:100%;position:relative;display:block;"><span style="position:absolute;left:-9999px;">Search help articles</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="position:absolute;left:16px;top:16px;color:var(--muted,#5A6472);"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><input type="search" value="{{ q }}" onChange="{{ onQ }}" placeholder="Search, e.g. refund, size chart, GST" style="width:100%;height:52px;padding:0 16px 0 46px;border:1px solid var(--field,#D7D3CD);border-radius:10px;background:var(--surface,#FFFFFF);color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:16px;"></label>
+      </div>
+    </section>
+    <section style="max-width:1240px;margin:0 auto;padding:clamp(32px,6cqw,72px) clamp(16px,4cqw,24px);display:flex;flex-direction:column;gap:28px;">
+      <sc-if value="{{ hasQ }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;"><span role="status" style="font-size:15px;color:var(--muted,#5A6472);">{{ resultLine }}</span>
+          <sc-for list="{{ hResults }}" as="a" hint-placeholder-count="3"><a href="{{ a.href }}" style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:16px 20px;display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--text,#14181F);" style-hover="border-color:var(--outline,#B8541F);color:var(--text,#14181F);"><span style="font-weight:600;font-size:16px;">{{ a.t }}</span><span style="font-size:13px;color:var(--muted,#5A6472);">{{ a.cat }}</span></a></sc-for>
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;font-size:15px;">Nothing matches that yet. Try another word, or <a href="#/contact/support">ask our support team</a>.</div></sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noQ }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:14px;">
+          <sc-for list="{{ hcats }}" as="c" hint-placeholder-count="8"><div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px;"><h2 style="margin:0;font-family:Manrope,sans-serif;font-weight:700;font-size:18px;">{{ c.t }}</h2><span style="font-size:14px;color:var(--muted,#5A6472);">{{ c.d }}</span><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;"><sc-for list="{{ c.arts }}" as="a" hint-placeholder-count="3"><li><a href="{{ a.href }}" style="min-height:40px;display:flex;align-items:center;font-size:15px;">{{ a.t }}</a></li></sc-for></ul></div></sc-for>
+        </div>
+      </sc-if>
+      <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;"><span style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;">Still stuck?</span><span style="font-size:15px;color:var(--muted,#5A6472);">Write to our support team. Paid plans also get chat from inside the portal.</span></span><a href="#/contact/support" style="height:44px;padding:0 22px;border-radius:8px;background:#EC844F;color:#FFFFFF;text-decoration:none;display:flex;align-items:center;font-family:Manrope,sans-serif;font-weight:700;" style-hover="background:var(--btn-h,#D96C33);color:#FFFFFF;">Contact support</a></div>
+    </section>
+  </sc-if>
+  <sc-if value="{{ hart }}" hint-placeholder-val="{{ false }}">
+    <article data-screen-label="Help article" style="max-width:1240px;margin:0 auto;padding:clamp(32px,6cqw,64px) clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:40px;align-items:start;">
+      <div style="grid-column:span 2;min-width:min(100%,300px);max-width:720px;display:flex;flex-direction:column;gap:18px;">
+        <nav aria-label="Breadcrumb" style="font-size:14px;display:flex;gap:8px;flex-wrap:wrap;color:var(--muted,#5A6472);"><a href="#/help">Help centre</a><span aria-hidden="true">/</span><span>{{ hart.cat }}</span></nav>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(26px,4.4cqw,42px);line-height:1.1;letter-spacing:-0.03em;margin:0;color:var(--head,#0A2A4A);">{{ hart.t }}</h1>
+        <span style="font-size:14px;color:var(--muted,#5A6472);">Updated 1 October 2026 · {{ hart.who }}</span>
+        <p style="margin:0;font-size:17px;line-height:1.7;">{{ hart.intro }}</p>
+        <ol style="margin:0;padding:0 0 0 22px;display:flex;flex-direction:column;gap:12px;font-size:16px;line-height:1.65;"><sc-for list="{{ hart.steps }}" as="x" hint-placeholder-count="4"><li>{{ x }}</li></sc-for></ol>
+        <sc-if value="{{ hart.note }}" hint-placeholder-val="{{ false }}"><div style="background:var(--sunk,#F3EDE8);border-radius:12px;padding:16px 18px;font-size:15px;"><strong>Good to know: </strong>{{ hart.note }}</div></sc-if>
+        <sc-if value="{{ hart.stub }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed var(--field,#D7D3CD);border-radius:12px;padding:18px;font-size:15px;color:var(--muted,#5A6472);">Placeholder: step-by-step instructions go here.</div></sc-if>
+        <div style="border-top:1px solid var(--border,#E8E2DC);padding-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <sc-if value="{{ askHelpful }}" hint-placeholder-val="{{ true }}"><span style="font-size:15px;">Did this answer your question?</span><button onClick="{{ yesHelpful }}" style="height:44px;padding:0 16px;border:1px solid var(--outline,#B8541F);border-radius:8px;background:transparent;color:var(--outline,#B8541F);font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:var(--outline-h,#FDF0E8);">Yes</button><button onClick="{{ noHelpful }}" style="height:44px;padding:0 16px;border:1px solid var(--outline,#B8541F);border-radius:8px;background:transparent;color:var(--outline,#B8541F);font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:var(--outline-h,#FDF0E8);">No</button></sc-if>
+          <sc-if value="{{ helpfulMsg }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:15px;">{{ helpfulMsg }}</span></sc-if>
+        </div>
+      </div>
+      <aside style="display:flex;flex-direction:column;gap:14px;">
+        <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:4px;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:16px;padding-bottom:4px;">More in {{ hart.cat }}</span><sc-for list="{{ hart.more }}" as="a" hint-placeholder-count="2"><a href="{{ a.href }}" style="min-height:40px;display:flex;align-items:center;font-size:15px;">{{ a.t }}</a></sc-for></div>
+        <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;"><span style="font-family:Manrope,sans-serif;font-weight:700;font-size:16px;">Need a person?</span><span style="font-size:14px;color:var(--muted,#5A6472);">Tell us your store name and what you were trying to do.</span><a href="#/contact/support" style="height:44px;border:1px solid var(--outline,#B8541F);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-family:Manrope,sans-serif;font-weight:700;font-size:14px;color:var(--outline,#B8541F);" style-hover="background:var(--outline-h,#FDF0E8);color:var(--outline,#B8541F);">Contact support</a></div>
+      </aside>
+    </article>
+  </sc-if>
+</sc-if>
+
+<sc-if value="{{ pg.contact }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Contact" style="max-width:1240px;margin:0 auto;padding:clamp(40px,7cqw,88px) clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(32px,5cqw,64px);align-items:start;">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:2px;background:#EC844F;display:block;"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted,#5A6472);">Contact</span></div>
+      <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(30px,5cqw,54px);line-height:1.05;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);">Book a demo or ask us anything.</h1>
+      <p style="margin:0;font-size:17px;color:var(--muted,#5A6472);">A demo is a 30-minute video call. We build a shop from your description while you watch, then answer your questions about plans, selling abroad or moving from another platform.</p>
+      <dl style="margin:0;display:flex;flex-direction:column;border-top:1px solid var(--border,#E8E2DC);">
+        <div style="padding:14px 0;border-bottom:1px solid var(--border,#E8E2DC);display:flex;flex-direction:column;gap:2px;"><dt style="font-size:14px;color:var(--muted,#5A6472);">Sales and partners</dt><dd style="margin:0;"><a href="mailto:sales@dripfunnel.com" style="font-size:17px;font-weight:500;">sales@dripfunnel.com</a></dd></div>
+        <div style="padding:14px 0;border-bottom:1px solid var(--border,#E8E2DC);display:flex;flex-direction:column;gap:2px;"><dt style="font-size:14px;color:var(--muted,#5A6472);">Help with your shop</dt><dd style="margin:0;"><a href="mailto:support@dripfunnel.com" style="font-size:17px;font-weight:500;">support@dripfunnel.com</a> · or the <a href="#/help">help centre</a></dd></div>
+      </dl>
+    </div>
+    <div style="background:var(--surface,#FFFFFF);border:1px solid var(--border,#E8E2DC);border-radius:16px;padding:clamp(20px,3cqw,32px);">
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="display:flex;flex-direction:column;gap:12px;padding:12px 0;"><span style="width:44px;height:44px;border-radius:50%;background:var(--okbg,#EEF7F2);color:var(--okfg,#1D6B47);display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;">{{ sentTitle }}</span><span style="font-size:16px;color:var(--muted,#5A6472);">{{ sentBody }}</span><button onClick="{{ resetForm }}" style="align-self:flex-start;height:44px;padding:0;border:0;background:transparent;color:var(--link,#B8541F);font-family:Inter,sans-serif;font-size:15px;font-weight:500;cursor:pointer;">Send another message</button></div>
+      </sc-if>
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submit }}" noValidate="" style="display:flex;flex-direction:column;gap:18px;">
+          <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;"><legend style="font-size:14px;font-weight:600;padding:0 0 8px;">What can we help with?</legend><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ topics }}" as="t" hint-placeholder-count="4"><button type="button" onClick="{{ t.onClick }}" aria-pressed="{{ t.pressed }}" style="min-height:44px;padding:0 14px;border:1px solid {{ t.bd }};border-radius:8px;background:{{ t.bg }};color:{{ t.fg }};font-family:Inter,sans-serif;font-size:14px;font-weight:500;cursor:pointer;">{{ t.label }}</button></sc-for></div></fieldset>
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600;">{{ f.label }}
+              <input type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.ph }}" autoComplete="{{ f.ac }}" aria-invalid="{{ f.inv }}" style="height:48px;padding:0 14px;border:{{ f.bd }};border-radius:8px;background:var(--surface,#FFFFFF);color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:16px;font-weight:400;">
+              <sc-if value="{{ f.err }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:14px;font-weight:400;color:var(--link,#B8541F);">{{ f.err }}</span></sc-if>
+            </label>
+          </sc-for>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600;">Country
+            <select value="{{ form.country }}" onChange="{{ onCountry }}" style="height:48px;padding:0 12px;border:1px solid var(--field,#D7D3CD);border-radius:8px;background:var(--surface,#FFFFFF);color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:16px;font-weight:400;"><option value="">Choose a country</option><sc-for list="{{ countries }}" as="c" hint-placeholder-count="8"><option value="{{ c }}">{{ c }}</option></sc-for></select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600;">{{ msgLabel }}
+            <textarea rows="4" value="{{ form.msg }}" onChange="{{ onMsg }}" placeholder="{{ msgPh }}" aria-invalid="{{ msgInv }}" style="padding:12px 14px;border:{{ msgBd }};border-radius:8px;background:var(--surface,#FFFFFF);color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:16px;font-weight:400;line-height:1.6;resize:vertical;"></textarea>
+            <sc-if value="{{ errs.msg }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:14px;font-weight:400;color:var(--link,#B8541F);">{{ errs.msg }}</span></sc-if>
+          </label>
+          <span style="font-size:13px;color:var(--muted,#5A6472);">We use these details only to reply to you. See our <a href="#/privacy">Privacy Policy</a>.</span>
+          <button type="submit" style="height:48px;border:0;border-radius:8px;background:#EC844F;color:#FFFFFF;font-family:Manrope,sans-serif;font-weight:700;font-size:16px;cursor:pointer;" style-hover="background:var(--btn-h,#D96C33);">{{ submitLabel }}</button>
+        </form>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ legalOn }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Legal" style="max-width:1240px;margin:0 auto;padding:clamp(40px,7cqw,80px) clamp(16px,4cqw,24px) clamp(44px,8cqw,96px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:40px;align-items:start;">
+    <nav aria-label="On this page" style="display:flex;flex-direction:column;gap:2px;position:sticky;top:96px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted,#5A6472);padding-bottom:8px;">On this page</span>
+      <sc-for list="{{ legal.secs }}" as="x" hint-placeholder-count="8"><button onClick="{{ x.jump }}" style="min-height:40px;padding:0;border:0;background:transparent;text-align:left;color:var(--text,#14181F);font-family:Inter,sans-serif;font-size:14px;cursor:pointer;" style-hover="color:var(--link,#B8541F);">{{ x.n }}. {{ x.h }}</button></sc-for>
+      <a href="{{ legal.otherHref }}" style="min-height:44px;display:flex;align-items:center;font-size:14px;margin-top:12px;">{{ legal.other }}</a>
+    </nav>
+    <article style="grid-column:span 3;min-width:min(100%,300px);max-width:760px;display:flex;flex-direction:column;gap:18px;">
+      <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:clamp(30px,5cqw,50px);line-height:1.05;letter-spacing:-0.035em;margin:0;color:var(--head,#0A2A4A);">{{ legal.title }}</h1>
+      <span style="font-size:14px;color:var(--muted,#5A6472);">Last updated: [date] · Applies from: [date]</span>
+      <div role="note" style="background:var(--tint,#FDF0E8);color:var(--tint-fg,#8F4017);border-radius:12px;padding:14px 16px;font-size:15px;">Template text. Replace every section with wording approved by your lawyer before publishing.</div>
+      <p style="margin:0;font-size:17px;line-height:1.7;">{{ legal.intro }}</p>
+      <sc-for list="{{ legal.secs }}" as="x" hint-placeholder-count="8"><section id="{{ x.id }}" style="display:flex;flex-direction:column;gap:8px;padding-top:12px;"><h2 style="margin:0;font-family:Manrope,sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.02em;color:var(--head,#0A2A4A);">{{ x.n }}. {{ x.h }}</h2><p style="margin:0;font-size:16px;line-height:1.75;">{{ x.p }}</p></section></sc-for>
+    </article>
+  </section>
+</sc-if>
+  </main>
+  <footer data-band="" style="background:#0A2A4A;color:#FFFFFF;">
+    <div style="max-width:1240px;margin:0 auto;padding:64px clamp(16px,4cqw,24px) 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:36px;">
+      <div style="display:flex;flex-direction:column;gap:16px;grid-column:span 2;min-width:0;max-width:360px;">
+        <img src="assets/dripfunnel-logo-inverse.svg" alt="DripFunnel" style="height:28px;width:auto;align-self:flex-start;">
+        <span style="font-size:15px;color:#B8C7D6;line-height:1.6;">Describe your business and AI builds your whole store. Then run catalogue, orders, offers, suppliers and selling abroad from one portal.</span>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#B8C7D6;">Show prices in
+          <select value="{{ cur }}" onChange="{{ onCur }}" style="height:44px;max-width:220px;border:1px solid #2A4C6E;border-radius:8px;background:#071F35;color:#FFFFFF;padding:0 12px;font-family:Inter,sans-serif;font-size:15px;"><option value="USD">US dollars (USD)</option><option value="EUR">Euros (EUR)</option><option value="INR">Indian rupees (INR)</option></select>
+        </label>
+      </div>
+      <sc-for list="{{ footCols }}" as="c" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#B8C7D6;padding-bottom:6px;">{{ c.h }}</span>
+          <sc-for list="{{ c.links }}" as="l" hint-placeholder-count="4"><a href="{{ l.href }}" style="min-height:36px;display:flex;align-items:center;color:#FFFFFF;text-decoration:none;font-size:15px;" style-hover="color:#F09A6D;">{{ l.label }}</a></sc-for>
+        </div>
+      </sc-for>
+    </div>
+    <div style="max-width:1240px;margin:0 auto;padding:20px clamp(16px,4cqw,24px) 32px;border-top:1px solid rgba(255,255,255,0.14);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:#B8C7D6;">
+      <span>© 2026 DripFunnel. A Softobotics company.</span>
+      <button onClick="{{ toggleTheme }}" style="height:44px;padding:0 14px;border:1px solid #2A4C6E;border-radius:8px;background:transparent;color:#FFFFFF;font-family:Inter,sans-serif;font-size:14px;cursor:pointer;" style-hover="background:rgba(255,255,255,0.08);">{{ themeLabel }}</button>
+    </div>
+  </footer>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'light'|'dark'&quot;},&quot;currency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;USD&quot;,&quot;EUR&quot;,&quot;INR&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'USD'|'EUR'|'INR'&quot;},&quot;showPlaceholders&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {
+    route: this.parse(),
+    theme: (() => { const p = this.props.defaultTheme; if (p === 'light' || p === 'dark') return p; try { const t = localStorage.getItem('df-site-theme'); if (t) return t; return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; } catch (e) { return 'light'; } })(),
+    cur: (() => { const p = this.props.currency; if (p && p !== 'auto') return p; try { const l = navigator.language || ''; return /IN$/i.test(l) ? 'INR' : /^(de|fr|it|es|nl|pt)|-(DE|FR|IT|ES|NL|AT|BE|IE|PT|FI)$/i.test(l) ? 'EUR' : 'USD'; } catch (e) { return 'USD'; } })(),
+    period: 'year', w: typeof window !== 'undefined' ? window.innerWidth : 1280, menu: false, res: false,
+    heroPrompt: '', planF: '', device: 'desktop', dStep: 0, dev: 'desktop', liveV: 13, blogCat: 'All', q: '', helpCat: '', helpful: null,
+    form: { topic: 'demo', name: '', email: '', company: '', country: '', msg: '' }, errs: {}, sent: false, faqOpen: -1
+  };
+  parse() { try { return (location.hash || '').replace(/^#\/?/, '').split('?')[0]; } catch (e) { return ''; } }
+  componentDidMount() {
+    this._hc = () => { const route = this.parse(); const t = route.split('/'); const patch = { route, menu: false, res: false, helpful: null }; if (t[0] === 'contact') { patch.sent = false; patch.form = { ...this.state.form, topic: ['demo', 'sales', 'partners', 'support'].includes(t[1]) ? t[1] : this.state.form.topic }; } this.setState(patch); window.scrollTo(0, 0); const fr = document.querySelector('[data-frame]'); if (fr) fr.scrollTop = 0; };
+    this._rs = () => this.setState({ w: window.innerWidth });
+    this._kd = e => { if (e.key === 'Escape' && (this.state.res || this.state.menu)) this.setState({ res: false, menu: false }); };
+    this._cl = e => { if (this.state.res && !(e.target.closest && e.target.closest('[aria-haspopup],[role=menu]'))) this.setState({ res: false }); };
+    window.addEventListener('hashchange', this._hc); window.addEventListener('resize', this._rs); window.addEventListener('keydown', this._kd); document.addEventListener('click', this._cl);
+    this._hc(); this.paintBody();
+  }
+  componentWillUnmount() { window.removeEventListener('hashchange', this._hc); window.removeEventListener('resize', this._rs); window.removeEventListener('keydown', this._kd); document.removeEventListener('click', this._cl); }
+  componentDidUpdate() { this.paintBody(); }
+  paintBody() { document.body.style.background = this.state.theme === 'dark' ? '#061726' : this.state.device === 'phone' ? '#E8E2DC' : '#FDFAF7'; }
+  scrollToId(id) { const el = document.getElementById(id); if (!el) return; const fr = this.state.device === 'phone' ? document.querySelector('[data-frame]') : null; if (fr) fr.scrollTo({ top: el.getBoundingClientRect().top - fr.getBoundingClientRect().top + fr.scrollTop - 120, behavior: 'smooth' }); else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 140, behavior: 'smooth' }); }
+  renderVals() {
+    const s = this.state; const cur = s.cur;
+    const fmt = v => new Intl.NumberFormat({ INR: 'en-IN', USD: 'en-US', EUR: 'de-DE' }[cur], { style: 'currency', currency: cur, maximumFractionDigits: v % 1 ? 2 : 0 }).format(v);
+    const parts = s.route.split('/'); const k = parts[0] || 'home';
+    const known = ['home', 'ai', 'features', 'pricing', 'partners', 'blog', 'help', 'contact', 'terms', 'privacy'];
+    const key = known.includes(k) ? k : 'home';
+    const phone = s.device === 'phone';
+    const wide = !phone && s.w >= 980;
+    const REG = {
+      USD: { country: 'United States', store: 'Juniper & Co.', slug: 'juniper-co', city: 'Portland', owner: 'Farhan', tax: 'Sales tax', taxLine: 'Sales tax worked out by state and added at checkout', price: 'Prices shown before tax', pay: 'Stripe, PayPal', couriers: 'USPS, UPS, FedEx', compare: 'MSRP only. No made-up “was” prices', code: 'HTS code, optional', units: 'lb and in · sizes S–XL', items: [['Linen napkins, set of 4', 38], ['Table runner', 54], ['Waffle hand towel', 26], ['Stonewashed throw', 120]], today: 1284, after: { headline: 'Linen for slow mornings', sub: 'Hand-dyed in Portland. Free returns within 30 days.', cta: 'Shop bestsellers', accent: '#3F5E4A', bg: '#EEF0E8', fg: '#1E2A22', tile: '#D9DECF', bar: '#F7F7F2', nav: 'New in · Bestsellers · Our story · Cart' }, prompt: 'We sell hand-dyed linen for the home, made in Portland. Calm and earthy, lots of white space. Put bestsellers first and add a page about how we dye our fabric.' },
+      EUR: { country: 'Germany', store: 'Leinen & Licht', slug: 'leinen-licht', city: 'Berlin', owner: 'Farhan', tax: 'VAT', taxLine: 'VAT at 19%, included in every price', price: 'Prices shown with VAT', pay: 'Stripe, PayPal, Klarna, bank transfer', couriers: 'DHL, DPD, Hermes', compare: 'Lowest price in the last 30 days, worked out for you', code: 'CN code, optional', units: 'kg and cm · sizes 36–42', items: [['Leinenservietten, 4er-Set', 34], ['Tischläufer', 49], ['Waffel-Handtuch', 24], ['Leinendecke', 109]], today: 1176, after: { headline: 'Leinen für langsame Morgen', sub: 'Handgefärbt in Berlin. 30 Tage kostenlose Rücksendung.', cta: 'Bestseller ansehen', accent: '#3F5E4A', bg: '#EEF0E8', fg: '#1E2A22', tile: '#D9DECF', bar: '#F7F7F2', nav: 'Neu · Bestseller · Über uns · Warenkorb' }, prompt: 'We sell hand-dyed linen from Berlin, mostly to Germany and the Netherlands. Calm and earthy, lots of white space. Put bestsellers first and add a page about our workshop.' },
+      INR: { country: 'India', store: 'Kesari Threads', slug: 'kesari-threads', city: 'Jaipur', owner: 'Farhan', tax: 'GST', taxLine: 'GST at 5%, included in every price', price: 'Prices shown with GST', pay: 'Cashfree, PhonePe, cash on delivery, bank transfer', couriers: 'Shiprocket', compare: 'MRP shown, and your price can never go above it', code: 'HSN code, required', units: 'kg and cm · sizes S–XL', items: [['Block-print kurta', 1890], ['Indigo dupatta', 1250], ['Cushion covers, set of 2', 990], ['Double bedcover', 3400]], today: 48600, after: { headline: 'Printed by hand in Jaipur', sub: 'Cotton block prints in saffron and indigo. Free delivery over ₹1,500.', cta: 'Shop new arrivals', accent: '#9A3B12', bg: '#FBEBD9', fg: '#3A1A0A', tile: '#F0D2B4', bar: '#FFF8F0', nav: 'New in · Kurtas · Home · Our printers · Cart' }, prompt: 'We sell hand block-printed cotton from Jaipur. Warm and colourful, saffron and indigo. Show new arrivals first and add a page about the families who print for us.' }
+    };
+    const R = REG[cur] || REG.USD;
+    const go = h => '#/' + h;
+    const navDef = [['home', 'Home'], ['features', 'Features'], ['ai', 'AI Builder'], ['pricing', 'Pricing'], ['partners', 'Partners']];
+    const resDef = [['blog', 'Blog', 'Guides for running and growing a shop'], ['help', 'Help centre', 'How-to articles and support'], ['contact', 'Contact and demo', 'Talk to sales or book a demo']];
+    const isRes = ['blog', 'help', 'contact'].includes(key);
+    const toggleTheme = () => { const t = s.theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('df-site-theme', t); } catch (e) {} this.setState({ theme: t }); };
+
+    // AI store mocks
+    const DV = { desktop: { maxw: '100%', cols: 'repeat(4,minmax(0,1fr))', hfs: '24px', pad: '26px 22px', r: '10px', n: 4 }, tablet: { maxw: '420px', cols: 'repeat(3,minmax(0,1fr))', hfs: '21px', pad: '22px 18px', r: '16px', n: 3 }, phone: { maxw: '240px', cols: 'repeat(2,minmax(0,1fr))', hfs: '18px', pad: '18px 14px', r: '24px', n: 2 } };
+    const dv = DV[s.dev];
+    const tiles = (bg, n) => R.items.slice(0, n).map(([name, p]) => ({ name, price: fmt(p), bg }));
+    const before = { label: 'Before', bg: '#FFFFFF', fg: '#14181F', accent: '#5A6472', headline: R.store, sub: 'Our shop. Say hello.', cta: 'Browse', hfont: 'Inter', bar: '#FFFFFF', nav: 'Shop · About · Cart', tiles: tiles('#EDEAE5', dv.n) };
+    const after = { label: 'After', ...R.after, hfont: 'Manrope', tiles: tiles(R.after.tile, dv.n) };
+    const aft = { ...after, tiles: tiles(R.after.tile, 4) };
+    const H = [[13, 'Calm, earthy homepage · bestsellers first', 'Today, 10:42'], [12, 'New page: how we make it', 'Yesterday, 16:05'], [11, 'Free-returns note in the footer', '28 Sep, 09:30'], [10, 'First version', '24 Sep, 14:12']];
+    const history = H.map(([v, label, date]) => ({ v, label, date, isLive: v === s.liveV, canBack: v !== s.liveV, back: () => this.setState({ liveV: v }) }));
+    const liveMsg = s.liveV === 13 ? 'Version 13 is live. Pick any earlier version to go back to it.' : 'Version ' + s.liveV + ' is live again. Nothing else changed, and version 13 is still in your history.';
+    const stepDef = [['Describe', 'Say what you sell and how it should feel.'], ['Preview', 'See before and after on desktop, tablet and phone.'], ['Publish', 'Approve it. Your live shop changes in about a minute.'], ['Undo', 'Every version is kept. Go back in one click.']];
+    const steps = stepDef.map(([t, d], i) => ({ n: '0' + (i + 1), t, d, on: s.dStep === i, pressed: s.dStep === i ? 'true' : 'false', bg: s.dStep === i ? 'var(--surface,#FFFFFF)' : 'transparent', bd: s.dStep === i ? 'var(--border,#E8E2DC)' : 'transparent', mk: s.dStep === i ? '#EC844F' : 'transparent', numC: s.dStep === i ? 'var(--link,#B8541F)' : 'var(--field,#D7D3CD)', onClick: () => this.setState({ dStep: i }) }));
+    const devs = [['desktop', 'Desktop'], ['tablet', 'Tablet'], ['phone', 'Phone']].map(([kk, l]) => ({ label: l, pressed: s.dev === kk ? 'true' : 'false', bg: s.dev === kk ? 'var(--head,#0A2A4A)' : 'transparent', fg: s.dev === kk ? 'var(--paper,#FDFAF7)' : 'var(--text,#14181F)', onClick: () => this.setState({ dev: kk }) }));
+
+    const IC = { ai: 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18', fee: 'M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z', free: 'M5 12l5 5L20 7', box: 'M4 7l8-4 8 4v10l-8 4-8-4zM4 7l8 4 8-4M12 11v10', globe: 'M12 21a9 9 0 100-18 9 9 0 000 18zM3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z', tag: 'M3 12V4h8l10 10-8 8zM7.5 8.5h.01', truck: 'M3 6h11v10H3zM14 10h4l3 3v3h-7M7 19a2 2 0 100-4 2 2 0 000 4zM17 19a2 2 0 100-4 2 2 0 000 4z', team: 'M9 11a4 4 0 100-8 4 4 0 000 8zM2 21c0-4 3-6 7-6s7 2 7 6M17 3.5a4 4 0 010 7.5M22 21c0-3-1.5-5-4-5.7', bag: 'M6 2l-3 4v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0', chart: 'M4 20V10M10 20V4M16 20v-7M22 20H2' };
+    const homeFeatures = [
+      ['ai', 'AI designs your whole store', 'Homepage, pages, menus, product pages and the look of every one. Preview, publish, undo.', 'ai', 'See how it works'],
+      ['fee', 'Zero fees on your orders', 'On every plan, including Starter. You pay only your payment provider’s own fee.', 'pricing', 'See pricing'],
+      ['free', 'Start free', 'Starter is free forever. Paid plans start with 10 days of everything in Business, no credit card.', 'pricing', 'Compare plans'],
+      ['box', 'A catalogue that does the detail', 'Sizes and colours, A+ content, product video, size charts, collections and filters. Import from a spreadsheet or Shopify.', 'features', 'Catalogue features'],
+      ['globe', 'Sell in many countries', 'Markets, currencies and languages, with ' + R.tax + ' and other local tax, duties at checkout, and local payments and couriers.', 'features', 'Selling abroad'],
+      ['tag', 'Offers that bring people back', 'Discount codes, automatic offers, buy X get Y, single-use codes and abandoned-cart reminders.', 'features', 'Offers and carts'],
+      ['truck', 'Suppliers who manage their own shelf', 'Invite suppliers to add products, keep stock up to date and even pack their own orders. Approve first if you like.', 'features', 'Suppliers'],
+      ['team', 'Your team, with the right keys', 'Staff accounts with Owner, Manager and Staff roles. Each sees only what their job needs.', 'features', 'Team and roles']
+    ].map(([ic, t, d, h, l]) => ({ icon: IC[ic], t, d, href: go(h), l }));
+    const pnav = [['Home', '', 1], ['Orders', '4', 0], ['Customers', '', 0], ['Offers', '', 0], ['Abandoned carts', '2', 0], ['Reports', '', 0], ['Products', '1', 0], ['Collections', '', 0], ['Storefront', '', 0], ['Settings', '', 0], ['Billing', '', 0]].map(([label, badge, on]) => ({ label, badge, bg: on ? 'rgba(255,255,255,0.10)' : 'transparent', mk: on ? '#EC844F' : 'transparent', w: on ? 700 : 400 }));
+    const wait = [['4 orders to ship', 'Oldest paid 2 hours ago', 'Ship'], ['2 abandoned carts to remind', 'Worth ' + fmt(R.items[0][1] + R.items[3][1]), 'Remind'], ['1 supplier product to approve', 'Added by your supplier this morning', 'Review']].map(([t, d, a]) => ({ t, d, a }));
+    const nums = [['Takings today', fmt(R.today)], ['Orders today', '12'], ['Visitors today', '840']].map(([l, v]) => ({ l, v }));
+    const regions = ['INR', 'EUR', 'USD'].map(c => { const r = REG[c]; const on = c === cur; return { country: r.country, store: r.store, on, bd: on ? '2px solid #EC844F' : '1px solid var(--border,#E8E2DC)', rows: [['Currency', c], ['Tax', r.taxLine], ['Payments', r.pay], ['Couriers', r.couriers], ['Compare price', r.compare], ['Product code', r.code]].map(([l, v]) => ({ l, v })) }; });
+    const showPh = this.props.showPlaceholders !== false;
+    const RC = ['INR', 'EUR', 'USD'];
+    regions.forEach(r => { r.hbg = r.on ? 'var(--tint,#FDF0E8)' : 'transparent'; });
+    const regTable = ['Currency', 'Tax', 'Payments', 'Couriers', 'Compare price', 'Product code'].map((l, i) => ({ l, cells: RC.map(c => ({ v: regions[RC.indexOf(c)].rows[i].v, bg: c === cur ? 'var(--tint,#FDF0E8)' : 'transparent' })) }));
+    const rate = { USD: 0.08, EUR: 0.19, INR: 0.05 }[cur]; const incl = cur !== 'USD';
+    const sub = R.items[0][1] + R.items[1][1]; const tax = incl ? sub - sub / (1 + rate) : sub * rate; const total = incl ? sub : sub + tax;
+    const receipt = { items: [[R.items[0][0], fmt(R.items[0][1])], [R.items[1][0], fmt(R.items[1][1])]].map(([l, v]) => ({ l, v })), lines: [['Subtotal', fmt(sub)], [incl ? R.tax + ' included' : R.tax + ' (sample)', fmt(Math.round(tax * 100) / 100)], ['Delivery', 'Free'], ['Payment provider', 'Their own fee']].map(([l, v]) => ({ l, v })), net: fmt(Math.round(total * 100) / 100), zero: fmt(0) };
+    homeFeatures.forEach((f, i) => { f.n = String(i + 1).padStart(2, '0'); });
+
+    // Pricing
+    const PT = { INR: { starter: [4999, 7000], growth: [6999, 9000], business: [9999, 12000] }, USD: { starter: [96, 149], growth: [144, 199], business: [240, 299] }, EUR: { starter: [96, 139], growth: [144, 189], business: [240, 279] } }[cur];
+    const PL = [
+      { k: 'free', name: 'Starter (Free)', for: 'Try it with real shoppers. Free for life.', cta: 'Start free', points: ['10 products', 'Your shop on a DripFunnel address', 'AI designs your shop on your own AI key', 'Owner only', 'No fee on your orders, ever'] },
+      { k: 'starter', name: 'Growth', for: 'Your first real shop, on your own domain.', cta: 'Start 10-day free trial', points: ['100 products', 'Your own domain', '2 staff accounts', 'Import from a spreadsheet', 'AI designs your shop on your own AI key', 'The 4 reports'] },
+      { k: 'growth', name: 'Growth Pro', for: 'A small team, more markets and a richer shop.', cta: 'Start 10-day free trial', badge: 'Most popular', points: ['5,000 products', 'A+ content and video', '5 staff accounts', '2 markets, currencies and languages', 'AI included, no key needed', 'Remove “Powered by DripFunnel”'] },
+      { k: 'business', name: 'Business', for: 'High volume, many suppliers, selling abroad.', cta: 'Start 10-day free trial', points: ['Unlimited products', 'Suppliers with full access', '15 staff accounts', '10 markets, currencies and languages', 'Duties and import taxes at checkout', 'Custom reports and priority support'] },
+      { k: 'ent', name: 'Partner', for: 'White-label, many stores, your own terms.', cta: 'Talk to us', points: ['Everything in Business', 'Your brand on the portal, shops and emails', 'Many stores under one account', 'SSO and full API access', 'Migration, onboarding and uptime guarantee', 'Named account manager'] }
+    ];
+    const BW = { free: '1 GB bandwidth a month (about 1,000–5,000 page views)', starter: '10 GB bandwidth a month', growth: '50 GB bandwidth a month', business: '200 GB bandwidth a month, buy more any time', ent: 'Bandwidth to fit your traffic' };
+    const yearly = s.period === 'year';
+    const plans = PL.map(p => {
+      const hi = p.k === 'growth'; const dark = p.k === 'ent'; const Y = (PT[p.k] || [])[0]; const SET = (PT[p.k] || [])[1];
+      const yrMo = Y ? Y / 12 : 0; const mo = Y ? Y * 2 / 12 : 0;
+      return { ...p, badge: p.badge || '', points: [...p.points, ...(SET ? ['Optional: we build your storefront for you, ' + fmt(SET) + ' one-time'] : []), BW[p.k]],
+        price: p.k === 'free' ? 'Free' : dark ? 'Custom' : fmt(Math.round(yearly ? yrMo : mo)), per: Y ? '/month' : '',
+        note: p.k === 'free' ? 'Forever. No card needed.' : dark ? 'Built around your business' : yearly ? fmt(Y) + ' billed yearly, after 10 free days' : 'Billed monthly, after 10 free days. ' + fmt(Math.round(yrMo)) + '/month if you pay yearly.',
+        href: dark ? go('contact/partners') : 'DF Store Prototype.dc.html', dark, hi,
+        bg: dark ? '#0A2A4A' : 'var(--surface,#FFFFFF)', fg: dark ? '#FFFFFF' : 'var(--text,#14181F)', sub: dark ? '#B8C7D6' : 'var(--muted,#5A6472)', rule: dark ? 'rgba(255,255,255,0.16)' : 'var(--border,#E8E2DC)', tick: dark ? '#F09A6D' : 'var(--link,#B8541F)',
+        bd: hi ? '2px solid #EC844F' : dark ? '1px solid #1C3F60' : '1px solid var(--border,#E8E2DC)',
+        btnBg: hi ? '#EC844F' : 'transparent', btnFg: hi ? '#FFFFFF' : dark ? '#F09A6D' : 'var(--outline,#B8541F)', btnBd: hi ? '1px solid #EC844F' : dark ? '1px solid #F09A6D' : '1px solid var(--outline,#B8541F)', btnH: hi ? 'background:var(--btn-h,#D96C33);color:#FFFFFF;' : dark ? 'background:rgba(240,154,109,0.12);color:#F09A6D;' : 'background:var(--outline-h,#FDF0E8);color:var(--outline,#B8541F);' };
+    });
+    const Rw = (name, v, note) => ({ name, note: note || '', v });
+    const G = [
+      ['Catalogue', [Rw('Products', ['10', '100', '5,000', 'Unlimited', 'Unlimited']), Rw('Photos per product', ['3', '5', '25', '50', 'Custom']), Rw('Versions per product', ['10', '100', '100', '250', 'Custom'], 'e.g. every size × colour'), Rw('Collections', ['3', '25', 'Unlimited', 'Unlimited', 'Unlimited']), Rw('Filters and internal tags', ['✓', '✓', '✓', '✓', '✓']), Rw('Size charts', ['1', '2', '25', 'Unlimited', 'Unlimited']), Rw('Specifications and highlights', ['✓', '✓', '✓', '✓', '✓']), Rw('Badges', ['—', '✓', '✓', '✓', '✓']), Rw('FAQs and related products', ['—', '—', '✓', '✓', '✓']), Rw('A+ content', ['—', '—', '50 products', 'Unlimited', 'Unlimited + shared blocks']), Rw('Product video', ['—', '—', '✓', '✓', '✓']), Rw('Import from a spreadsheet', ['—', '✓', '✓', '✓', '✓']), Rw('Bring products from Shopify', ['—', '—', '✓', '✓', '✓']), Rw('AI for descriptions and translations', ['Your own AI key', 'Your own AI key', 'Included · monthly allowance', 'Included · larger allowance', 'Custom'], 'Same AI account as your storefront: one key, or one allowance'), Rw('Legal and safety details', ['✓', '✓', '✓', '✓', '✓'], 'Never behind a paywall')]],
+      ['Getting started', [Rw('Storefront built by our team (optional)', ['—', fmt(PT.starter[1]) + ' one-time', fmt(PT.growth[1]) + ' one-time', fmt(PT.business[1]) + ' one-time', 'Custom'], 'Only if you want it. Or build it yourself with the AI, free on every plan')]],
+      ['Getting paid', [Rw('DripFunnel fee on your orders', ['None', 'None', 'None', 'None', 'None'], 'We never take a cut of your sales'), Rw('Payment gateways', ['1', '2', 'All', 'All', 'All']), Rw('Cash on delivery, bank transfer', ['✓', '✓', '✓', '✓', '✓']), Rw('Discount codes and automatic offers', ['3 live', '3 live', 'Unlimited', 'Unlimited', 'Unlimited'], 'Percent, fixed, free delivery and buy X get Y on every plan'), Rw('Customer-group offers, tiers, single-use codes', ['—', '—', '✓', '✓', '✓']), Rw('Offer results', ['—', '—', '✓', '✓', '✓'])]],
+      ['Team and suppliers', [Rw('Staff accounts', ['Owner only', '2', '5', '15', 'Unlimited']), Rw('Manager role', ['—', '—', '✓', '✓', '✓']), Rw('Suppliers', ['—', '—', '—', 'Unlimited · full access', 'Unlimited · full access'], 'Stock only, products and stock, or also packing their own orders'), Rw('Approve supplier products', ['—', '—', '—', '✓', '✓']), Rw('Suppliers pack their own orders', ['—', '—', '—', '✓', '✓'])]],
+      ['Selling abroad', [Rw('Markets', ['Home only', 'Home only', '2', '10', 'Unlimited']), Rw('Currencies', ['1', '1', '2', '10', 'Unlimited'], 'Automatic conversion, or set prices yourself'), Rw('Languages', ['1', '1', '2', '10', 'Unlimited']), Rw('Price adjustment per market', ['—', '—', '✓', '✓', '✓']), Rw('Fixed prices per market', ['—', '—', '—', '✓', '✓']), Rw('Own domain per market', ['—', '—', '—', '✓', '✓']), Rw('Duties and import taxes at checkout', ['—', '—', '—', '✓', '✓'])]],
+      ['Shipping and stock', [Rw('Stock locations', ['1', '2', '5', '10', 'Unlimited']), Rw('Couriers you can connect', ['1', '2', 'All', 'All', 'All']), Rw('Live courier rates at checkout', ['—', '—', '✓', '✓', '✓']), Rw('Delivery-area lists', ['✓', '✓', '✓', '✓', '✓'])]],
+      ['Storefront', [Rw('Monthly bandwidth', ['1 GB', '10 GB', '50 GB', '200 GB', 'Custom'], 'Total data your shop sends to shoppers. 1 GB usually covers 1,000–5,000 page views a month.'), Rw('Buy extra bandwidth', ['—', '—', '—', '✓', '✓'], 'Billed per extra GB, so your shop never slows down'), Rw('Your own domain', ['—', '✓', '✓', '✓', '✓']), Rw('Remove “Powered by DripFunnel”', ['—', '—', '✓', '✓', 'Full white-label']), Rw('AI that designs your whole store', ['Your own AI key', 'Your own AI key', 'Included · monthly allowance', 'Included · larger allowance', 'Custom'], 'Starter (Free) and Growth: connect your own AI account. Growth Pro and up: included'), Rw('Version history', ['7 days', '30 days', '90 days', '1 year', 'Unlimited']), Rw('Abandoned-cart reminders', ['You send · 1 per cart', 'You send · 1 per cart', 'Automatic · up to 3', 'Automatic · up to 3', 'Automatic · up to 3'], 'From Growth Pro, reminders can include a single-use discount'), Rw('Blog', ['Planned', 'Planned', 'Planned', 'Planned', 'Planned'])]],
+      ['Reports', [Rw('Home numbers', ['✓', '✓', '✓', '✓', '✓']), Rw('Takings, what sold, markets, tax', ['—', '✓', '✓', '✓', '✓']), Rw('Export and supplier report', ['—', '—', '✓', '✓', '✓']), Rw('Custom reports', ['—', '—', '—', '✓', '✓'])]],
+      ['Support and partner', [Rw('Support', ['Help centre', 'Email', 'Chat', 'Priority chat and phone', 'Named manager']), Rw('Uptime guarantee', ['—', '—', '—', '—', '✓']), Rw('White-label', ['—', '—', '—', '—', '✓']), Rw('Many stores, one account', ['—', '—', '—', '—', '✓']), Rw('SSO and full API', ['—', '—', '—', '—', '✓']), Rw('Migration and onboarding', ['—', '—', '—', '—', '✓'])]]
+    ];
+    const groups = G.map(([name, rows]) => ({ name, rows: rows.map(r => ({ name: r.name, note: r.note, cells: r.v.map((v, i) => ({ v, fg: v === '—' ? 'var(--muted,#5A6472)' : v === 'Planned' ? 'var(--tint-fg,#8F4017)' : 'var(--text,#14181F)', w: v === '✓' ? 700 : 400, bg: i === 2 ? 'var(--tint,#FDF0E8)' : 'transparent', label: v === '—' ? 'Not included' : v === '✓' ? 'Included' : v })) })) }));
+    const setupLine = fmt(PT.starter[1]) + ' on Growth, ' + fmt(PT.growth[1]) + ' on Growth Pro, ' + fmt(PT.business[1]) + ' on Business';
+    const faqDef = [
+      ['How does the 10-day free trial work?', 'Every new store gets full Business access for 10 days, no credit card required. Use every feature, then pick the plan that fits. We remind you before the trial ends, and nothing you made is ever deleted.'],
+      ['Is Starter (Free) really free forever?', 'Yes. You keep a real shop with 10 products for as long as you like. We never take a fee on your orders, on any plan.'],
+      ['What happens if I go over a limit?', 'Nothing breaks and nothing is deleted. Everything you have keeps selling; you just can’t add more until you move up a plan.'],
+      ['Can I change plans any time?', 'Upgrades start straight away and you pay the difference for the month. Downgrades take effect at the end of your billing period.'],
+      ['If I downgrade, do I lose my A+ content?', 'You keep it. It’s hidden from your shop until you upgrade again, then it comes straight back.'],
+      ['What does “your own AI key” mean?', 'On Starter (Free) and Growth you connect your own AI account (for example OpenAI or Anthropic) and pay them directly for what you use. It designs your store and writes product descriptions and translations. From Growth Pro, all of that AI is included with one monthly allowance: no key, no extra bill.'],
+      ['What happens when I run out of AI allowance?', 'Your shop keeps working and nothing you published changes. You can wait for next month’s allowance, move up a plan, or connect your own key to keep going.'],
+      ['What is bandwidth, and what if I go over?', 'It’s the total data your shop sends to shoppers each month: pages, photos and videos. 1 GB usually covers 1,000–5,000 page views. If you go over, your shop stays online: we tell you at 80% and 100%, and you can move up a plan. On Business you can also buy extra bandwidth, billed per GB. We never switch your shop off without warning.'],
+      ['Do I have to pay for storefront setup?', 'No. The AI builds your storefront for free on every plan. Need help building your storefront? We’ll do it for you: our team builds your homepage, pages, menus and first products so you launch looking finished. It’s optional and paid once: ' + setupLine + '.'],
+      ['Do you charge per staff member?', 'No. Each plan includes a number of staff accounts. Your suppliers’ users don’t count towards it.'],
+      ['What does white-label mean?', 'On Partner, the portal, the shops and every email carry your brand, not ours. It’s for agencies and groups running shops for others.']
+    ];
+    const faqs = faqDef.map(([q, a], i) => ({ q, a, open: s.faqOpen === i, exp: s.faqOpen === i ? 'true' : 'false', sign: s.faqOpen === i ? '−' : '+', onClick: () => this.setState({ faqOpen: s.faqOpen === i ? -1 : i }) }));
+    const priceFoot = { INR: 'Prices in Indian rupees, before GST.', EUR: 'Prices in euros, before VAT.', USD: 'Prices in US dollars, before sales tax.' }[cur] + ' Yearly plans cost half the monthly price. We never charge a fee on your orders. Items marked “planned” aren’t in the product yet.';
+    const periods = [['month', 'Monthly', ''], ['year', 'Yearly', 'Save 50%']].map(([kk, l, tag]) => ({ label: l, tag, pressed: s.period === kk ? 'true' : 'false', bg: s.period === kk ? 'var(--head,#0A2A4A)' : 'transparent', fg: s.period === kk ? 'var(--paper,#FDFAF7)' : 'var(--text,#14181F)', onClick: () => this.setState({ period: kk }) }));
+
+    return {
+      theme: s.theme, onTheme: e => { const t = e.target.value; try { localStorage.setItem('df-site-theme', t); } catch (e2) {} this.setState({ theme: t }); },
+      devices: [['desktop', 'Desktop'], ['phone', 'Phone']].map(([kk, l]) => ({ label: l, pressed: phone === (kk === 'phone') ? 'true' : 'false', bg: phone === (kk === 'phone') ? '#EC844F' : 'transparent', fg: '#FFFFFF', onClick: () => this.setState({ device: kk, menu: false, res: false }) })),
+      headH: phone ? '60px' : '72px', deskBg: phone ? (s.theme === 'dark' ? '#061726' : '#E8E2DC') : 'var(--paper,#FDFAF7)', frameAlign: phone ? 'center' : 'stretch', framePad: phone ? '32px 16px' : '0',
+      frameStyle: phone ? 'width:390px;max-width:100%;height:780px;border:10px solid #14181F;border-radius:40px;overflow:auto;overscroll-behavior:contain;box-shadow:0 30px 60px rgba(10,42,74,0.25);background:var(--paper,#FDFAF7);' : 'display:flex;flex-direction:column;flex:1;',
+      isDark: s.theme === 'dark', isLight: s.theme !== 'dark', themeLabel: s.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode', toggleTheme,
+      wide, narrow: !wide, menuOpen: s.menu && !wide, toggleMenu: () => this.setState({ menu: !s.menu }),
+      nav: navDef.map(([kk, l]) => ({ label: l, href: kk === 'home' ? '#/' : go(kk), cur: key === kk ? 'page' : undefined, line: key === kk ? '#EC844F' : 'transparent' })),
+      resNav: resDef.map(([kk, l, sub]) => ({ label: l, sub, href: go(kk) })), resOpen: s.res, resLine: isRes ? '#EC844F' : 'transparent', toggleRes: () => this.setState({ res: !s.res }),
+      mnav: [...navDef, ...resDef].map(([kk, l]) => ({ label: l, href: kk === 'home' ? '#/' : go(kk), cur: key === kk ? 'page' : undefined })),
+      cur, onCur: e => this.setState({ cur: e.target.value }), R, fmt,
+      pg: Object.fromEntries(known.map(x => [x, key === x])),
+      footCols: [
+        { h: 'Product', links: [['Features', 'features'], ['AI Builder', 'ai'], ['Pricing', 'pricing'], ['Partners', 'partners']] },
+        { h: 'Resources', links: [['Blog', 'blog'], ['Help centre', 'help'], ['Contact support', 'contact/support']] },
+        { h: 'Company', links: [['Book a demo', 'contact/demo'], ['Talk to sales', 'contact/sales'], ['Become a partner', 'contact/partners']] },
+        { h: 'Legal', links: [['Terms of Service', 'terms'], ['Privacy Policy', 'privacy']] }
+      ].map(c => ({ h: c.h, links: c.links.map(([label, h]) => ({ label, href: go(h) })) })),
+      heroPrompt: s.heroPrompt, onHeroPrompt: e => this.setState({ heroPrompt: e.target.value }),
+      savePrompt: () => { try { localStorage.setItem('df-site-prompt', s.heroPrompt); } catch (e) {} },
+      examples: [['Calm and earthy', 'Make it calm and earthy, with lots of white space and big photos.'], ['Bestsellers first', 'Put our bestsellers at the top of the homepage and add a gift guide page.'], ['Our story', 'Add a page telling the story of how we started in ' + R.city + ', and link it from the menu.']].map(([short, full]) => ({ short, use: () => this.setState({ heroPrompt: full }) })),
+      useRegionPrompt: () => this.setState({ heroPrompt: R.prompt }),
+      before, after, aft, frames: [before, after], dv, devs, steps, history, liveMsg, liveV: s.liveV,
+      d0: s.dStep === 0, d1: s.dStep === 1, d2: s.dStep === 2, d3: s.dStep === 3,
+      nextStep: () => this.setState({ dStep: (s.dStep + 1) % 4 }), nextLabel: s.dStep === 3 ? 'Start again' : 'Next: ' + stepDef[(s.dStep + 1) % 4][0],
+      heroBg: React.createElement('div', { 'aria-hidden': 'true', 'data-hero-bg': '', key: 'hb', style: { position: 'absolute', top: 0, bottom: 0, left: 'calc(50% - 50cqw)', width: '100cqw', zIndex: -1, pointerEvents: 'none', overflow: 'hidden', WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(transparent 0%, #000 12%, #000 80%, transparent 100%)', WebkitMaskComposite: 'source-in', maskImage: 'linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(transparent 0%, #000 12%, #000 80%, transparent 100%)', maskComposite: 'intersect' } },
+        React.createElement('svg', { viewBox: '0 0 100 100', preserveAspectRatio: 'none', style: { position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' } },
+          ...Array.from({ length: 17 }, (_, i) => { const x1 = -4 + i * 6.75; const x2 = 50 + (x1 - 50) * 0.14; const d = 9 + ((i * 37) % 6); const del = -((i * 53) % 11); const pts = { x1, y1: -2, x2, y2: 104 };
+            return React.createElement('g', { key: 'f' + i },
+              React.createElement('line', { ...pts, vectorEffect: 'non-scaling-stroke', style: { stroke: 'var(--border,#E8E2DC)', strokeWidth: 1, opacity: 'var(--fl-a,0.7)' } }),
+              React.createElement('line', { ...pts, pathLength: 100, vectorEffect: 'non-scaling-stroke', strokeLinecap: 'round', style: { stroke: '#EC844F', strokeOpacity: 'var(--dr-a,0.56)', strokeWidth: 2.2, strokeDasharray: '12.5 200', animation: 'dfDrip ' + d + 's cubic-bezier(.45,0,.75,1) ' + del + 's infinite' } })); }))),
+      homeFeatures, pnav, wait, nums, regions, regTable, receipt, idxCols: wide ? '48px minmax(0,1.1fr) minmax(0,1fr) 32px' : 'minmax(0,1fr)', showPh, logoSlots: [1, 2, 3, 4, 5, 6], quoteSlots: [1, 2, 3],
+      plans, heads: PL.map((p, i) => ({ name: p.name, bg: i === 2 ? 'var(--tint,#FDF0E8)' : 'transparent' })), groups, faqs, priceFoot, periods,
+      setupFrom: fmt(PT.starter[1]), setupLine,
+      ...this.pageVals(s, R, fmt, go, parts, key)
+    };
+  }
+  pageVals(s, R, fmt, go, parts, key) {
+    const OK = ['var(--okbg,#EEF7F2)', 'var(--okfg,#1D6B47)'], PE = ['var(--tint,#FDF0E8)', 'var(--tint-fg,#8F4017)'], NE = ['var(--sunk,#F3EDE8)', 'var(--text,#14181F)'];
+    const row = (a, b, c, pill, col) => ({ a, b, c: c || '', pill: pill || '', pbg: (col || NE)[0], pfg: (col || NE)[1] });
+    const it = R.items;
+    const setupLineShort = 'from ' + fmt(({ INR: 7000, USD: 149, EUR: 139 })[s.cur]) + ' one-time';
+    const F = (t, p, d) => ({ t, p, d });
+    const fsecs = [
+      { id: 'storefront', label: 'Storefront and AI', title: 'A store designed from a description', lead: 'No themes, no templates. The AI designs the homepage, pages, menus, product pages and the look of all of them. You check, publish and can undo.', plan: 'Every plan. On Starter and Growth the AI runs on your own key; from Growth Pro it is included.', items: [F('Describe a change', 'All plans', 'Plain words in, a draft out. One change at a time.'), F('Before and after preview', 'All plans', 'Desktop, tablet and phone, side by side.'), F('Approve and publish', 'All plans', 'Nothing reaches shoppers until you press approve. Publishes in about a minute.'), F('Version history and undo', 'All plans', '7 days on Starter, 30 on Growth, 90 on Growth Pro, 1 year on Business.'), F('AI included', 'Growth Pro', 'A monthly allowance with no key to connect. Larger on Business.'), F('Your own AI key', 'All plans', 'OpenAI or Anthropic. Paste it once in Settings.'), F('Your own domain', 'Growth', 'Connect a domain you already own: add one DNS record, we handle the certificate.'), F('Remove “Powered by DripFunnel”', 'Growth Pro', 'Your shop, your name only.'), F('Bandwidth that grows', 'All plans', '1 GB on Starter to 200 GB on Business. Buy more on Business.'), F('We build it for you', 'Growth', 'Optional one-time service: ' + setupLineShort + '.')], mockTitle: 'Storefront · draft', mockSub: 'v14 · not live', rows: [row('Homepage', 'Bestsellers first, new hero', 'Changed', 'Draft', PE), row('Menu', 'Shop · Our story · Help', 'Changed', 'Draft', PE), row('Products and prices', 'Not touched', '', '', null), row('Checkout', 'Not touched', '', '', null)], foot: 'Approve & publish · Discard · History' },
+      { id: 'catalogue', label: 'Catalogue', title: 'A catalogue that handles the detail', lead: 'Add a product once and sell every size and colour of it, with the content shoppers need to decide.', plan: 'Starter: 10 products. Growth: 100. Growth Pro: 5,000. Business: unlimited.', items: [F('Versions', 'All plans', 'Every size × colour with its own price, stock, photos and code. Up to 250 per product on Business.'), F('Photos', 'All plans', '3 per product on Starter, up to 50 on Business.'), F('Product video', 'Growth Pro', 'One video per product, shown with the photos.'), F('A+ content', 'Growth Pro', 'Rich modules below the fold: comparison tables, feature rows, story sections.'), F('Size charts', 'All plans', 'Build once, attach to many products. 1 on Starter, 25 on Growth Pro.'), F('Collections', 'All plans', 'Manual or by rule. 3 on Starter, unlimited from Growth Pro.'), F('Filters and internal tags', 'All plans', 'Shoppers filter by what matters; tags stay private.'), F('Menus', 'All plans', 'Header and footer menus, or let the AI arrange them.'), F('Specifications and highlights', 'All plans', 'Structured facts shoppers compare on.'), F('Badges', 'Growth', 'New, bestseller, low stock, your own.'), F('FAQs and related products', 'Growth Pro', 'Answer the question on the page; suggest the next thing.'), F('AI descriptions', 'All plans', 'Written in your tone from a few facts.'), F('AI translations', 'All plans', 'Every language your markets need, from one source text.'), F('Import from a spreadsheet', 'Growth', 'Match columns once, pause and resume, see what failed and why.'), F('Bring products from Shopify', 'Growth Pro', 'Products, versions, photos and collections come across.'), F('Export', 'Growth Pro', 'CSV of products, stock or orders, ready for your accountant.'), F('Stock history', 'All plans', 'Every change to every version, who and when.'), F('Bulk edit', 'All plans', 'Select many, change price, stock, collections or status at once.'), F('Legal and safety details', 'All plans', 'Country of origin, warnings, ' + R.code + ', MRP or MSRP. Never behind a paywall.'), F('Compare-at price', 'All plans', R.compare + '.')], mockTitle: it[0][0], mockSub: '8 versions · 3 languages', rows: [row('S · Natural', 'In stock at ' + R.city, fmt(it[0][1]), '24 left', OK), row('M · Natural', 'In stock at ' + R.city, fmt(it[0][1]), '18 left', OK), row('L · Indigo', 'Supplier stock', fmt(it[0][1]), '3 left', PE), row('XL · Indigo', 'Supplier stock', fmt(it[0][1]), 'Sold out', NE)], foot: 'A+ content · Product video · Size chart · ' + R.code },
+      { id: 'orders', label: 'Orders and shipping', title: 'Orders, shipping and returns in one place', lead: 'See what to ship first, send it with your courier, and handle returns without a spreadsheet.', plan: 'Every plan has unlimited orders. Live courier rates from Growth Pro. 10 stock locations on Business.', items: [F('Order list and filters', 'All plans', 'To ship, unpaid, returns, by market, by supplier.'), F('Ship with your courier', 'All plans', R.couriers + '. Tracking goes to the shopper automatically.'), F('Live courier rates at checkout', 'Growth Pro', 'Shoppers see the real price before they pay.'), F('Partial shipping', 'All plans', 'Send what you have now and the rest later.'), F('Refunds', 'All plans', 'All or part of an order, back to the original payment.'), F('Returns', 'All plans', 'Request, approve, receive, refund. Each supplier handles their own items; you can override.'), F('Cancellations', 'All plans', 'Before shipping, with stock put back.'), F('Invoices, packing slips and labels', 'All plans', 'Print one or many, with the right tax wording for the market.'), F('Delivery charges', 'All plans', 'Free, flat, by weight, or free above a threshold.'), F('Delivery-area lists', 'All plans', 'Postcodes or regions you do and don’t deliver to.'), F('Stock locations', 'All plans', '1 on Starter, 5 on Growth Pro, 10 on Business.'), F('Customers and groups', 'All plans', 'Profiles, order history, notes and groups for offers.'), F('Email the customer', 'All plans', 'From the order, with the order details filled in.'), F('Order exports', 'Growth Pro', 'CSV by date range, market or status.')], mockTitle: 'Order #1042', mockSub: 'Paid · 2 items', rows: [row(it[1][0], 'Qty 1', fmt(it[1][1]), 'Packed', OK), row(it[2][0], 'Qty 2', fmt(it[2][1] * 2), 'To ship', PE), row('Courier', R.couriers.split(',')[0] + ' · tracking added', '', 'Shipped', OK)], foot: 'Print invoice · Packing slip · Label · Refund' },
+      { id: 'payments', label: 'Payments and tax', title: 'Get paid the way your shoppers pay', lead: 'Local payment methods, local tax rules and zero DripFunnel fees on every order.', plan: 'Zero fees on every plan. 1 gateway on Starter, 2 on Growth, all from Growth Pro.', items: [F('Zero fees on your orders', 'All plans', 'We never take a cut of your sales. You pay only your provider.'), F('Payment gateways', 'All plans', R.pay + '. Connect in minutes.'), F('Cash on delivery and bank transfer', 'All plans', 'For markets where cards are not the norm.'), F('Local tax worked out', 'All plans', R.taxLine + '.'), F('Tax-inclusive or exclusive prices', 'All plans', 'Follows the rule of each market automatically.'), F('Tax report', 'Growth', 'What you owe, by market and rate.'), F('Shopper invoices', 'All plans', 'Numbered, with the tax detail each country needs.')], mockTitle: 'Payments', mockSub: R.country, rows: R.pay.split(',').map((p, i) => row(p.trim(), i === 0 ? 'Connected' : 'Available', '', i === 0 ? 'Live' : '', i === 0 ? OK : null)), foot: 'DripFunnel fee: ' + fmt(0) + ' on every order' },
+      { id: 'offers', label: 'Offers and carts', title: 'Offers that bring people back', lead: 'Run the offer you have in mind and see whether it worked. Remind shoppers who left something behind.', plan: '3 live offers on Starter and Growth. Unlimited offers and automatic reminders from Growth Pro.', items: [F('Discount codes', 'All plans', 'Percent off, fixed amount or free delivery.'), F('Automatic offers', 'All plans', 'No code needed; applied when the rule is met.'), F('Buy X get Y', 'All plans', 'Buy 2 get 1, mix and match, cheapest free.'), F('Minimum spend and quantity', 'All plans', 'Set the bar the cart must clear.'), F('Single-use codes', 'Growth Pro', 'One per shopper, generated in bulk or sent in a reminder.'), F('Customer-group offers', 'Growth Pro', 'Trade, VIP, first order, your own groups.'), F('Tiered offers', 'Growth Pro', 'Spend more, save more.'), F('Schedules and stacking rules', 'All plans', 'Start and end dates, and which offers may combine.'), F('Offer results', 'Growth Pro', 'Orders, revenue and discount given, per offer.'), F('Abandoned-cart reminders', 'All plans', 'One you send yourself on Starter; up to 3 sent automatically from Growth Pro.'), F('Discount in the last reminder', 'Growth Pro', 'A single-use code, only if the first two didn’t work.'), F('Regional wording', 'All plans', 'Coupon or voucher, shipping or delivery, by market.')], mockTitle: 'Buy 2, get 1 free', mockSub: 'Automatic offer · live', rows: [row('Who', 'Everyone', '', 'Live', OK), row('Reminder 1', '1 hour after they leave', 'Sent', '', null), row('Reminder 2', '1 day after', 'Sent', '', null), row('Reminder 3', '3 days after, with a single-use code', 'Scheduled', 'Code', PE)] },
+      { id: 'abroad', label: 'Selling abroad', title: 'Sell in many countries from one shop', lead: 'Add a market and your shop shows the right currency, language, tax and payment methods there.', plan: 'Home market on Starter and Growth. 2 markets on Growth Pro, 10 on Business.', items: [F('Markets', 'Growth Pro', 'Each with its own currency, languages, tax and couriers.'), F('Currencies', 'Growth Pro', 'Automatic conversion, or set prices yourself.'), F('Languages', 'Growth Pro', 'Shop, emails and invoices in the shopper’s language.'), F('Price adjustment per market', 'Growth Pro', '+10% for one country, rounded nicely.'), F('Fixed prices per market', 'Business', 'Exact local prices, not conversions.'), F('Duties and import taxes at checkout', 'Business', 'Shoppers pay once, nothing at the door.'), F('Own domain per market', 'Business', 'shop.de, shop.in, shop.com.'), F('Local payment methods', 'All plans', 'Klarna in Germany, PhonePe in India, PayPal in the US.'), F('Local couriers', 'All plans', 'DHL, Shiprocket, USPS and more.'), F('Local rules built in', 'All plans', 'VAT-inclusive prices, 30-day lowest price in the EU, MRP in India, HSN codes.')], mockTitle: 'Markets', mockSub: '5 live', rows: [row('India', 'INR · Hindi, English', 'GST incl.', 'Live', OK), row('Germany', 'EUR · German', 'VAT 19% incl.', 'Live', OK), row('United States', 'USD · English', 'Sales tax excl.', 'Live', OK), row('United Arab Emirates', 'AED · Arabic, English', 'VAT 5% incl.', 'Live', OK), row('United Kingdom', 'GBP · English', 'VAT 20% incl.', 'Duties at checkout', PE)] },
+      { id: 'suppliers', label: 'Suppliers', title: 'Suppliers who manage their own shelf', lead: 'Let suppliers keep their own products and stock up to date, and even pack their own orders, under your rules.', plan: 'Business and Partner. Unlimited suppliers; their users don’t count towards your staff.', items: [F('Invite suppliers', 'Business', 'By email. The invitation creates their business and first user.'), F('Three access levels', 'Business', 'Stock only; products and stock; or also packing their own orders.'), F('Approval before going live', 'Business', 'Optional. Review, approve or send back with a reason.'), F('Approval for edits', 'Business', 'Decide whether an edit to a live product needs a second look.'), F('Suppliers see only their own', 'Business', 'Their products, their order lines, the delivery address. Never the order total or other suppliers.'), F('Shared record', 'Business', 'You can edit a supplier’s product and they see the change. Only price is yours alone.'), F('Suppliers pack their own orders', 'Business', 'Ship to your warehouse or straight to the shopper, your choice per supplier.'), F('Supplier returns', 'Business', 'Each supplier handles their own items; you can override.'), F('Supplier report', 'Business', 'What each supplier sold, by period.'), F('Suspend or remove', 'Business', 'Their products stay in the catalogue, paused, until you decide.')], mockTitle: 'Suppliers', mockSub: '2 active · 1 to approve', rows: [row('Loom House', 'Products and stock', '12 products', 'Active', OK), row('Indigo Mills', 'Also packs own orders', '31 products', 'Active', OK), row('New product', 'From Loom House, this morning', '', 'To approve', PE)], foot: 'Approve · Send back with a reason' },
+      { id: 'team', label: 'Team and security', title: 'Your team, with the right keys', lead: 'Each person sees only what their job needs, and every account is protected.', plan: 'Owner only on Starter. 2 staff on Growth, 5 on Growth Pro, 15 on Business.', items: [F('Owner, Manager and Staff roles', 'Growth', 'Owner runs everything; Manager runs catalogue and orders; Staff handle orders and customers.'), F('Manager role', 'Growth Pro', 'Day-to-day running without billing or settings.'), F('Invitations', 'Growth', 'Email invites that expire after 7 days. Resend or revoke any time.'), F('View-only where it matters', 'Growth', 'Staff can see offers and collections but not change them.'), F('Two-step sign-in', 'All plans', 'Authenticator app or email code, with backup codes.'), F('Activity in the stock history', 'All plans', 'Who changed what, and when.'), F('My profile', 'All plans', 'Name, email, password, appearance and time zone.'), F('Support access switch', 'All plans', 'Decide whether support may look at your store, and for how long.')], mockTitle: 'People', mockSub: '3 staff · 2 suppliers', rows: [row(R.owner, 'Owner', 'Everything', 'Owner', OK), row('Mei', 'Manager', 'Catalogue, orders, offers', 'Staff', NE), row('Ravi', 'Staff', 'Orders and customers', 'Staff', NE), row('Loom House', 'Supplier · products and stock', '12 products', 'Supplier', PE)] },
+      { id: 'reports', label: 'Reports', title: 'Reports that answer the obvious questions', lead: 'What came in, what sold, where it went and how much tax you owe.', plan: 'Home numbers on every plan. The 4 reports from Growth. Export from Growth Pro. Custom on Business.', items: [F('Home numbers', 'All plans', 'Takings, orders and visitors today, on the first screen.'), F('Takings', 'Growth', 'By day, week or month, with refunds taken off.'), F('What sold', 'Growth', 'Products and versions, so you know what to restock.'), F('Markets', 'Growth', 'Where orders come from, in each currency.'), F('Tax', 'Growth', 'Collected by market and rate, ready to file.'), F('Supplier report', 'Growth Pro', 'Sales per supplier for settling up.'), F('Export any report', 'Growth Pro', 'CSV for your spreadsheet or accountant.'), F('Custom reports', 'Business', 'Pick the columns, filters and period, and save it.')], mockTitle: 'Takings · last 7 days', mockSub: 'Sample data', isBars: true, bars: [52, 64, 48, 80, 72, 96, 60].map((hh, i) => ({ h: hh + '%', l: ['M', 'T', 'W', 'T', 'F', 'S', 'S'][i], c: i === 5 ? '#EC844F' : 'var(--head,#0A2A4A)' })), rows: [] },
+      { id: 'billing', label: 'Plans and billing', title: 'Plans that don’t punish you for growing', lead: 'Start free, try everything, and change plans without losing work.', plan: 'Every plan. Nothing you made is ever deleted when you move down.', items: [F('Starter, free forever', 'All plans', 'A real shop with 10 products, for as long as you like.'), F('10-day trial of Business', 'All plans', 'Every feature, no credit card. We remind you before it ends.'), F('Upgrade now, downgrade later', 'All plans', 'Upgrades start straight away; downgrades at the end of the period.'), F('Choose what to keep', 'All plans', 'Over a limit after a downgrade? Pick what stays live. The rest is paused, not deleted.'), F('Monthly or yearly', 'All plans', 'Yearly costs half the monthly price.'), F('Invoices', 'All plans', 'Downloadable, with your business details and tax ID.'), F('Past due, not locked out', 'All plans', 'If a payment fails you can still see everything; changes wait until it’s fixed.'), F('Cancel any time', 'All plans', 'From Billing, with a clear note on what happens to the shop and domain.')], mockTitle: 'Billing', mockSub: 'Growth Pro · yearly', rows: [row('Plan', 'Growth Pro', '', 'Active', OK), row('Next invoice', '1 October 2027', '', '', null), row('Card', 'Visa ending 4417', '', '', null), row('Trial', 'Ended · you chose Growth Pro', '', '', null)], foot: 'Change plan · Download invoices · Cancel' }
+    ].map((f, i) => ({ isBars: false, foot: '', ...f, n: String(i + 1).padStart(2, '0'), items: f.items.map(x => ({ ...x, pc: x.p === 'All plans' ? 'var(--okfg,#1D6B47)' : 'var(--tint-fg,#8F4017)' })) }));
+    const PLAN_RANK = { 'All plans': 0, Growth: 1, 'Growth Pro': 2, Business: 3 };
+    const PF = ['All', 'Starter (Free)', 'Growth', 'Growth Pro', 'Business', 'Partner'];
+    const pfRank = { 'Starter (Free)': 0, Growth: 1, 'Growth Pro': 2, Business: 3, Partner: 3 }[s.planF];
+    const fIndex = fsecs.map(g => ({ n: g.n, label: g.label, items: g.items.map(x => { const inPlan = pfRank === undefined || PLAN_RANK[x.p] <= pfRank; return { t: x.t, p: x.p, pc: inPlan ? x.pc : 'var(--field,#D7D3CD)', fg: inPlan ? 'var(--text,#14181F)' : 'var(--muted,#5A6472)' }; }) }));
+    const allF = fsecs.flatMap(g => g.items); const inCount = pfRank === undefined ? allF.length : allF.filter(x => PLAN_RANK[x.p] <= pfRank).length;
+    const POSTS = [
+      { id: 'describe-your-shop', cat: 'Storefront and AI', title: 'How to describe your shop so the AI gets it right', ex: 'Three sentences do most of the work: what you sell, who buys it, and how it should feel.', date: '24 Sep 2026', mins: 5, body: [{ h: 'Start with what you sell', p: 'Name the products and what makes them yours: where they’re made, what they’re made of, who makes them. “Hand block-printed cotton from Jaipur” gives the AI far more to work with than “clothes”.' }, { h: 'Say who buys it', p: 'One line about your shoppers shapes the words and the layout. Gift buyers want a gift guide near the top; repeat customers want new arrivals first.' }, { h: 'Describe the feeling, not the layout', p: 'Words like calm, bold, warm or playful set colours, type and spacing. You don’t need to say where the button goes. If you have brand colours, name them.' }, { h: 'Then change one thing at a time', p: 'Once the first version is live, ask for small changes: a new page, a simpler menu, bestsellers first. Each one arrives as a draft you can check, and every version stays in your history.' }] },
+      { id: 'selling-to-europe', cat: 'Selling abroad', title: 'Selling into Europe: VAT, duties and what shoppers see at checkout', ex: 'What changes when you add a European market, and which settings to check first.', date: '17 Sep 2026', mins: 7 },
+      { id: 'cart-reminders', cat: 'Offers', title: 'Abandoned-cart reminders: when to send them and what to say', ex: 'Three reminders, three jobs. When to add a discount, and when not to.', date: '9 Sep 2026', mins: 4 },
+      { id: 'moving-from-shopify', cat: 'Guides', title: 'Moving from Shopify: what comes across and what to check', ex: 'Products, versions, photos and collections come with you. Here is what to look at before you switch your domain.', date: '2 Sep 2026', mins: 6 },
+      { id: 'size-charts', cat: 'Catalogue', title: 'Size charts that answer the question before it’s asked', ex: 'Fewer returns start on the product page. How to set up charts once and reuse them.', date: '26 Aug 2026', mins: 4 },
+      { id: 'suppliers', cat: 'Suppliers', title: 'Letting suppliers add products without losing control', ex: 'Pick the right access level, decide whether to approve, and keep your catalogue consistent.', date: '19 Aug 2026', mins: 5 }
+    ].map(p => ({ ...p, href: go('blog/' + p.id), meta: p.date + ' · ' + p.mins + ' min read' }));
+    const cats = ['All', ...Array.from(new Set(POSTS.map(p => p.cat)))];
+    const pid = key === 'blog' ? parts[1] : '';
+    const post0 = pid ? POSTS.find(p => p.id === pid) || POSTS[0] : null;
+    const post = post0 ? { ...post0, body: post0.body || [], stub: !post0.body } : null;
+    const HC = [
+      ['start', 'Getting started', 'Sign up, first products, going live', [['first-store', 'Set up your store in your first 10 minutes'], ['go-live', 'Go live: what to check before you share your shop'], ['trial', 'How the 10-day trial works']]],
+      ['catalogue', 'Catalogue', 'Products, versions, collections, imports', [['add-product', 'Add a product with sizes and colours'], ['import-csv', 'Import products from a spreadsheet'], ['import-shopify', 'Bring your products from Shopify']]],
+      ['orders', 'Orders and shipping', 'Shipping, tracking, returns, refunds', [['ship-order', 'Ship an order and add tracking'], ['refund', 'Refund all or part of an order'], ['print', 'Print invoices, packing slips and labels']]],
+      ['payments', 'Payments and tax', 'Payment methods, tax, invoices', [['connect-payments', 'Connect a payment method'], ['tax', 'How tax is worked out in each country'], ['cod', 'Offer cash on delivery']]],
+      ['storefront', 'Storefront and AI', 'Describe, preview, publish, undo', [['describe', 'Describe a change to your storefront'], ['undo', 'Go back to an earlier version'], ['ai-key', 'Connect your own AI key']]],
+      ['abroad', 'Selling abroad', 'Markets, currencies, languages, duties', [['add-market', 'Add a market'], ['currencies', 'Set prices per currency'], ['duties', 'Charge duties at checkout']]],
+      ['team', 'Team and suppliers', 'Staff roles, suppliers, approvals', [['invite-staff', 'Invite staff and choose their role'], ['invite-supplier', 'Invite a supplier'], ['approval', 'Turn on approval for supplier products']]],
+      ['billing', 'Billing and plans', 'Plans, invoices, upgrades, cancelling', [['change-plan', 'Change your plan'], ['invoices', 'Download your invoices'], ['cancel', 'Cancel your subscription']]]
+    ];
+    const BODY = {
+      describe: { who: 'Owners', intro: 'Only the store owner can change the storefront. Managers and staff can look but not publish.', steps: ['In the portal, open Storefront.', 'Under Describe a change, write what you want in plain words, for example “Make the menu simpler: Shop, Our story, Help”.', 'Wait for the draft. It shows what changed and what wasn’t touched.', 'Check it on Desktop, Tablet and Phone.', 'Press Approve & publish, or Discard to throw the draft away.'], note: 'One draft at a time. Publish or discard it before asking for the next change.' },
+      undo: { who: 'Owners', intro: 'Every publish is saved as a numbered version. Going back is instant and doesn’t use your AI allowance.', steps: ['Open Storefront and find History on the right.', 'Pick the version you want and press Go back to this.', 'Confirm. Your live shop switches back within a minute.'], note: 'How far back you can go depends on your plan: 7 days on Starter up to unlimited on Partner.' },
+      'first-store': { who: 'Everyone', intro: 'Signing up builds your store for you. This is what to do next.', steps: ['Describe your shop on the first screen. The AI builds a first version you can change later.', 'Add your first product, or load sample products to see how things look.', 'Connect a payment method in Settings › Payments.', 'Check your shipping charges in Settings › Shipping.', 'Open your shop and place a test order.'] },
+      trial: { who: 'Everyone', intro: 'New stores get everything in Business for 10 days. No credit card is needed to start.', steps: ['Use any feature during the trial. Nothing is held back.', 'We remind you before the trial ends.', 'Pick a plan, or do nothing and move to Starter (Free).', 'On Starter, choose which 10 products stay live. Nothing else is deleted; it’s paused until you upgrade.'] },
+      'ship-order': { who: 'Owners, managers, staff', intro: 'Ship a whole order at once, or part of it now and the rest later.', steps: ['Open Orders and pick an order marked To ship.', 'Tick the items going in this parcel.', 'Choose the courier and add the tracking number.', 'Press Mark as shipped. The shopper gets an email with tracking.'] },
+      'invite-supplier': { who: 'Owners on Business', intro: 'Suppliers add their own products and keep their stock up to date. They only ever see their own products and order lines.', steps: ['Go to Settings › Team and suppliers and press Invite a supplier.', 'Enter the supplier’s business name and their contact’s email.', 'Choose an access level: stock only, products and stock, or also packing their own orders.', 'Send the invitation. It stays open for 7 days.'], note: 'Changing a supplier’s access level can take a few minutes to take effect.' }
+    };
+    const allArts = HC.flatMap(([cid, ct, , arts]) => arts.map(([id, t]) => ({ id, t, cat: ct, cid, href: go('help/' + id) })));
+    const q = s.q.trim().toLowerCase();
+    const hResults = q ? allArts.filter(a => (a.t + ' ' + a.cat).toLowerCase().includes(q)) : [];
+    const aid = key === 'help' ? parts[1] : '';
+    const a0 = aid ? allArts.find(a => a.id === aid) || allArts[0] : null;
+    const hart = a0 ? { ...a0, who: 'Everyone', intro: 'Placeholder: a short line on what this article helps with.', steps: [], note: '', ...(BODY[a0.id] || {}), stub: !BODY[a0.id], more: allArts.filter(x => x.cid === a0.cid && x.id !== a0.id) } : null;
+    const f = s.form; const E = s.errs;
+    const setF = (k2, v) => this.setState({ form: { ...this.state.form, [k2]: v }, errs: { ...this.state.errs, [k2]: '' } });
+    const T = { demo: ['Book a demo', 'Book my demo', 'Anything you’d like us to cover? (optional)', 'e.g. We sell in India and want to start shipping to the UAE'], sales: ['Sales question', 'Send to sales', 'Your question', 'e.g. Can you build our storefront for us?'], partners: ['Partners', 'Talk to us', 'Tell us about the shops you run', 'e.g. We run 40 shops for clients in Germany and want them under our brand'], support: ['Support', 'Send to support', 'What’s happening?', 'e.g. My courier tracking numbers aren’t showing on orders'] };
+    const tp = T[f.topic] || T.demo;
+    const needMsg = f.topic !== 'demo';
+    const fld = (k2, label, type, ph, ac) => ({ label, type, ph, ac, value: f[k2], err: E[k2] || '', inv: E[k2] ? 'true' : 'false', bd: E[k2] ? '2px solid #00325F' : '1px solid var(--field,#D7D3CD)', onChange: e => setF(k2, e.target.value) });
+    const submit = e => { e.preventDefault(); const x = this.state.form; const er = {}; if (!x.name.trim()) er.name = 'Enter your name.'; if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.email.trim())) er.email = 'Enter a full email address, like you@shop.com.'; if (needMsg && !x.msg.trim()) er.msg = 'Tell us a little about what you need.'; this.setState({ errs: er, sent: !Object.keys(er).length }); };
+    const isLegal = key === 'terms' || key === 'privacy';
+    const LG = {
+      terms: { title: 'Terms of Service', other: 'Read the Privacy Policy', otherHref: go('privacy'), intro: 'These terms are the agreement between you and DripFunnel when you use DripFunnel to run an online shop. They cover your account, your plan and what each of us is responsible for.', secs: [['Who we are', 'DripFunnel is operated by [legal entity name], a Softobotics company, registered at [address].'], ['Your account', 'You must be old enough to form a contract where you live. You’re responsible for everyone you invite to your store, including staff and suppliers, and for keeping sign-in details safe.'], ['Plans, trials and billing', 'Starter is free. Paid plans start with a 10-day trial of Business. After the trial, plans are billed monthly or yearly in advance. Upgrades start straight away; downgrades take effect at the end of the billing period.'], ['Fees on your orders', 'DripFunnel does not charge a fee on your orders on any plan. Your payment provider charges its own fees under its own terms.'], ['Your shop and your content', 'You own your products, photos, words and customer relationships. You give us permission to host and display them so your shop works. You’re responsible for what you sell and for following the law in each market you sell in.'], ['AI-designed storefronts', 'The AI suggests designs and text. Nothing is published until you approve it, and you’re responsible for what you publish.'], ['Acceptable use', '[List of prohibited products and activities.]'], ['Cancelling and closing', 'You can cancel any time from Billing. [What happens to the shop, products, domain and data, and for how long they’re kept.]'], ['Liability', '[Limitation of liability, to be written by counsel.]'], ['Changes to these terms', 'We’ll tell you by email at least [n] days before a change that affects you.'], ['Contact', 'Questions about these terms: legal@dripfunnel.com.']] },
+      privacy: { title: 'Privacy Policy', other: 'Read the Terms of Service', otherHref: go('terms'), intro: 'This policy explains what personal data DripFunnel collects, why, and the choices you have. It covers merchants and their teams who use DripFunnel, and visitors to this website.', secs: [['Who is responsible', '[Legal entity name], a Softobotics company, is responsible for data about merchants and website visitors. For shoppers’ data, the merchant is responsible and DripFunnel processes it on their behalf.'], ['What we collect', 'Account details (name, email, password), store details, billing details, and how you use the portal. [Full list.]'], ['Why we use it', 'To run your store, bill you, keep accounts secure, provide support and improve DripFunnel. [Legal bases per purpose.]'], ['Shoppers’ data', 'Orders, addresses and contact details belong to the merchant’s store. Suppliers see only what they need to ship their own items.'], ['Who we share it with', 'Payment providers, couriers, hosting and email providers that help run the service. [Named list of sub-processors.]'], ['Where it is stored', '[Regions and transfer safeguards.]'], ['How long we keep it', '[Retention periods.]'], ['Your rights', 'Depending on where you live, you can ask to see, correct, export or delete your data. [Region-specific rights, e.g. GDPR, India DPDP Act, US state laws.]'], ['Cookies', '[Cookies used on this website and in the portal, and how to manage them.]'], ['Contact', 'privacy@dripfunnel.com.']] }
+    };
+    const lg = LG[key];
+    const legal = lg ? { ...lg, secs: lg.secs.map(([h, p], i) => ({ n: i + 1, h, p, id: 'sec-' + (i + 1), jump: () => this.scrollToId('sec-' + (i + 1)) })) } : null;
+    return {
+      aiSteps: [['Describe', 'What you sell, who buys it and how it should feel. Or one change: “add an About page”.'], ['Preview', 'A draft arrives with what changed and what wasn’t touched. Check desktop, tablet and phone.'], ['Approve', 'Nothing reaches shoppers until you say so. Don’t like it? Discard and ask again.'], ['Publish', 'Your live shop changes in about a minute. We check that it did.'], ['Undo', 'Every version is kept. Go back to any of them in one click.']].map(([t, d], i) => ({ n: '0' + (i + 1), t, d })),
+      aiPrompts: [[R.prompt, 'Colours, type, homepage, menu, new page'], ['Add a page about how we make our products, and put it in the menu.', 'New page · menu'], ['Put our bestsellers at the top of the homepage.', 'Homepage sections'], ['Show the size chart above the add-to-cart button on product pages.', 'Product page layout'], ['Use our brand colours, deep green and cream, everywhere.', 'Look and feel on every page'], ['Make the menu simpler: Shop, Our story, Help.', 'Menus']].map(([p, c]) => ({ p, c })),
+      aiDesigns: [['Homepage', 'Sections, order and words'], ['Pages', 'About, story, help, gift guides'], ['Menus', 'Header and footer'], ['Product pages', 'Layout and what shows first'], ['Look and feel', 'Colours, type and spacing']].map(([t, d]) => ({ t, d })),
+      histPlans: [['Starter (Free)', '7 days'], ['Growth', '30 days'], ['Growth Pro', '90 days'], ['Business', '1 year'], ['Partner', 'Unlimited']].map(([p, v]) => ({ p, v })),
+      fnav: fsecs.map(x => ({ n: x.n, label: x.label, onClick: () => this.scrollToId(x.id) })), fsecs, featCount: allF.length, featFree: allF.filter(x => x.p === 'All plans').length,
+      planFilter: PF.map(p => { const on = (s.planF || 'All') === p; return { label: p, pressed: on ? 'true' : 'false', bg: on ? 'var(--head,#0A2A4A)' : 'transparent', fg: on ? 'var(--paper,#FDFAF7)' : 'var(--text,#14181F)', bd: on ? 'var(--head,#0A2A4A)' : 'var(--field,#D7D3CD)', onClick: () => this.setState({ planF: p === 'All' ? '' : p }) }; }),
+      fIndex, idxLine: pfRank === undefined ? allF.length + ' features across ' + fsecs.length + ' areas.' : inCount + ' of ' + allF.length + ' features are included on ' + s.planF + '. Greyed items start on a higher plan.',
+      idxColumns: this.state.device === 'phone' ? 1 : s.w >= 1100 ? 3 : s.w >= 700 ? 2 : 1, stickyTop: this.state.device === 'phone' ? '60px' : '72px', mockTop: this.state.device === 'phone' ? '120px' : '136px',
+      pStats: [['Stores', '86'], ['Live', '78'], ['Plans', '4']].map(([l, v]) => ({ l, v })),
+      pDomains: [['Portal', 'store.northstar.com'], ['Shops', '*.shops.northstar.com'], ['Emails from', 'mail.northstar.com']].map(([l, v]) => ({ l, v })),
+      pBlocks: [
+        ['Your brand everywhere', 'Merchants and their shoppers see your name, not ours.', ['Your logo, colours and font on the portal', 'Shops on your own domain', 'Every email sent from your own address']],
+        ['Your plans, your prices', 'Build plans from DripFunnel’s features and set your own prices in each currency.', ['Choose what each plan includes and its limits', 'Set prices per currency, monthly and yearly', 'Compare your plans side by side before publishing']],
+        ['Many stores, one account', 'Create and run every client’s store from one partner console.', ['See every store’s plan, status and payments', 'Help a merchant by signing in as them, with a full activity log', 'Your team with Owner, Admin, Support, Finance and Read-only roles']],
+        ['Checked before you go live', 'We review every partner before their first shop opens.', ['Branding, domains, plans and legal pages checked', 'We can set up with you in a guided session', 'Sent back with clear notes if something is missing']]
+      ].map(([t, d, pts], i) => ({ n: '0' + (i + 1), t, d, pts })),
+      pStatement: [['Collected from your 78 stores', '$4,261.40', 400], ['DripFunnel wholesale fee', '−$1,549.00', 400], ['Adjustments', '$0.00', 400], ['Paid to you on 1 September', '$2,712.40', 700]].map(([l, v, w]) => ({ l, v, w })),
+      pSteps: [['Talk to us', 'Tell us how many stores and where.'], ['Agree terms', 'Your wholesale rate and contract.'], ['Set up', 'Brand, domains, plans and legal pages, on your own or with us.'], ['Submit', 'Send your setup for review.'], ['Approval', 'We check it and approve, or send it back with notes.'], ['Go live', 'Open your first stores under your brand.']].map(([t, d], i) => ({ n: '0' + (i + 1), t, d })),
+      blogIndex: key === 'blog' && !pid, post, related: post ? POSTS.filter(p => p.id !== post.id).slice(0, 3) : [],
+      blogCats: cats.map(c => { const on = s.blogCat === c; return { label: c, pressed: on ? 'true' : 'false', bg: on ? 'var(--head,#0A2A4A)' : 'transparent', fg: on ? 'var(--paper,#FDFAF7)' : 'var(--text,#14181F)', bd: on ? 'var(--head,#0A2A4A)' : 'var(--border,#E8E2DC)', onClick: () => this.setState({ blogCat: c }) }; }),
+      posts: POSTS.filter(p => s.blogCat === 'All' || p.cat === s.blogCat),
+      helpIndex: key === 'help' && !aid, hart, q: s.q, onQ: e => this.setState({ q: e.target.value }), hasQ: !!q, noQ: !q, hResults, noResults: !!q && !hResults.length,
+      resultLine: hResults.length + (hResults.length === 1 ? ' article' : ' articles') + ' for “' + s.q.trim() + '”',
+      hcats: HC.map(([cid, t, d, arts]) => ({ t, d, arts: arts.map(([id, at]) => ({ t: at, href: go('help/' + id) })) })),
+      askHelpful: s.helpful === null, helpfulMsg: s.helpful === true ? 'Thanks for telling us.' : s.helpful === false ? 'Sorry about that. Contact support and we’ll help directly.' : '',
+      yesHelpful: () => this.setState({ helpful: true }), noHelpful: () => this.setState({ helpful: false }),
+      form: f, errs: E, sent: s.sent, notSent: !s.sent, submit, submitLabel: tp[1], msgLabel: tp[2], msgPh: tp[3],
+      msgInv: E.msg ? 'true' : 'false', msgBd: E.msg ? '2px solid #00325F' : '1px solid var(--field,#D7D3CD)', onMsg: e => setF('msg', e.target.value), onCountry: e => setF('country', e.target.value),
+      topics: Object.keys(T).map(k2 => { const on = f.topic === k2; return { label: T[k2][0], pressed: on ? 'true' : 'false', bg: on ? 'var(--head,#0A2A4A)' : 'transparent', fg: on ? 'var(--paper,#FDFAF7)' : 'var(--text,#14181F)', bd: on ? 'var(--head,#0A2A4A)' : 'var(--field,#D7D3CD)', onClick: () => this.setState({ form: { ...this.state.form, topic: k2 }, errs: {} }) }; }),
+      fields: [fld('name', 'Your name', 'text', 'e.g. Priya Sharma', 'name'), fld('email', 'Work email', 'email', 'you@shop.com', 'email'), fld('company', 'Shop or company (optional)', 'text', 'e.g. ' + R.store, 'organization')],
+      countries: ['India', 'Germany', 'United States', 'United Kingdom', 'United Arab Emirates', 'France', 'Netherlands', 'Other'],
+      sentTitle: 'Thanks, ' + (f.name.trim().split(' ')[0] || 'we’ve got it') + '.', sentBody: f.topic === 'demo' ? 'We’ll email ' + f.email + ' with times for your demo.' : f.topic === 'support' ? 'Our support team will reply to ' + f.email + '. If it’s about a live order, include the order number when we write back.' : 'We’ll reply to ' + f.email + ' from sales@dripfunnel.com.',
+      resetForm: () => this.setState({ sent: false, form: { ...this.state.form, msg: '' } }),
+      legalOn: isLegal, legal
+    };
+  }
+}
+</script>
+</body>
+</html>
