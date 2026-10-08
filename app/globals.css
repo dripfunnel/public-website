@@ -1,0 +1,116 @@
+[data-site] {
+  --paper: #fdfaf7;
+  --surface: #ffffff;
+  --sunk: #f3ede8;
+  --border: #e8e2dc;
+  --field: #d7d3cd;
+  --text: #14181f;
+  --head: #0a2a4a;
+  --muted: #5a6472;
+  --link: #b8541f;
+  --link-h: #8f4017;
+  --focus: #00519f;
+  --btn-h: #d96c33;
+  --outline: #b8541f;
+  --outline-h: #fdf0e8;
+  --tint: #fdf0e8;
+  --tint-fg: #8f4017;
+  --okbg: #eef7f2;
+  --okfg: #1d6b47;
+  --band: #0a2a4a;
+  --logo-l: block;
+  --logo-d: none;
+  --fl-a: 0.7;
+  --dr-a: 0.56;
+}
+[data-site][data-theme='dark'] {
+  --paper: #061726;
+  --surface: #0a2a4a;
+  --sunk: #071f35;
+  --border: #1c3f60;
+  --field: #2a4c6e;
+  --text: #ffffff;
+  --head: #ffffff;
+  --muted: #b8c7d6;
+  --link: #ec844f;
+  --link-h: #f09a6d;
+  --focus: #2e7bd1;
+  --btn-h: #f09a6d;
+  --outline: #ec844f;
+  --outline-h: #2a1710;
+  --tint: #2a1710;
+  --tint-fg: #ec844f;
+  --okbg: #0f2a1e;
+  --okfg: #7fd1a5;
+  --band: #0e3355;
+  --logo-l: none;
+  --logo-d: block;
+  --fl-a: 0.63;
+  --dr-a: 0.504;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #fdfaf7;
+}
+a {
+  color: var(--link, #b8541f);
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--link-h, #8f4017);
+}
+:focus-visible {
+  outline: 2px solid var(--focus, #00519f);
+  outline-offset: 2px;
+}
+[data-band] :focus-visible {
+  outline-color: #2e7bd1;
+}
+@keyframes dfDrip {
+  0% {
+    stroke-dashoffset: 14;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+@keyframes dfDrift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 22px 44px;
+  }
+}
+@keyframes dfFloatA {
+  0% {
+    transform: translate(-8%, -6%) scale(1);
+  }
+  100% {
+    transform: translate(10%, 8%) scale(1.15);
+  }
+}
+@keyframes dfFloatB {
+  0% {
+    transform: translate(6%, 4%) scale(1.1);
+  }
+  100% {
+    transform: translate(-10%, -8%) scale(0.95);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-bg] * {
+    animation: none !important;
+  }
+}
