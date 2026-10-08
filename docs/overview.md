@@ -23,7 +23,7 @@ Build one **public website** using **Next.js**.
 
 - One existing HTML file is the single source of truth for the design.
 - The finished website must match it exactly (layout, spacing, colors, typography, behavior).
-- The file is `DripFunnel Website v2.dc.html` in the repo root. Confirmed as the final design file.
+- The file is `design/DripFunnel Website v2.dc.html` in the project. The `design/` folder also holds the script and assets it needs to open. Confirmed as the final design file.
 
 ## Decisions
 
