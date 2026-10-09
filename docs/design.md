@@ -158,7 +158,7 @@ Shadows are used only on the dropdown and mobile menu (soft navy shadow).
 |-------|----------|--------|
 | Arabic text | Fonts have no Arabic letters | IBM Plex Sans Arabic on Arabic pages (decided above). |
 | Right-to-left layout | Not supported | Header, footer, cards, arrows, breadcrumbs and spacing must mirror for Arabic. |
-| Language selector | Does not exist | New component in header and footer. It must use the same styling as the theme toggle and the currency selector. |
+| Region and language drop-down | Does not exist | New component in the header (after the theme toggle): flag, region code and arrow, opening a list like the Resources dropdown (same surface, border, 12px corners, shadow, 44px rows). Simple flag drawings are part of the page, not image files. The footer has the matching region and language selectors in the style of the original currency selector. |
 | AED currency | Not shown | Currency selector and prices show AED. Same style as the other currencies. |
 | Font loading | Loaded from Google Fonts at page load | Fonts served from the website itself (decided above). |
 
@@ -173,4 +173,11 @@ Shadows are used only on the dropdown and mobile menu (soft navy shadow).
 
 ## Open Questions
 
-1. **Form error color:** the original defines success colors but the error color was not in the theme list. It should be confirmed from the contact form in the original during the build.
+None at the moment.
+
+## Decided while building
+
+- **Form error color:** the original draws an invalid form field with a **2px border in `#00325F`** (dark navy) instead of the normal 1px `field` border. This is kept, in both themes. (Answers the earlier open question.)
+- **Fonts:** each font has a small extra file for letters outside basic Latin (for example the rupee sign ₹ on India prices). A visitor's browser downloads it only on pages that use such a letter.
+- **Header height:** 72px, and 60px on screens up to 600px wide.
+- **"Skip to content" link:** hidden until it gets keyboard focus (in the original it was always off-screen).

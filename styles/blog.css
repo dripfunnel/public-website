@@ -1,0 +1,2 @@
+/* Blog pages. Class names start with df-blog-. */
+.df-blog-card:hover { border-color: var(--outline, #B8541F) !important; color: var(--text, #14181F) !important; }

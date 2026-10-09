@@ -26,7 +26,7 @@ So all SEO items below are **new work**, not copied from the original. The visib
 
 - Every page is built ahead of time (SSG) as full HTML, so search engines see the real content without running scripts.
 - Every page has its own real address (see [pages-and-navigation.md](pages-and-navigation.md)).
-- Content must **not** depend on location detection or on the visitor's currency choice to appear. Search engines always get the default version of a page (English, INR).
+- Content must **not** depend on location detection or on the visitor's currency choice to appear. Each region address always serves the same page, with that region's currency, to search engines.
 - Text that matters for search must be real text, not text inside images.
 
 ### 2.2 Page title, description and address
@@ -42,11 +42,11 @@ Blog and help articles take their title from the article title and their descrip
 
 ### 2.3 Languages (English and Arabic)
 
-- Each language has its own address, so each is indexed on its own (decided earlier; the address format is still pending in [pages-and-navigation.md](pages-and-navigation.md)).
-- Every page tells search engines about its other-language version using **alternate-language links (hreflang)** for English and Arabic, plus a default.
+- Each region has its own address (`/in/`, `/us/`, `/ae/`, decided by the owner), so each is indexed on its own. Arabic adds `/ar` after the region and exists for the UAE only (see [pages-and-navigation.md](pages-and-navigation.md) section 6), so there are four versions of each page.
+- Every page tells search engines about its other region and language versions using **alternate links (hreflang)**: English for India, the US and the UAE (`en-IN`, `en-US`, `en-AE`), Arabic for the UAE (`ar-AE`), plus a default (`x-default` points to `/in/`).
 - The page itself declares its language, and for Arabic its right-to-left direction.
 - Titles, descriptions and headings are translated. They are not copied from English.
-- **Currency is not part of the address.** US, India and UAE visitors see the same page address in the same language; only the displayed currency differs. This avoids duplicate pages. Search engines see INR (the default).
+- **Region is part of the address; currency follows the region.** `/in/` shows INR, `/us/` USD and `/ae/` AED by default. The three English versions are near copies, so each page needs a **canonical address** (its own) and hreflang links between them so search engines do not treat them as duplicates. (Replaces the earlier decision of one English address for all regions.)
 
 ### 2.4 Automatic detection must not hurt SEO
 
@@ -125,19 +125,29 @@ These are drafts written from the content of the original file, **for the owner 
 ## Decisions
 
 - Real addresses per page and language; all SEO tags are new work.
-- Search engines always receive the default version (English, INR), with no location-based redirects for crawlers.
-- Currency is not part of the address.
-- English and Arabic alternate-language links on every page.
+- Search engines are never redirected by location. The bare address always sends crawlers to `/in/`. Each region address serves its own version to everyone.
+- Region is part of the address (`/in/`, `/us/`, `/ae/`); the domain is `www.dripfunnel.com`.
+- Alternate links (hreflang) between the region and language versions on every page.
 - Staging sites are hidden from search engines.
 - Core Web Vitals "good" targets as listed above.
 - **No automatic language redirect.** A banner suggests the detected language instead. (Owner answered "yes" to the recommended option.)
-- **One English address** for the US, India and UAE. Only the currency changes by region.
 - **Addresses stay in English letters** on Arabic pages.
+
+## Built (what is in place)
+
+- Every page has its own title, description, canonical address, alternate links (hreflang) for India, US, UAE English and UAE Arabic, plus `x-default` (India), and Open Graph / Twitter tags.
+- `sitemap.xml` lists every page in every region and language with the alternates; `robots.txt` allows search engines on the live site and blocks everything when `NEXT_PUBLIC_SITE_ENV` is not `production` (test sites).
+- Structured data: Home has Organization and WebSite; Pricing has FAQPage and Product/Offer; blog articles have Article and Breadcrumb; help articles have Breadcrumb.
+- **Unfinished articles** (5 of 6 blog articles, 18 of 24 help articles) are `noindex` until they have real content.
+- "Page not found" is a real 404 with `noindex`.
+- Every page has exactly one `h1`, and pages are checked by `scripts/check-pages.mjs` (titles, descriptions, canonical, language and direction, alt text).
+- **Share preview image:** until the owner supplies a 1200 x 630 image, the square DripFunnel icon (512 x 512) is used for all pages.
+- The Organization data has only the name and parent company. Official company name, address and social profiles are still needed (open question 4).
 
 ## Open Questions
 
 1. **Titles and descriptions:** are the drafts above acceptable, or should the owner supply the wording?
 2. **Share image:** a default preview image (about 1200 × 630) is needed. Will the owner supply one, or should the logo on a brand-color background be used?
-3. **Prices in search results:** structured data would show one currency per page. Show only the default (INR) or leave prices out of structured data?
+3. ~~Prices in search results~~ **Answered while building:** each region's Pricing page has Product/Offer data in **its own currency**, with the monthly price shown in the default Yearly view, exactly as visible. Partner (price "Custom") has no offer.
 4. **Company details:** for the Organization data, what are the company's official name, address, and social media profile links?
-5. **Domain:** needed for the sitemap, canonical addresses and Search Console. (Already pending in [deployment.md](deployment.md).)
+5. **Domain:** decided: `www.dripfunnel.com`. Search Console and Bing still need to be set up after launch.

@@ -1,0 +1,38 @@
+/* Home page. Class names start with df-home-. Layout switches at 980px, the same as the header. */
+
+/* "Describe your shop" boxes */
+.df-home-band-btn:hover { background: #F09A6D !important; color: #FFFFFF !important; }
+.df-home-example:hover { border-style: solid !important; border-color: var(--outline, #B8541F) !important; }
+.df-home-demo:hover { color: #FFFFFF !important; }
+
+/* Animated "drip" background of the hero. CSS only; turned off for visitors who ask for reduced motion (see app/globals.css). */
+.df-home-herobg {
+  position: absolute; top: 0; bottom: 0; left: calc(50% - 50cqw); width: 100cqw; z-index: -1; pointer-events: none; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(transparent 0%, #000 12%, #000 80%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(transparent 0%, #000 12%, #000 80%, transparent 100%);
+  mask-composite: intersect;
+}
+.df-home-herobg svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* Feature list: one column on phones, four columns (number, title, text, arrow) from 980px. */
+.df-home-feat { display: grid; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 980px) {
+  .df-home-feat { grid-template-columns: 48px minmax(0, 1.1fr) minmax(0, 1fr) 32px; }
+}
+
+/* Portal preview: the dark side menu is shown from 980px. */
+.df-home-side { display: none !important; }
+@media (min-width: 980px) {
+  .df-home-side { display: flex !important; }
+}
+
+/* Receipt with torn top and bottom edges. */
+.df-home-receipt {
+  -webkit-mask: conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 14px 51% repeat-x, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 14px 51% repeat-x;
+  mask: conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 14px 51% repeat-x, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 14px 51% repeat-x;
+}
+
+/* Country comparison table scrolls sideways on small screens. */
+.df-home-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 15px; }
+.df-home-table th, .df-home-table td { text-align: start; }

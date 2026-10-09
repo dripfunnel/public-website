@@ -1,0 +1,30 @@
+/* Features page. Class names start with df-features-. */
+
+/* The "Contents" bar: sticks under the header (72px, 60px on phones). */
+.df-features-nav { position: sticky; top: 72px; z-index: 20; background: var(--paper, #FDFAF7); border-top: 1px solid var(--border, #E8E2DC); border-bottom: 1px solid var(--border, #E8E2DC); }
+.df-features-navrow { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4cqw, 24px); display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.df-features-navrow::-webkit-scrollbar { display: none; }
+.df-features-navlink { height: 48px; padding: 0 12px; display: flex; align-items: center; gap: 8px; white-space: nowrap; font-family: Inter, sans-serif; font-size: 14px; line-height: normal; color: var(--text, #14181F); text-decoration: none; }
+.df-features-navlink:hover { color: var(--link, #B8541F); }
+.df-features-navnum { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted, #5A6472); }
+
+/* Each group: jumping to it from the Contents bar leaves room for the header and the bar. */
+.df-features-group { scroll-margin-top: 140px; }
+/* The sample panel sticks beside the list. */
+.df-features-mock { position: sticky; top: 136px; }
+
+/* The index at the bottom: 1 column, 2 from 700px, 3 from 1100px. */
+.df-features-cols { columns: 1; column-gap: 40px; }
+@media (min-width: 700px) { .df-features-cols { columns: 2; } }
+@media (min-width: 1100px) { .df-features-cols { columns: 3; } }
+
+/* Phones: the header is 60px tall. */
+@media (max-width: 600px) {
+  .df-features-nav { top: 60px; }
+  .df-features-group { scroll-margin-top: 120px; }
+  .df-features-mock { top: 120px; }
+}
+
+/* Final band buttons (hover as in the original). */
+.df-features-cta:hover { background: #F09A6D !important; color: #FFFFFF !important; }
+.df-features-cmp:hover { color: #FFFFFF !important; }

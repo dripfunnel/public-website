@@ -1,0 +1,94 @@
+/* ---------- Fonts (served from this website, not from Google Fonts) ---------- */
+/* Manrope: headings, buttons, prices. Inter: body text. IBM Plex Mono: small labels. */
+/* Each font has a "latin" file and a small "latin-ext" file that is only downloaded when a page uses one of its letters (for example the rupee sign). */
+
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/manrope-latin-500-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/manrope-latin-ext-500-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/manrope-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/manrope-latin-ext-600-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/manrope-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/manrope-latin-ext-700-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/manrope-latin-800-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/manrope-latin-ext-800-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/inter-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/inter-latin-ext-400-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/inter-latin-500-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/inter-latin-ext-500-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-600-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-ext-600-normal.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* ---------- Colors: light theme (default) and dark theme ---------- */
+/* The theme is set on <html data-theme="light|dark"> by a tiny script that runs before the page is painted, so there is no flash. */
+
+:root {
+  --paper: #FDFAF7; --surface: #FFFFFF; --sunk: #F3EDE8; --border: #E8E2DC; --field: #D7D3CD;
+  --text: #14181F; --head: #0A2A4A; --muted: #5A6472; --link: #B8541F; --link-h: #8F4017;
+  --focus: #00519F; --btn-h: #D96C33; --outline: #B8541F; --outline-h: #FDF0E8;
+  --tint: #FDF0E8; --tint-fg: #8F4017; --okbg: #EEF7F2; --okfg: #1D6B47; --band: #0A2A4A;
+  --logo-l: block; --logo-d: none; --fl-a: 0.7; --dr-a: 0.56;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #061726; --surface: #0A2A4A; --sunk: #071F35; --border: #1C3F60; --field: #2A4C6E;
+  --text: #FFFFFF; --head: #FFFFFF; --muted: #B8C7D6; --link: #EC844F; --link-h: #F09A6D;
+  --focus: #2E7BD1; --btn-h: #F09A6D; --outline: #EC844F; --outline-h: #2A1710;
+  --tint: #2A1710; --tint-fg: #EC844F; --okbg: #0F2A1E; --okfg: #7FD1A5; --band: #0E3355;
+  --logo-l: none; --logo-d: block; --fl-a: 0.63; --dr-a: 0.504;
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper, #FDFAF7); color: var(--text, #14181F); font-family: Inter, Helvetica, Arial, sans-serif; }
+a { color: var(--link, #B8541F); text-underline-offset: 3px; }
+a:hover { color: var(--link-h, #8F4017); }
+:focus-visible { outline: 2px solid var(--focus, #00519F); outline-offset: 2px; }
+[data-band] :focus-visible { outline-color: #2E7BD1; }
+button, input, select, textarea { font: inherit; }
+
+@keyframes dfDrip { 0% { stroke-dashoffset: 14; opacity: 0; } 10% { opacity: 1; } 88% { opacity: 1; } 100% { stroke-dashoffset: -100; opacity: 0; } }
+@keyframes dfDrift { from { background-position: 0 0; } to { background-position: 22px 44px; } }
+@keyframes dfFloatA { 0% { transform: translate(-8%, -6%) scale(1); } 100% { transform: translate(10%, 8%) scale(1.15); } }
+@keyframes dfFloatB { 0% { transform: translate(6%, 4%) scale(1.1); } 100% { transform: translate(-10%, -8%) scale(0.95); } }
+@media (prefers-reduced-motion: reduce) { [data-hero-bg] * { animation: none !important; } }
+
+/* ---------- Shared building blocks used by the header, footer and pages ---------- */
+
+/* "Skip to content": hidden until it gets keyboard focus. */
+.df-skip { position: absolute; inset-inline-start: -9999px; top: 8px; z-index: 100; padding: 10px 14px; border-radius: 8px; background: var(--surface, #FFFFFF); color: var(--text, #14181F); border: 1px solid var(--border, #E8E2DC); }
+.df-skip:focus { inset-inline-start: 8px; }
+
+/* Header: desktop navigation from 980px wide, the mobile menu below that. Header is 72px tall, 60px on phones. */
+.df-header-row { height: 72px; }
+@media (max-width: 600px) { .df-header-row { height: 60px; gap: 4px !important; } .df-header-row .df-narrow { gap: 4px !important; } .df-header-row .df-region-btn { padding: 0 8px !important; gap: 6px !important; } }
+.df-wide { display: none !important; }
+.df-narrow { display: flex !important; }
+@media (min-width: 980px) {
+  .df-wide { display: flex !important; }
+  .df-narrow { display: none !important; }
+}
+
+/* Theme icons: the moon shows in the light theme, the sun in the dark theme. */
+:root[data-theme="dark"] .df-ic-moon { display: none; }
+:root:not([data-theme="dark"]) .df-ic-sun { display: none; }
+.df-when-light { display: inline; }
+.df-when-dark { display: none; }
+:root[data-theme="dark"] .df-when-light { display: none; }
+:root[data-theme="dark"] .df-when-dark { display: inline; }
+
+/* Hover effects (the original "style-hover"). They use !important because the base look is written inline. */
+.df-h-link:hover { color: var(--link, #B8541F) !important; }
+.df-h-sunk:hover { background: var(--sunk, #F3EDE8) !important; }
+.df-h-outline:hover { background: var(--outline-h, #FDF0E8) !important; color: var(--outline, #B8541F) !important; }
+.df-h-primary:hover { background: var(--btn-h, #D96C33) !important; color: #FFFFFF !important; }
+.df-h-foot:hover { color: #F09A6D !important; }
+.df-h-foot-btn:hover { background: rgba(255, 255, 255, 0.08) !important; }
+
+/* Arrows and other direction signs mirror on right-to-left pages. */
+[dir="rtl"] .df-flip { transform: scaleX(-1); }

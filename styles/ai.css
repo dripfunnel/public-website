@@ -1,0 +1,29 @@
+/* AI Builder page. Class names start with df-ai-. */
+
+/* Device buttons (Desktop / Tablet / Phone) */
+.df-ai-devbtn { height: 44px; padding: 0 16px; border: 0; background: transparent; color: var(--text, #14181F); font-family: Inter, sans-serif; font-size: 14px; cursor: pointer; }
+.df-ai-devbtn[aria-pressed="true"] { background: var(--head, #0A2A4A); color: var(--paper, #FDFAF7); }
+
+/* The card holding the Before / After shop previews. Sizes per device are set with variables. */
+.df-ai-stage {
+  --maxw: 100%; --cols: repeat(4, minmax(0, 1fr)); --hfs: 24px; --pad: 26px 22px; --rad: 10px;
+  background: var(--surface, #FFFFFF); border: 1px solid var(--border, #E8E2DC); border-radius: 12px;
+  padding: clamp(16px, 3cqw, 28px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px;
+}
+.df-ai-stage.df-ai-dev-tablet { --maxw: 420px; --cols: repeat(3, minmax(0, 1fr)); --hfs: 21px; --pad: 22px 18px; --rad: 16px; }
+.df-ai-stage.df-ai-dev-phone { --maxw: 240px; --cols: repeat(2, minmax(0, 1fr)); --hfs: 18px; --pad: 18px 14px; --rad: 24px; }
+.df-ai-frame { width: 100%; max-width: var(--maxw); border: 6px solid #14181F; border-radius: var(--rad); overflow: hidden; background: #FFFFFF; color: #14181F; }
+.df-ai-hero { padding: var(--pad); display: flex; flex-direction: column; gap: 8px; }
+.df-ai-headline { font-weight: 800; font-size: var(--hfs); line-height: 1.12; letter-spacing: -0.02em; }
+.df-ai-tiles { padding: 10px; display: grid; grid-template-columns: var(--cols); gap: 8px; }
+.df-ai-tile { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.df-ai-dev-tablet .df-ai-tile:nth-child(n+4) { display: none; }
+.df-ai-dev-phone .df-ai-tile:nth-child(n+3) { display: none; }
+
+/* "Go back to this" button in the history card */
+.df-ai-back { height: 44px; padding: 0 14px; border: 1px solid var(--outline, #B8541F); border-radius: 8px; background: transparent; color: var(--outline, #B8541F); font-family: Inter, sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+.df-ai-back:hover { background: var(--outline-h, #FDF0E8) !important; }
+
+/* Dark band: buttons and link hover */
+.df-ai-band-btn:hover { background: #F09A6D !important; color: #FFFFFF !important; }
+.df-ai-band-link:hover { color: #FFFFFF !important; }

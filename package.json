@@ -1,0 +1,20 @@
+{
+  "name": "dripfunnel-public-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node scripts/fix-export-paths.mjs",
+    "start": "node scripts/serve.mjs out 3000",
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "check": "node scripts/check-pages.mjs http://localhost:3000"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.0"
+  }
+}

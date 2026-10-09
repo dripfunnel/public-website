@@ -1,0 +1,3 @@
+/* Partners page. Hover effects (the original "style-hover"); the base look is written inline, so these use !important. */
+.df-partners-cta:hover { background: #F09A6D !important; color: #FFFFFF !important; }
+.df-partners-mail:hover { color: #FFFFFF !important; }

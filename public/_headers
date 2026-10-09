@@ -1,0 +1,17 @@
+# Cloudflare Pages response headers.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Built files have a fingerprint in their name, so they can be kept forever.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts, logos and icons.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=604800

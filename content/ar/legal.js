@@ -1,0 +1,60 @@
+// Arabic texts for this part of the site: English text -> Arabic text.
+// First draft written by Claude, to be reviewed by a native Arabic speaker AND a lawyer before launch.
+// Terms of Service and Privacy Policy. The [bracketed] parts are placeholders the owner still has to fill in; they stay in brackets.
+const ar = {
+  'The agreement between you and DripFunnel when you use DripFunnel to run an online shop.': 'الاتفاقية بينك وبين DripFunnel عند استخدامك DripFunnel لإدارة متجر إلكتروني.',
+  'What personal data DripFunnel collects, why, and the choices you have.': 'ما البيانات الشخصية التي تجمعها DripFunnel، ولماذا، والخيارات المتاحة لك.',
+  'On this page': 'في هذه الصفحة',
+  'Read the Privacy Policy': 'اقرأ سياسة الخصوصية',
+  'Read the Terms of Service': 'اقرأ شروط الخدمة',
+  'Last updated: [date] · Applies from: [date]': 'آخر تحديث: [التاريخ] · يسري اعتبارًا من: [التاريخ]',
+  'Template text. Replace every section with wording approved by your lawyer before publishing.': 'نص قالب. استبدل كل قسم بصياغة يعتمدها محاميك قبل النشر.',
+
+  // Terms of Service
+  'These terms are the agreement between you and DripFunnel when you use DripFunnel to run an online shop. They cover your account, your plan and what each of us is responsible for.': 'هذه الشروط هي الاتفاقية بينك وبين DripFunnel عند استخدامك DripFunnel لإدارة متجر إلكتروني. وهي تشمل حسابك وخطتك وما يتحمله كل طرف منا من مسؤوليات.',
+  'Who we are': 'من نحن',
+  'DripFunnel is operated by [legal entity name], a Softobotics company, registered at [address].': 'تُشغَّل DripFunnel بواسطة [اسم الكيان القانوني]، وهي شركة تابعة لـ Softobotics، ومسجّلة في [العنوان].',
+  'Your account': 'حسابك',
+  'You must be old enough to form a contract where you live. You’re responsible for everyone you invite to your store, including staff and suppliers, and for keeping sign-in details safe.': 'يجب أن تكون في السن القانونية لإبرام عقد في البلد الذي تقيم فيه. وأنت مسؤول عن كل من تدعوه إلى متجرك، بمن فيهم الموظفون والموردون، وعن الحفاظ على سرّية بيانات تسجيل الدخول.',
+  'Plans, trials and billing': 'الخطط والفترات التجريبية والفوترة',
+  'Starter is free. Paid plans start with a 10-day trial of Business. After the trial, plans are billed monthly or yearly in advance. Upgrades start straight away; downgrades take effect at the end of the billing period.': 'خطة Starter مجانية. تبدأ الخطط المدفوعة بفترة تجريبية مدتها 10 أيام لخطة Business. بعد الفترة التجريبية تُفوتر الخطط شهريًا أو سنويًا مقدّمًا. تبدأ الترقيات فورًا، أما التخفيضات فتسري في نهاية فترة الفوترة.',
+  'Fees on your orders': 'الرسوم على طلباتك',
+  'DripFunnel does not charge a fee on your orders on any plan. Your payment provider charges its own fees under its own terms.': 'لا تتقاضى DripFunnel أي رسوم على طلباتك في أي خطة. أما مزوّد الدفع لديك فيتقاضى رسومه الخاصة بموجب شروطه.',
+  'Your shop and your content': 'متجرك ومحتواك',
+  'You own your products, photos, words and customer relationships. You give us permission to host and display them so your shop works. You’re responsible for what you sell and for following the law in each market you sell in.': 'أنت تملك منتجاتك وصورك ونصوصك وعلاقاتك بعملائك. وتمنحنا الإذن باستضافتها وعرضها ليعمل متجرك. وأنت مسؤول عمّا تبيعه وعن الالتزام بالقانون في كل سوق تبيع فيه.',
+  'AI-designed storefronts': 'واجهات المتاجر المصمَّمة بالذكاء الاصطناعي',
+  'The AI suggests designs and text. Nothing is published until you approve it, and you’re responsible for what you publish.': 'يقترح الذكاء الاصطناعي التصاميم والنصوص. لا يُنشر أي شيء قبل موافقتك عليه، وأنت مسؤول عمّا تنشره.',
+  'Acceptable use': 'الاستخدام المقبول',
+  '[List of prohibited products and activities.]': '[قائمة المنتجات والأنشطة المحظورة.]',
+  'Cancelling and closing': 'الإلغاء والإغلاق',
+  'You can cancel any time from Billing. [What happens to the shop, products, domain and data, and for how long they’re kept.]': 'يمكنك الإلغاء في أي وقت من قسم الفوترة. [ما الذي يحدث للمتجر والمنتجات والنطاق والبيانات، ومدة الاحتفاظ بها.]',
+  'Liability': 'المسؤولية',
+  '[Limitation of liability, to be written by counsel.]': '[حدود المسؤولية، يكتبها المستشار القانوني.]',
+  'Changes to these terms': 'التغييرات على هذه الشروط',
+  'We’ll tell you by email at least [n] days before a change that affects you.': 'سنخبرك عبر البريد الإلكتروني قبل [n] يومًا على الأقل من أي تغيير يؤثر عليك.',
+  'Questions about these terms: legal@dripfunnel.com.': 'للاستفسار عن هذه الشروط: legal@dripfunnel.com.',
+
+  // Privacy Policy
+  'This policy explains what personal data DripFunnel collects, why, and the choices you have. It covers merchants and their teams who use DripFunnel, and visitors to this website.': 'توضّح هذه السياسة ما البيانات الشخصية التي تجمعها DripFunnel، ولماذا، والخيارات المتاحة لك. وهي تشمل التجّار وفرقهم الذين يستخدمون DripFunnel، وزوّار هذا الموقع.',
+  'Who is responsible': 'الجهة المسؤولة',
+  '[Legal entity name], a Softobotics company, is responsible for data about merchants and website visitors. For shoppers’ data, the merchant is responsible and DripFunnel processes it on their behalf.': '[اسم الكيان القانوني]، وهي شركة تابعة لـ Softobotics، مسؤولة عن بيانات التجّار وزوّار الموقع. أما بيانات المتسوّقين فالتاجر هو المسؤول عنها، وتعالجها DripFunnel نيابةً عنه.',
+  'What we collect': 'ما الذي نجمعه',
+  'Account details (name, email, password), store details, billing details, and how you use the portal. [Full list.]': 'بيانات الحساب (الاسم والبريد الإلكتروني وكلمة المرور)، وبيانات المتجر، وبيانات الفوترة، وكيفية استخدامك للبوابة. [القائمة الكاملة.]',
+  'Why we use it': 'لماذا نستخدمها',
+  'To run your store, bill you, keep accounts secure, provide support and improve DripFunnel. [Legal bases per purpose.]': 'لتشغيل متجرك وفوترتك وحماية الحسابات وتقديم الدعم وتحسين DripFunnel. [الأسس القانونية لكل غرض.]',
+  'Shoppers’ data': 'بيانات المتسوّقين',
+  'Orders, addresses and contact details belong to the merchant’s store. Suppliers see only what they need to ship their own items.': 'الطلبات والعناوين وبيانات التواصل تخص متجر التاجر. ولا يرى الموردون إلا ما يحتاجون إليه لشحن منتجاتهم.',
+  'Who we share it with': 'مع من نشاركها',
+  'Payment providers, couriers, hosting and email providers that help run the service. [Named list of sub-processors.]': 'مزوّدو الدفع وشركات الشحن ومزوّدو الاستضافة والبريد الإلكتروني الذين يساعدون في تشغيل الخدمة. [قائمة مسمّاة بالمعالِجين الفرعيين.]',
+  'Where it is stored': 'أين تُخزَّن',
+  '[Regions and transfer safeguards.]': '[المناطق وضمانات النقل.]',
+  'How long we keep it': 'مدة الاحتفاظ بها',
+  '[Retention periods.]': '[مدد الاحتفاظ.]',
+  'Your rights': 'حقوقك',
+  'Depending on where you live, you can ask to see, correct, export or delete your data. [Region-specific rights, e.g. GDPR, India DPDP Act, US state laws.]': 'بحسب مكان إقامتك، يمكنك طلب الاطلاع على بياناتك أو تصحيحها أو تصديرها أو حذفها. [الحقوق الخاصة بكل منطقة، مثل GDPR وقانون DPDP الهندي وقوانين الولايات الأمريكية.]',
+  'Cookies': 'ملفات تعريف الارتباط',
+  '[Cookies used on this website and in the portal, and how to manage them.]': '[ملفات تعريف الارتباط المستخدمة في هذا الموقع وفي البوابة، وكيفية إدارتها.]',
+  'privacy@dripfunnel.com.': 'privacy@dripfunnel.com.',
+};
+
+export default ar;

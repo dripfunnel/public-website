@@ -1,0 +1,4 @@
+/* Help centre pages. Class names start with df-help-. */
+.df-help-card:hover { border-color: var(--outline, #B8541F) !important; color: var(--text, #14181F) !important; }
+/* Text for screen readers only (the search label). Not positioned left/right, so it never causes sideways scrolling in right-to-left pages. */
+.df-help-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

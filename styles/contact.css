@@ -1,0 +1,3 @@
+/* Contact page. The look is written inline (copied from the original design); this only stops long words and inputs from pushing the page wider than the screen. */
+.df-contact > * { min-width: 0; }
+.df-contact input, .df-contact select, .df-contact textarea { width: 100%; min-width: 0; }

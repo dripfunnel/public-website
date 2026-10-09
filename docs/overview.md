@@ -28,9 +28,20 @@ Build one **public website** using **Next.js**.
 ## Decisions
 
 - **Default language:** English.
-- **Language in the URL:** yes. Each language has its own URLs (e.g. `/en/pricing`, `/ar/pricing`), so each language is indexed separately by search engines.
+- **Domain:** `www.dripfunnel.com` (given by the owner).
+- **Region in the URL (replaces the earlier "language in the URL" idea):** each launch region has its own address on the domain, so each is indexed separately by search engines. Given by the owner:
+
+  | Region | Address |
+  |--------|---------|
+  | India | `https://www.dripfunnel.com/in/` |
+  | United States | `https://www.dripfunnel.com/us/` |
+  | United Arab Emirates | `https://www.dripfunnel.com/ae/` |
+
+  Pages sit under the region, for example `/in/pricing`, `/us/pricing`, `/ae/pricing`. Arabic adds `/ar` after the region and exists **for the UAE only** (`/ae/ar/pricing`). India and the US are English only. The bare `https://www.dripfunnel.com/` sends visitors to a region by location, with `/in/` as the fallback. Details in [pages-and-navigation.md](pages-and-navigation.md) section 6.
+- **Region selector (footer):** choosing a region (India, United States, UAE) moves the visitor to that region's address, on the same page. Decided by the owner.
+- **Arabic text:** Claude writes a first draft of the Arabic wording for a native speaker to review before launch (decided by Claude; the owner said "you can take decision").
 - **Launch regions:** United States, India, United Arab Emirates.
-- **Currency per region:** each region has its own currency.
+- **Currency per region:** each region has its own currency (shown by default on that region's address).
 
   | Region | Currency |
   |--------|----------|
@@ -40,9 +51,9 @@ Build one **public website** using **Next.js**.
 
 - **UAE language:** both **English and Arabic**. Decided by Claude on the owner's instruction ("take the decision on your own"). Arabic requires a right-to-left (RTL) layout. English remains the default.
 - **Automatic detection:** language and currency are detected from the visitor's location.
-- **Manual override:** if detection is wrong, the visitor can change language and currency themselves.
+- **Manual override:** if detection is wrong, the visitor can change region (footer) and, in the UAE, language (header and footer) themselves.
 - **Only three regions for now:** United States, India and UAE. More countries can be added later; this is out of scope at launch.
-- **Visitors from other countries:** since only three regions exist, they see the defaults (English and INR) and can switch manually to any available language and currency. (Assumed by Claude; see open question 1.)
+- **Visitors from other countries:** sent to `/in/` (English, INR) from the bare address, and can switch to any region or language. Confirmed by the owner (fallback `/in/`).
 - **Prices are fixed per currency:** each currency (INR, USD, AED) has its own fixed price. Prices are **not** converted automatically with exchange rates.
 - **Prices are managed from the back end:** an admin will be able to change prices from the back end, and the website must show the updated prices.
 - **Back end:** not ready yet. Whether pages stay static or become dynamic will be decided later.
@@ -61,9 +72,10 @@ Build one **public website** using **Next.js**.
 - Pages, navigation, header and footer (copied from the original design) are described in [pages-and-navigation.md](pages-and-navigation.md).
 - SEO requirements are described in [seo.md](seo.md).
 - Colors, fonts, spacing, components, themes and assets (taken from the original design) are described in [design.md](design.md).
+- What is built and what still needs the owner is in [build-status.md](build-status.md).
 - Details for pages, features, design, content, languages and currencies will go in separate files in `docs/`.
 
 ## Open Questions
 
-1. **Visitors from other countries:** is it correct that they see English and INR (the defaults) and can switch manually?
-2. **Later, with the back end:** how will the website get prices from it, and how fast must a price change appear? To be decided when the back end is planned.
+1. **Later, with the back end:** how will the website get prices from it, and how fast must a price change appear? To be decided when the back end is planned.
+2. **AED prices:** the original has no AED prices. Placeholder values are used (about the US price x 3.67, rounded: Growth AED 349 a year, Growth Pro AED 529, Business AED 879, and set-up fees AED 549 / 729 / 1,099) until the owner supplies the real ones. They live in one file, `lib/regions.js`.

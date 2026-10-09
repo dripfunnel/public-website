@@ -1,0 +1,26 @@
+/* Pricing page. Class names start with df-pricing-. Most of the look is inline, copied from the original design. */
+
+/* Hover of the dark "Partner" plan button (the original style-hover). */
+.df-pricing-btn-dark:hover { background: rgba(240, 154, 109, 0.12) !important; color: #F09A6D !important; }
+/* Hover of the buttons in the dark band at the bottom. */
+.df-pricing-cta:hover { background: #F09A6D !important; color: #FFFFFF !important; }
+.df-pricing-talk:hover { color: #FFFFFF !important; }
+
+/* Comparison table: a real table, scrolls sideways inside its box on small screens (min width 880px as in the original). */
+.df-pricing-scroll { border: 1px solid var(--border, #E8E2DC); border-radius: 12px; overflow: auto; background: var(--surface, #FFFFFF); }
+.df-pricing-tbl { width: 100%; min-width: 880px; border-collapse: collapse; table-layout: fixed; font-size: 14px; }
+.df-pricing-tbl th, .df-pricing-tbl td { border-bottom: 1px solid var(--border, #E8E2DC); }
+.df-pricing-tbl thead th { padding: 14px 12px; font-family: Manrope, sans-serif; font-weight: 800; font-size: 15px; text-align: center; }
+.df-pricing-tbl thead th.df-pricing-feat { padding: 14px 18px; font-family: Inter, sans-serif; font-weight: 400; font-size: 13px; color: var(--muted, #5A6472); text-align: start; vertical-align: top; }
+.df-pricing-tbl th.df-pricing-group { padding: 12px 18px; background: var(--paper, #FDFAF7); font-family: 'IBM Plex Mono', monospace; font-weight: 400; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tint-fg, #8F4017); text-align: start; }
+.df-pricing-tbl tbody th[scope="row"] { padding: 12px 18px; font-weight: 400; text-align: start; vertical-align: top; }
+.df-pricing-name { display: flex; flex-direction: column; }
+.df-pricing-note { font-size: 12px; color: var(--muted, #5A6472); }
+.df-pricing-tbl td { padding: 12px; text-align: center; vertical-align: top; color: var(--text, #14181F); }
+.df-pricing-tbl .df-pricing-hl { background: var(--tint, #FDF0E8); }
+.df-pricing-tbl td.df-pricing-yes { font-weight: 700; }
+.df-pricing-tbl td.df-pricing-no { color: var(--muted, #5A6472); }
+.df-pricing-tbl td.df-pricing-planned { color: var(--tint-fg, #8F4017); }
+/* First column: 24.2% of the table, but never narrower than 220px (the original grid was minmax(220px,1.6fr)). */
+.df-pricing-c1 { width: 24.2%; }
+@media (max-width: 943px) { .df-pricing-c1 { width: 220px; } }

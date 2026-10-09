@@ -1,0 +1,11 @@
+/* Terms of Service and Privacy Policy. The look is written inline (copied from the original design); this holds what inline styles cannot do. */
+
+/* Table of contents links ("On this page"): hover colour (the original "style-hover"). */
+.df-legal-toc-link:hover { color: var(--link, #B8541F) !important; }
+
+/* Sections are reached with plain links (#sec-3). The sticky header is 72px (60px on phones); the original scrolled to 140px (120px in the phone frame) below the top. */
+.df-legal-sec { scroll-margin-top: 140px; }
+@media (max-width: 600px) { .df-legal-sec { scroll-margin-top: 120px; } }
+
+/* Long words and email addresses must not push the page wider than the screen. */
+.df-legal-article { overflow-wrap: anywhere; }
