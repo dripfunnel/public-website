@@ -1,0 +1,24 @@
+# Cloudflare Pages headers (https://developers.cloudflare.com/pages/configuration/headers/).
+# No third-party scripts, fonts or analytics are used, so the policy below allows only this site.
+# Next.js adds small inline scripts (theme, page data), so 'unsafe-inline' is needed for scripts
+# until nonces or hashes are added. It is report-only for now: check for violations before enforcing.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'
+
+# Test (staging / preview) sites must never appear in search engines.
+https://*.pages.dev/*
+  X-Robots-Tag: noindex
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

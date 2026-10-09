@@ -54,9 +54,9 @@ Sticky at the top of every page. Shown on wide screens:
 |----------|------|
 | Left | DripFunnel logo (links to Home). A light version and a dark version are used for the light and dark themes. |
 | Centre | **Home · Features · AI Builder · Pricing · Partners · Resources ▾** |
-| Right | **Language selector (new, not in the original)** · Theme toggle (light / dark) · **Sign in** · **Start free** |
+| Right | **Country selector (new, not in the original)** · Theme toggle (light / dark) · **Sign in** · **Start free** |
 
-- **Decision:** the language selector sits **next to the theme toggle** in the header. On mobile it also sits next to the theme toggle, beside the menu button.
+- **Decision:** the country selector (United States, India, United Arab Emirates) sits **next to the theme toggle** in the header. Choosing a country opens the same page for that country. On mobile it also sits next to the theme toggle, beside the menu button.
 
 - **Resources ▾** opens a dropdown with three items, each with a short description:
   - **Blog**: "Guides for running and growing a shop"
@@ -80,7 +80,7 @@ Dark navy band at the bottom of every page.
   - DripFunnel logo (inverse version).
   - Text: "Describe your business and AI builds your whole store. Then run catalogue, orders, offers, suppliers and selling abroad from one portal."
   - **"Show prices in"** currency selector. **Decision:** the currency selector stays in the footer only, as in the original (not added to the header).
-  - **Language selector (new, not in the original):** placed **beside the currency selector**.
+  - **Country selector (new, not in the original):** placed **beside the currency selector**.
 - **Link columns:**
 
   | Product | Resources | Company | Legal |
@@ -104,43 +104,45 @@ These need a decision so the build stays "exactly the same" without conflicting 
 | Topic | Original file | Decision already made | What changes |
 |-------|---------------|----------------------|--------------|
 | Currencies | USD, EUR, INR | USD, INR, AED at launch | EUR is replaced by AED in the selector. Original regional example content (Germany, EUR) would need an equivalent for the UAE. |
-| Language | English only, no language selector | English and Arabic, language in the URL, switchable | A language selector is added in the header (next to the theme toggle) and in the footer (beside the currency selector). Arabic needs a mirrored (right-to-left) layout. |
-| Addresses | Hash addresses (`#/pricing`) | Real addresses per language (`/en/pricing`) for SEO | Same pages, new address format (see below). |
+| Country | One page set, no country selector | English only. One page set **per country**, country in the URL, switchable | A country selector is added in the header (next to the theme toggle) and in the footer (beside the currency selector). No languages, no right-to-left layout. |
+| Addresses | Hash addresses (`#/pricing`) | Real addresses per country (`/in/pricing`) for SEO | Same pages, new address format (see below). |
 | Currency detection | Detected from the browser language | Detected from the visitor's location, with manual override | Detection method changes. |
 
-## 6. Address mapping (not final: see open question 4)
+## 6. Address format (decided)
 
-The owner asked whether the language can be given as `/pricing?language=en`. This is **not decided yet**. The three options are compared below.
+The country comes first in every address. There is no language in the address, because there is only one language (English).
 
-| Option | Example | SEO | Works with static (SSG) pages | Verdict |
-|--------|---------|-----|-------------------------------|---------|
-| **A. Language in the path, English without a prefix** | English: `/pricing` · Arabic: `/ar/pricing` | Good. Each language has its own address and is indexed separately. | Yes. One built page per address. | **Recommended.** Keeps the clean `/pricing` address for the default language. |
-| **B. Language in the path, always shown** | `/en/pricing` · `/ar/pricing` | Good | Yes | Also good. Slightly longer addresses. |
-| **C. Language in the query** | `/pricing?language=ar` | Weak. Search engines may treat it as the same page, and may not index Arabic properly. | No. A static page is built per path, so the server cannot return different pages for different query values. The language would be changed in the browser after loading. | Not recommended. It conflicts with the earlier requirement that each language is indexed separately. |
+| Country | Address start | Default currency |
+|---------|---------------|------------------|
+| United States | `/us/` | USD |
+| India (default country) | `/in/` | INR |
+| United Arab Emirates | `/ae/` | AED |
 
-Currency is **not** part of the address in any option. It is chosen from location or by the visitor and remembered in the browser.
+| Page | Address (shown for India) |
+|------|---------------------------|
+| Home | `/in/` |
+| Features | `/in/features/` |
+| AI Builder | `/in/ai/` |
+| Pricing | `/in/pricing/` |
+| Partners | `/in/partners/` |
+| Blog / article | `/in/blog/` · `/in/blog/<article>/` |
+| Help centre / article | `/in/help/` · `/in/help/<article>/` |
+| Contact | `/in/contact/` · `/in/contact/demo/` · `/in/contact/sales/` · `/in/contact/partners/` · `/in/contact/support/` |
+| Terms / Privacy | `/in/terms/` · `/in/privacy/` |
 
-The table below uses option B for illustration. Same pages, with the language first:
+For the other countries, `/in/` becomes `/us/` or `/ae/`.
 
-| Page | Proposed address |
-|------|------------------|
-| Home | `/en` |
-| Features | `/en/features` |
-| AI Builder | `/en/ai` |
-| Pricing | `/en/pricing` |
-| Partners | `/en/partners` |
-| Blog / article | `/en/blog` · `/en/blog/<article>` |
-| Help centre / article | `/en/help` · `/en/help/<article>` |
-| Contact | `/en/contact` · `/en/contact/demo` · `/en/contact/sales` · `/en/contact/partners` · `/en/contact/support` |
-| Terms / Privacy | `/en/terms` · `/en/privacy` |
-
-For Arabic, `/en` becomes `/ar`.
+- **The bare address `/`** is not a content page. A visitor is sent to their own country (`/us/`, `/in/` or `/ae/`) from their location, or to India if their country is not one of the three. There is **no "choose your country" page** (owner decision): visitors change country from the header. Search engines and link previews are not redirected by location; they get a tiny, non-indexed page that forwards to India (`/in/`) with a plain HTML redirect. The same page is what shows when running the site locally, where there is no location lookup.
+- **Currency is not part of the address.** It starts as the country's own currency and the visitor can change it in the footer. The choice is remembered in the browser.
+- **Pages are separate per country.** Each country has its own page files and data file in the project, so any country can later show different wording, offers, prices or sample content without affecting the others. At launch the content is the same except for country-specific sample content, currency and prices.
+- **Switching country** keeps the visitor on the same page (for example `/in/pricing/` becomes `/us/pricing/`) and resets the currency to that country's own.
 
 ## Open Questions
 
 ### Decided
 
-- Language selector: next to the theme toggle in the header, and beside the currency selector in the footer.
+- Country selector (replaces the earlier language selector): next to the theme toggle in the header, and beside the currency selector in the footer.
+- Address format: `/<country>/<page>/` with country first (`/us`, `/in`, `/ae`). No language in the address.
 - Currency selector: stays in the footer only.
 - A proper **"Page not found"** page is added (instead of sending unknown addresses to Home).
 
@@ -148,5 +150,4 @@ For Arabic, `/en` becomes `/ar`.
 
 1. **Help and blog content:** many help and blog articles in the original are placeholders. Is real content coming, and from whom? Should unfinished articles be hidden or shown as they are?
 2. **Sign in / Start free link:** which address do they go to? The original points to a local prototype file. (Same open point as the store/portal address.)
-3. **EUR content:** the original shows Germany / EUR sample content on the Pricing and other pages. With launch currencies USD, INR and AED, what replaces the EUR example (for example a UAE store with AED)?
-4. **Address format:** the owner asked for `/pricing?language=en`. Recommended instead: option A (`/pricing` for English, `/ar/pricing` for Arabic). Final choice pending.
+3. **EUR content:** the original shows Germany / EUR sample content. It is replaced by a sample UAE shop in AED ("Dune & Date", Dubai, VAT 5% included), **written by Claude as a proposal**. Owner to approve or rewrite. AED plan prices are also placeholders (US dollar price x 3.67, rounded) until confirmed.

@@ -66,14 +66,6 @@ White text on the brand-orange button is `#FFFFFF`.
 
 Body text defaults: Inter, 16px, line height 1.55.
 
-### Arabic font (decided)
-
-- **IBM Plex Sans Arabic**, weights 400, 500, 600 and 700. Chosen by Claude on the owner's instruction ("pick one that pairs well").
-- **Why:** it has the clean, modern look of Manrope and Inter, and it belongs to the same family as IBM Plex Mono, which is already used for the small labels. It also has matching Latin letters, so mixed Arabic/English text (brand names, product names) looks consistent. It is free to use and can be served from the website.
-- **Where:** used for Arabic body text, headings, buttons and labels on Arabic pages. Headings use the 700 weight (the heaviest it offers), since Manrope's 800 does not exist in Arabic.
-- **Loaded only on Arabic pages**, so English pages stay as light as before.
-- **Numbers:** prices and figures keep the normal digits (0-9) as in the original, also on Arabic pages. Confirmed by the owner.
-
 ### Font delivery (decided)
 
 - All fonts are **served from the website itself**, not from Google Fonts. The owner agreed on the condition that it is faster and looks the same.
@@ -145,30 +137,26 @@ Shadows are used only on the dropdown and mobile menu (soft navy shadow).
 ## 8. Images, logos and assets
 
 - Images and logos are placed in the **`public/assets/`** folder (decided) and taken from there when a page needs them.
-- The owner agreed to **reuse the previous logos and pictures**. They are in the earlier project commit (`8945784`) and will be brought back into `public/assets/` when the build starts. They are not in the current branch.
+- The owner agreed to **reuse the previous logos and pictures**. They are now in `public/assets/` (logos taken from the cleaned copies in `dripfunnel-pw-main`, favicons from `design/assets/favicon/`).
 - The set in that commit:
   - **Logos (SVG):** `dripfunnel-logo.svg` and `dripfunnel-logo-inverse.svg` (full logo for light and dark), `dripfunnel-mark.svg` and `dripfunnel-mark-inverse.svg` (symbol only).
   - **Favicons and app icons (PNG):** light and dark sets in sizes 16 to 512, rounded versions, a maskable icon, an Apple touch icon (180) and `icon-ink-512.png`.
-- Logo SVG files contain a large block of hidden metadata that is not needed on the website. It should be removed so the logo loads faster.
+- The logo SVG files in `design/assets/` contain a large block of hidden metadata (13 KB each). The website uses the cleaned copies (5 KB) instead, so the logo loads faster.
 - The website adds a favicon for each theme so it looks right in light and dark browser tabs.
 
 ## 9. Differences from the original that affect design
 
 | Topic | Original | Needed |
 |-------|----------|--------|
-| Arabic text | Fonts have no Arabic letters | IBM Plex Sans Arabic on Arabic pages (decided above). |
-| Right-to-left layout | Not supported | Header, footer, cards, arrows, breadcrumbs and spacing must mirror for Arabic. |
-| Language selector | Does not exist | New component in header and footer. It must use the same styling as the theme toggle and the currency selector. |
+| Country selector | Does not exist | New component in header and footer. It must use the same styling as the theme toggle and the currency selector. |
 | AED currency | Not shown | Currency selector and prices show AED. Same style as the other currencies. |
 | Font loading | Loaded from Google Fonts at page load | Fonts served from the website itself (decided above). |
 
 ## Decided in this document
 
-- Arabic font: IBM Plex Sans Arabic.
 - Fonts served from the website itself.
 - Assets folder: `public/assets/`.
 - Logos and pictures: reuse the previous ones from commit `8945784`.
-- Digits on Arabic pages: normal digits (0-9).
 - Other pictures (photos, merchant logos, testimonial pictures): the owner will supply them later.
 
 ## Open Questions

@@ -1,0 +1,7 @@
+{
+	// Cloudflare Pages project. Used by `npm run preview:local` (wrangler pages dev).
+	// The real project, domain and environments are set up in the Cloudflare dashboard: see DEPLOYMENT.md.
+	"name": "dripfunnel-public-website",
+	"compatibility_date": "2026-09-01",
+	"pages_build_output_dir": "./out"
+}

@@ -1,0 +1,64 @@
+/* Hover states from the design's style-hover attributes. */
+
+.startBtn {
+	height: 44px;
+	padding: 0 22px;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+}
+.startBtn:hover {
+	background: var(--btn-h, #d96c33);
+	color: #ffffff;
+}
+
+.askBtn {
+	height: 48px;
+	padding: 0 24px;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+	font-size: 16px;
+}
+.askBtn:hover {
+	background: #f09a6d;
+	color: #ffffff;
+}
+
+.bandLink {
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	color: #f09a6d;
+	font-weight: 500;
+}
+.bandLink:hover {
+	color: #ffffff;
+}
+
+.backBtn {
+	height: 44px;
+	padding: 0 14px;
+	border: 1px solid var(--outline, #b8541f);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--outline, #b8541f);
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+}
+.backBtn:hover {
+	background: var(--outline-h, #fdf0e8);
+}

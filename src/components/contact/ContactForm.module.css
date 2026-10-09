@@ -1,0 +1,29 @@
+.submit {
+	height: 48px;
+	border: 0;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.submit:hover {
+	background: var(--btn-h, #d96c33);
+}
+
+.submit:disabled {
+	opacity: 0.7;
+	cursor: default;
+}
+
+/* Honeypot field: off-screen, not display:none, so simple bots still fill it. */
+.trap {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}

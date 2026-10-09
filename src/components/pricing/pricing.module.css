@@ -1,0 +1,22 @@
+/* Hover styles for the pricing page (the design's style-hover values). */
+
+.ctaNormal:hover {
+	background: var(--outline-h, #fdf0e8) !important;
+	color: var(--outline, #b8541f) !important;
+}
+.ctaHi:hover {
+	background: var(--btn-h, #d96c33) !important;
+	color: #ffffff !important;
+}
+.ctaDark:hover {
+	background: rgba(240, 154, 109, 0.12) !important;
+	color: #f09a6d !important;
+}
+
+.bandBtn:hover {
+	background: #f09a6d !important;
+	color: #ffffff !important;
+}
+.bandLink:hover {
+	color: #ffffff !important;
+}

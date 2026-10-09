@@ -12,8 +12,8 @@
 
 - The website is static (SSG, see [overview.md](overview.md)): pages are built ahead of time and served from Cloudflare's global network, close to each visitor. This supports the "very fast" goal.
 - Code is kept in Git. Pushing changes triggers an automatic build and deployment.
-- Visitor location (for language and currency) is read at Cloudflare's edge from the country information Cloudflare adds to each request. The visitor is then sent to the matching version (for example English with INR for India, English or Arabic with AED for the UAE). The visitor can always change language and currency manually.
-- Search engines must still be served a stable default version of each page.
+- Visitor location (for country and currency) is read at Cloudflare's edge from the country information Cloudflare adds to each request. On the bare address `/` the visitor is sent to the matching country (`/us/`, `/in/` or `/ae/`; India for any other country). On a country page a banner only suggests the visitor's own country. The visitor can always change country and currency manually.
+- Search engines are never redirected: every address always returns its own country's page. Only the bare address `/` and a tiny location lookup (`/api/geo`) need Cloudflare Pages Functions; all other pages are plain static files.
 
 ## Environments
 
