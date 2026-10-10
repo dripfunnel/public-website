@@ -3,5 +3,6 @@
 	// The real project, domain and environments are set up in the Cloudflare dashboard: see DEPLOYMENT.md.
 	"name": "dripfunnel-pw",
 	"compatibility_date": "2026-09-01",
-	"pages_build_output_dir": "./out"
+	"pages_build_output_dir": "./out",
+  "previews": {}
 }
