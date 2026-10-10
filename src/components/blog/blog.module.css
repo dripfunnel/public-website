@@ -1,0 +1,32 @@
+/* Hover rules from the design's style-hover attributes. */
+.card {
+	background: var(--surface, #ffffff);
+	border: 1px solid var(--border, #e8e2dc);
+	border-radius: 12px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	text-decoration: none;
+	color: var(--text, #14181f);
+}
+.card:hover {
+	border-color: var(--outline, #b8541f);
+	color: var(--text, #14181f);
+}
+
+.cta {
+	height: 44px;
+	padding: 0 22px;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+}
+.cta:hover {
+	background: var(--btn-h, #d96c33);
+	color: #ffffff;
+}

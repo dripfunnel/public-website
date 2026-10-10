@@ -1,0 +1,15 @@
+.jump {
+	min-height: 40px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	text-align: left;
+	color: var(--text, #14181f);
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.jump:hover {
+	color: var(--link, #b8541f);
+}

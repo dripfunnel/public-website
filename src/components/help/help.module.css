@@ -1,0 +1,69 @@
+/* Hover rules from the design's style-hover attributes. */
+.result {
+	background: var(--surface, #ffffff);
+	border: 1px solid var(--border, #e8e2dc);
+	border-radius: 12px;
+	padding: 16px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	text-decoration: none;
+	color: var(--text, #14181f);
+}
+.result:hover {
+	border-color: var(--outline, #b8541f);
+	color: var(--text, #14181f);
+}
+
+.cta {
+	height: 44px;
+	padding: 0 22px;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+}
+.cta:hover {
+	background: var(--btn-h, #d96c33);
+	color: #ffffff;
+}
+
+/* Outlined link used for "Need a person?" */
+.outlineLink {
+	height: 44px;
+	border: 1px solid var(--outline, #b8541f);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+	font-size: 14px;
+	color: var(--outline, #b8541f);
+}
+.outlineLink:hover {
+	background: var(--outline-h, #fdf0e8);
+	color: var(--outline, #b8541f);
+}
+
+/* Yes / No buttons */
+.outlineBtn {
+	height: 44px;
+	padding: 0 16px;
+	border: 1px solid var(--outline, #b8541f);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--outline, #b8541f);
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+}
+.outlineBtn:hover {
+	background: var(--outline-h, #fdf0e8);
+}

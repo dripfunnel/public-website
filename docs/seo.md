@@ -2,7 +2,7 @@
 
 > Requirements document. No code is written at this stage.
 >
-> Goal: the website is easy for Google and other search engines to find, read and rank, in both English and Arabic. Pages must also share well when a link is posted on social media or in chat.
+> Goal: the website is easy for Google and other search engines to find, read and rank, for each of the three countries (United States, India, United Arab Emirates), in English. Pages must also share well when a link is posted on social media or in chat.
 
 ## 1. Starting point (what the original file has)
 
@@ -26,7 +26,7 @@ So all SEO items below are **new work**, not copied from the original. The visib
 
 - Every page is built ahead of time (SSG) as full HTML, so search engines see the real content without running scripts.
 - Every page has its own real address (see [pages-and-navigation.md](pages-and-navigation.md)).
-- Content must **not** depend on location detection or on the visitor's currency choice to appear. Search engines always get the default version of a page (English, INR).
+- Content must **not** depend on location detection or on the visitor's currency choice to appear. Each address always returns its own country's page, with that country's own currency.
 - Text that matters for search must be real text, not text inside images.
 
 ### 2.2 Page title, description and address
@@ -40,26 +40,26 @@ Every page has:
 
 Blog and help articles take their title from the article title and their description from the opening text of the article.
 
-### 2.3 Languages (English and Arabic)
+### 2.3 Countries (English only)
 
-- Each language has its own address, so each is indexed on its own (decided earlier; the address format is still pending in [pages-and-navigation.md](pages-and-navigation.md)).
-- Every page tells search engines about its other-language version using **alternate-language links (hreflang)** for English and Arabic, plus a default.
-- The page itself declares its language, and for Arabic its right-to-left direction.
-- Titles, descriptions and headings are translated. They are not copied from English.
-- **Currency is not part of the address.** US, India and UAE visitors see the same page address in the same language; only the displayed currency differs. This avoids duplicate pages. Search engines see INR (the default).
+- There is one language, English. Each country has its own set of pages and its own address (`/us/`, `/in/`, `/ae/`), so each is indexed on its own (see [pages-and-navigation.md](pages-and-navigation.md)).
+- Every page tells search engines about the same page in the other countries using **alternate links (hreflang)**: `en-US`, `en-IN` and `en-AE`, plus a default (India).
+- The page declares its language as English.
+- Because the three countries share most of their wording, each country page has its **own canonical address** (it points to itself) and the alternate links tell search engines they are country versions of one page, not duplicates. Titles and descriptions may be adjusted per country (for example naming the currency).
+- **Currency is not part of the address.** Each country page shows that country's own currency by default; this is what search engines see. A visitor can change the currency in the footer, and it only changes the display in the browser.
 
 ### 2.4 Automatic detection must not hurt SEO
 
-The owner wants language and currency detected from the visitor's location. To keep this safe for SEO:
+The owner wants the country (and so the currency) detected from the visitor's location. To keep this safe for SEO:
 
-- **Search-engine crawlers are never redirected** based on location. They always see the default page for the address they asked for.
-- Location detection chooses the **currency** (shown on the page) and, on a visitor's first visit to the home address, can suggest or switch the **language**.
-- A visitor's own choice (language or currency selector) always wins and is remembered.
-- **Decided:** the site does **not** redirect automatically. For a first-time visitor whose detected language differs from the page, a small banner **suggests** the other language (for example "View this page in Arabic?"). The visitor decides.
+- **Search-engine crawlers are never redirected** based on location. Each address always returns its own country's page.
+- On the bare address `/`, a real visitor is sent to their own country (or India by default). Crawlers get a tiny non-indexed page that forwards to India (`/in/`) with a plain HTML redirect and a canonical link to `/in/`. There is no "choose your country" page.
+- A visitor's own choice (country or currency selector) always wins and is remembered.
+- **Decided:** the site does **not** redirect automatically from a country page. For a visitor whose detected country differs from the page, a small banner **suggests** their own country (for example "View the United Arab Emirates site?"). The visitor decides.
 
 ### 2.5 Sitemap and robots
 
-- An automatic **sitemap** listing all pages in every language, with their language alternates. It includes the blog and help articles.
+- An automatic **sitemap** listing all pages in every country, with their country alternates. It includes the blog and help articles.
 - A **robots file** that allows search engines to read the site and points to the sitemap.
 - **Test (staging) sites are blocked from search engines.** Only the live site can be indexed. (Links to [deployment.md](deployment.md).)
 - Do not index: the "Page not found" page, which must return a real "not found" status.
@@ -83,8 +83,8 @@ Structured data must match what the visitor actually sees on the page.
 ### 2.8 Page content quality
 
 - Descriptive link text (not "click here").
-- Every image has a short description (alt text), translated for Arabic. Decorative images have an empty description.
-- Readable address words (English words, lowercase, with hyphens). Article and page addresses stay in English letters also on Arabic pages (decided).
+- Every image has a short description (alt text). Decorative images have an empty description.
+- Readable address words (English words, lowercase, with hyphens).
 - Internal links between related pages (for example blog articles to help articles and to Pricing).
 - Same-address rules: one version only (with or without `www`, with or without a trailing slash, HTTPS only), and the others redirect to it.
 
@@ -107,7 +107,7 @@ Rules that support this: fonts served from the website (already decided), images
 
 ## 3. Draft titles and descriptions (English)
 
-These are drafts written from the content of the original file, **for the owner to approve or rewrite**. Arabic versions come with the translations.
+These are drafts written from the content of the original file, **for the owner to approve or rewrite**. Each country can later get its own wording.
 
 | Page | Draft title | Draft description |
 |------|-------------|-------------------|
@@ -124,20 +124,19 @@ These are drafts written from the content of the original file, **for the owner 
 
 ## Decisions
 
-- Real addresses per page and language; all SEO tags are new work.
-- Search engines always receive the default version (English, INR), with no location-based redirects for crawlers.
+- Real addresses per page and country; all SEO tags are new work.
+- Search engines always receive the page of the address they asked for, with no location-based redirects for crawlers.
 - Currency is not part of the address.
-- English and Arabic alternate-language links on every page.
+- Alternate links (hreflang) for the three countries on every page.
 - Staging sites are hidden from search engines.
 - Core Web Vitals "good" targets as listed above.
-- **No automatic language redirect.** A banner suggests the detected language instead. (Owner answered "yes" to the recommended option.)
-- **One English address** for the US, India and UAE. Only the currency changes by region.
-- **Addresses stay in English letters** on Arabic pages.
+- **No automatic redirect from a country page.** A banner suggests the detected country instead.
+- **One address per country** (`/us/`, `/in/`, `/ae/`), all in English.
 
 ## Open Questions
 
 1. **Titles and descriptions:** are the drafts above acceptable, or should the owner supply the wording?
 2. **Share image:** a default preview image (about 1200 × 630) is needed. Will the owner supply one, or should the logo on a brand-color background be used?
-3. **Prices in search results:** structured data would show one currency per page. Show only the default (INR) or leave prices out of structured data?
+3. **Prices in search results:** structured data would show one currency per page. Show the country's own currency, or leave prices out of structured data?
 4. **Company details:** for the Organization data, what are the company's official name, address, and social media profile links?
 5. **Domain:** needed for the sitemap, canonical addresses and Search Console. (Already pending in [deployment.md](deployment.md).)

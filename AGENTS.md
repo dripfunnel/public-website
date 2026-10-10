@@ -2,17 +2,16 @@
 
 Instructions for AI coding agents working in this repository.
 
-## Current phase: documentation only
+## Current phase: building the website
 
-**Do not write code yet.** The owner is describing the requirements one topic at a time, and each topic is recorded in a Markdown file in [`docs/`](docs/). Until the owner says the build can start:
+The requirements are written down in [`docs/`](docs/) and the owner has asked for the project to be built. The project follows the structure of the earlier DripFunnel website (`dripfunnel-pw-main`): see [`docs/project-structure.md`](docs/project-structure.md). Things not decided yet are tracked in [`PLACEHOLDERS.md`](PLACEHOLDERS.md).
 
-- Only create or edit `.md` files (and copy design reference files into `design/`).
-- Do not create the Next.js app, `package.json`, components, styles or config files.
 - Do not delete files the owner has not asked to delete.
+- Never edit `design/`.
 
 ## What this project is
 
-A public marketing website for DripFunnel (a Softobotics company), built with **Next.js**. It is SEO optimized, very fast, statically generated (SSG), mobile-first, multi-language (English default, Arabic) and multi-currency (INR default, USD, AED). It only **shows** prices; no payment, sign-in or checkout happens on it.
+A public marketing website for DripFunnel (a Softobotics company), built with **Next.js**. It is SEO optimized, very fast, statically generated (SSG), mobile-first, multi-country (United States, India, United Arab Emirates; **English only, no other languages**) and multi-currency (INR default, USD, AED). It only **shows** prices; no payment, sign-in or checkout happens on it.
 
 ## Where things are
 
@@ -23,11 +22,13 @@ A public marketing website for DripFunnel (a Softobotics company), built with **
 | [`docs/pages-and-navigation.md`](docs/pages-and-navigation.md) | Pages, header, footer, addresses |
 | [`docs/design.md`](docs/design.md) | Colors, fonts, spacing, components, themes, assets |
 | [`docs/seo.md`](docs/seo.md) | SEO requirements |
+| [`docs/project-structure.md`](docs/project-structure.md) | Folders, stack, how countries work, commands |
+| [`PLACEHOLDERS.md`](PLACEHOLDERS.md) | What is not final and what is needed from the owner |
 | [`design/`](design/) | The original design: `DripFunnel Website v2.dc.html`, its `support.js` and `assets/` |
 
 ## The original design is the source of truth
 
-The website must match `design/DripFunnel Website v2.dc.html` **exactly**: pages, navigation, header, footer, colors, fonts, spacing, components and light/dark themes. Read values from that file rather than guessing. Where this repo's docs list a deliberate difference (for example AED instead of EUR, a language selector, Arabic right-to-left layout, real addresses instead of `#/` addresses), the docs win.
+The website must match `design/DripFunnel Website v2.dc.html` **exactly**: pages, navigation, header, footer, colors, fonts, spacing, components and light/dark themes. Read values from that file rather than guessing. Where this repo's docs list a deliberate difference (for example AED instead of EUR, a country selector, real addresses instead of `#/` addresses), the docs win.
 
 ## Working with the owner
 
@@ -52,14 +53,27 @@ The docs must always match the website. This applies now and after the build sta
 
 - Next.js, static generation (SSG). Back end does not exist yet; prices are fixed values per currency, kept in one place.
 - Hosting: Cloudflare Pages, with production and test environments. Domain not decided yet.
-- Languages: English (default, no URL prefix proposed) and Arabic. Language in the address. No automatic redirect; a banner suggests the detected language.
+- Language: **English only**. There is **no i18n / translation system**, no Arabic and no right-to-left layout (owner decision, replaces the earlier English + Arabic plan).
+- Countries: United States, India (default), United Arab Emirates. The country is the first part of every address: `/us/`, `/in/`, `/ae/`. **Each country has its own page files and its own data file** (like `dripfunnel-pw-main`), so content can differ per country later. No automatic redirect from a country page; a banner suggests the detected country. The bare `/` sends visitors to their country (never crawlers).
 - Currencies: INR (default), USD, AED. Detected from location, user can change. Currency is not in the address.
-- Fonts: Manrope, Inter, IBM Plex Mono, plus IBM Plex Sans Arabic for Arabic. Served from the website itself.
+- Fonts: Manrope, Inter, IBM Plex Mono. Served from the website itself.
 - Assets in `public/assets/`; reuse the earlier logos and favicons (commit `8945784`).
 
 Check the docs for the current state; they may be newer than this summary.
 
-## When code starts later
+## Writing code
 
-- The earlier Next.js version used in this project had breaking changes from older versions. Before using any Next.js API, read the matching guide in `node_modules/next/dist/docs/` after installing.
+- This Next.js version has breaking changes from older versions (for example `params` is a Promise). Before using any Next.js API, read the matching guide in `node_modules/next/dist/docs/`.
 - Guard browser storage access (`localStorage`) with try/catch.
+- Every page exists once per country as its own component (`HomeUs`, `HomeIn`, `HomeAe`, ...) and country content lives in `src/data/countries/<country>.ts`. Do not add a translation system.
+- Keep server and first client render identical (apply stored choices in effects, not in initial state).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

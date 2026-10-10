@@ -1,0 +1,9 @@
+/* Hover styles for the partners page (the design's style-hover values). */
+
+.btn:hover {
+	background: #f09a6d !important;
+	color: #ffffff !important;
+}
+.link:hover {
+	color: #ffffff !important;
+}

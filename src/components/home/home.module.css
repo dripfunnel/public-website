@@ -1,0 +1,96 @@
+/* Hover and responsive rules of the home page (design: style-hover and the `wide` switch at 980px). */
+
+.start,
+.startBand {
+	height: 52px;
+	padding: 0 24px;
+	border-radius: 8px;
+	background: #ec844f;
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-family: Manrope, sans-serif;
+	font-weight: 700;
+	font-size: 16px;
+	flex: none;
+}
+.start:hover {
+	background: var(--btn-h, #d96c33);
+	color: #ffffff;
+}
+.startBand:hover {
+	background: #f09a6d;
+	color: #ffffff;
+}
+
+.try {
+	min-height: 44px;
+	padding: 0 14px;
+	border: 1px dashed var(--field, #d7d3cd);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--text, #14181f);
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	cursor: pointer;
+}
+.try:hover {
+	border-style: solid;
+	border-color: var(--outline, #b8541f);
+}
+
+.back {
+	height: 44px;
+	padding: 0 14px;
+	border: 1px solid var(--outline, #b8541f);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--outline, #b8541f);
+	font-family: Inter, sans-serif;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+}
+.back:hover {
+	background: var(--outline-h, #fdf0e8);
+}
+
+.demo {
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	color: #f09a6d;
+	font-weight: 500;
+}
+.demo:hover {
+	color: #ffffff;
+}
+
+.feat {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 6px 32px;
+	padding: 24px 0;
+	border-bottom: 1px solid var(--border, #e8e2dc);
+	text-decoration: none;
+	color: var(--text, #14181f);
+	align-items: baseline;
+}
+.feat:hover {
+	color: var(--link, #b8541f);
+}
+
+.side {
+	display: none;
+}
+
+@media (min-width: 980px) {
+	.feat {
+		grid-template-columns: 48px minmax(0, 1.1fr) minmax(0, 1fr) 32px;
+	}
+	.side {
+		display: flex;
+	}
+}
