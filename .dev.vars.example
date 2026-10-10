@@ -1,4 +1,4 @@
-# Copy to .dev.vars for `wrangler pages dev`. Never commit the real file.
+# Copy to .dev.vars for `wrangler dev` (npm run preview:local). Never commit the real file.
 # Where contact-form messages are forwarded (any HTTPS webhook). If unset, the form
 # shows a "could not send" message instead of silently dropping the message.
 LEAD_WEBHOOK_URL=

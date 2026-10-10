@@ -9,7 +9,7 @@
 | Framework | Next.js (App Router), fully static (`output: "export"`, SSG) |
 | Language of the code | TypeScript |
 | Styling | Plain CSS: design tokens in `src/app/globals.css`, component styles in CSS files / inline styles copied from the design |
-| Hosting | Cloudflare Pages (static files in `out/`, plus two tiny Pages Functions) |
+| Hosting | Cloudflare Workers (static files in `out/`, plus a small Worker in `worker/` for `/` and `/api/*`; settings in `wrangler.jsonc`) |
 | Fonts | Self-hosted WOFF2 in `public/fonts/` (Manrope, Inter, IBM Plex Mono) |
 | Website language | English only. There is no translation system. |
 
@@ -24,8 +24,9 @@
 | `src/data/countries/` | **One file per country** (`us.ts`, `in.ts`, `ae.ts`) with everything that can differ by country. `index.ts` lists the countries and currencies. |
 | `src/data/*.ts` | Page content (features, blog, help, legal, partners, pricing) and `prices.ts` (all plan prices in one place) and `seo.ts` (titles and descriptions). |
 | `src/lib/` | Small helpers: addresses, money format, SEO tags, structured data, constants. |
-| `public/` | Static files: logos and favicons (`assets/`), fonts, the default share image (`og/`), `_headers`, `_routes.json`. |
-| `functions/` | Cloudflare Pages Functions: `_middleware.js` (sends visitors on `/` to their country), `api/geo.js` (visitor country for the banner), `api/contact.js` (contact form). |
+| `public/` | Static files: logos and favicons (`assets/`), fonts, the default share image (`og/`), `_headers`. |
+| `worker/` | The Cloudflare Worker: `index.js` (sends each address to the right part), `country-redirect.js` (sends visitors on `/` to their country), `geo.js` (visitor country for the banner, `/api/geo`), `contact.js` (contact form, `/api/contact`). |
+| `wrangler.jsonc` | Cloudflare settings: Worker name (`dripfunnel-pw`), the `out/` folder, which addresses run the Worker. |
 | `design/` | The original design file. Never edit. |
 | `docs/` | Requirements (this folder). |
 
@@ -33,7 +34,7 @@
 
 - The address is `/<country>/<page>/`. English only.
 - Each country has its **own data file** and its **own page components**. At launch they share the same design and wording; only the sample content, currency and prices differ. A country can later get different content by editing its own files.
-- **Adding a country:** copy a file in `src/data/countries/`, register it in `index.ts`, add its currency in `index.ts` and `src/data/prices.ts`, copy the `...Us.tsx` files of each page component for the new country and register them in each route file, and add it to `AVAILABLE` in `functions/_middleware.js`.
+- **Adding a country:** copy a file in `src/data/countries/`, register it in `index.ts`, add its currency in `index.ts` and `src/data/prices.ts`, copy the `...Us.tsx` files of each page component for the new country and register them in each route file, and add it to `AVAILABLE` in `worker/country-redirect.js`.
 
 ## Currency
 
@@ -47,12 +48,12 @@
 | `npm run dev` | Local development server |
 | `npm run build` | Builds the static site into `out/` |
 | `npm run typecheck` | Checks the TypeScript |
-| `npm run preview:local` | Builds and serves `out/` with the Cloudflare Pages Functions (needs `wrangler`) |
+| `npm run preview:local` | Builds and serves the site the way Cloudflare does, including the Worker (http://localhost:8787/) |
 
 Environment variables are listed in `.env.example` (site address, production flag, portal address) and `.dev.vars.example` (contact form webhook).
 
 ## Notes
 
-- **Contact form:** the page posts to `/api/contact` (a Cloudflare Pages Function) which forwards the message to the webhook in `LEAD_WEBHOOK_URL`. Until a webhook is set, the form shows "We could not send your message. Please email sales@dripfunnel.com." The Book a demo topic address (`/<country>/contact/demo/`) uses the main contact page as its canonical address.
+- **Contact form:** the page posts to `/api/contact` (handled by the Cloudflare Worker, `worker/contact.js`) which forwards the message to the webhook in `LEAD_WEBHOOK_URL`. Until a webhook is set, the form shows "We could not send your message. Please email sales@dripfunnel.com." The Book a demo topic address (`/<country>/contact/demo/`) uses the main contact page as its canonical address.
 - **Windows builds:** on Windows, `next build` writes the small page-prefetch files in folders instead of dotted file names, so the browser's background prefetch requests return 404 there (links still work, they just load normally). Builds on Cloudflare (Linux) should be checked once for this after the first deployment.
 - **Home page, "Local rules" table:** the original design file renders this table empty (its own template is incomplete). The website fills it with the three countries.

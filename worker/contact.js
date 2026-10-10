@@ -1,4 +1,4 @@
-// Cloudflare Pages Function: POST /api/contact
+// POST /api/contact (called from worker/index.js)
 //
 // Receives the contact form (src/components/contact/ContactForm.tsx), checks it with the same rules
 // as the form, and forwards it as JSON to the HTTPS webhook in the LEAD_WEBHOOK_URL environment
@@ -23,7 +23,7 @@ function text(value) {
 	return typeof value === "string" ? value.trim() : "";
 }
 
-export async function onRequestPost({ request, env }) {
+export async function contact(request, env) {
 	let raw;
 	try {
 		raw = await request.text();

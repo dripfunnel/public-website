@@ -18,7 +18,7 @@ A public marketing website for DripFunnel (a Softobotics company), built with **
 | Path | What it holds |
 |------|---------------|
 | [`docs/overview.md`](docs/overview.md) | Goal, core requirements, decisions, open questions |
-| [`docs/deployment.md`](docs/deployment.md) | Hosting (Cloudflare Pages) and environments |
+| [`docs/deployment.md`](docs/deployment.md) | Hosting (Cloudflare Workers) and environments |
 | [`docs/pages-and-navigation.md`](docs/pages-and-navigation.md) | Pages, header, footer, addresses |
 | [`docs/design.md`](docs/design.md) | Colors, fonts, spacing, components, themes, assets |
 | [`docs/seo.md`](docs/seo.md) | SEO requirements |
@@ -52,7 +52,7 @@ The docs must always match the website. This applies now and after the build sta
 ## Decisions already made (summary)
 
 - Next.js, static generation (SSG). Back end does not exist yet; prices are fixed values per currency, kept in one place.
-- Hosting: Cloudflare Pages, with production and test environments. Domain not decided yet.
+- Hosting: Cloudflare Workers (static assets plus a small Worker in `worker/`), with production and test environments. Domain not decided yet.
 - Language: **English only**. There is **no i18n / translation system**, no Arabic and no right-to-left layout (owner decision, replaces the earlier English + Arabic plan).
 - Countries: United States, India (default), United Arab Emirates. The country is the first part of every address: `/us/`, `/in/`, `/ae/`. **Each country has its own page files and its own data file** (like `dripfunnel-pw-main`), so content can differ per country later. No automatic redirect from a country page; a banner suggests the detected country. The bare `/` sends visitors to their country (never crawlers).
 - Currencies: INR (default), USD, AED. Detected from location, user can change. Currency is not in the address.
