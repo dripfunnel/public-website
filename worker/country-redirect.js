@@ -1,7 +1,7 @@
-// Sends visitors who open the bare address "/" to their own country. Every other address passes
-// through untouched, so /us/..., /in/... and /ae/... are reachable from anywhere and stay crawlable.
-// public/_routes.json limits this function to "/" and "/api/*", so all other pages are served as
-// plain static files without running any code.
+// Sends visitors who open the bare address "/" to their own country. Every other address is served
+// untouched, so /us/..., /in/... and /ae/... are reachable from anywhere and stay crawlable.
+// "run_worker_first" in wrangler.jsonc limits the Worker to "/" and "/api/*", so all other pages are
+// served as plain static files without running any code.
 //
 // Update AVAILABLE when a country is added (src/data/countries/).
 const AVAILABLE = ["us", "in", "ae"];
@@ -24,10 +24,9 @@ function pickCountry(request) {
 	return DEFAULT_COUNTRY;
 }
 
-export async function onRequest({ request, next }) {
-	const url = new URL(request.url);
-	if (url.pathname !== "/") return next();
-	if (BOT.test(request.headers.get("User-Agent") || "")) return next();
+// Returns the redirect for a visitor, or null when the static "/" page should be served instead.
+export function countryRedirect(request) {
+	if (BOT.test(request.headers.get("User-Agent") || "")) return null;
 
 	return new Response(null, {
 		status: 302,

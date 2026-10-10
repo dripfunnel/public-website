@@ -1,5 +1,5 @@
 // Text and rules for the contact form (design: `T`, `needMsg`, `fld`, `submit`, countries, sent text).
-// The same validation rules are repeated in functions/api/contact.js, which checks them again on the server.
+// The same validation rules are repeated in worker/contact.js, which checks them again on the server.
 
 import { COUNTRY_NAMES } from "@/data/countries";
 import type { ContactTopic } from "@/lib/routes";

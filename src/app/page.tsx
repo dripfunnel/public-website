@@ -4,8 +4,8 @@ import { DEFAULT_COUNTRY, getCountry } from "@/data/countries";
 import { path } from "@/lib/routes";
 
 // The bare address "/" is not a content page and there is no country chooser: visitors pick a
-// country from the header. On the live site, the Cloudflare Pages Function in
-// functions/_middleware.js sends real visitors to their own country. This page is what search
+// country from the header. On the live site, the Cloudflare Worker in
+// worker/country-redirect.js sends real visitors to their own country. This page is what search
 // engines, link previews and local development get: it forwards to the default country with a
 // plain HTML redirect (works without JavaScript) and is not indexed.
 const target = path(DEFAULT_COUNTRY);

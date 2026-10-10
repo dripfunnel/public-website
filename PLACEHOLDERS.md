@@ -13,6 +13,6 @@ Things in the project that are **not final** and need an answer or content from 
 | 7 | **Merchant logos and testimonial pictures** (dashed boxes, as in the design) | Home page | Pictures |
 | 8 | **Terms and Privacy** contain `[bracketed]` placeholders (legal entity, address, prohibited activities, liability, retention, cookies and more) | `src/data/legal.ts` | Text written by counsel |
 | 9 | **Blog and help articles**: only some have a full body; the rest show a placeholder, as in the design | `src/data/blog.ts`, `src/data/help.ts` | Real article text |
-| 10 | **Contact form delivery**: messages go to a webhook; none is chosen yet | `LEAD_WEBHOOK_URL` (`.dev.vars.example`), `functions/api/contact.js` | Where messages should go (email service, CRM, ...) |
+| 10 | **Contact form delivery**: messages go to a webhook; none is chosen yet | `LEAD_WEBHOOK_URL` (`.dev.vars.example`), `worker/contact.js` | Where messages should go (email service, CRM, ...) |
 | 11 | **Company details** for structured data (legal name, address, social profiles) | `src/lib/schema.ts` | Details |
 | 12 | **Form error colour** (design defines it only on the contact form) | Contact form | Confirm |

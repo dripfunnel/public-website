@@ -1,4 +1,4 @@
-# Cloudflare Pages headers (https://developers.cloudflare.com/pages/configuration/headers/).
+# Cloudflare static asset headers (https://developers.cloudflare.com/workers/static-assets/headers/).
 # No third-party scripts, fonts or analytics are used, so the policy below allows only this site.
 # Next.js adds small inline scripts (theme, page data), so 'unsafe-inline' is needed for scripts
 # until nonces or hashes are added. It is report-only for now: check for violations before enforcing.
@@ -11,7 +11,7 @@
   Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'
 
 # Test (staging / preview) sites must never appear in search engines.
-https://*.pages.dev/*
+https://:name.:account.workers.dev/*
   X-Robots-Tag: noindex
 
 /_next/static/*
